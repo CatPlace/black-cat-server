@@ -1,7 +1,7 @@
 package com.spring.blackcat.likes;
 
-import com.spring.blackcat.domain.User;
 import com.spring.blackcat.post.PostRepository;
+import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,5 @@
 package com.spring.blackcat.category;
 
-import com.spring.blackcat.domain.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

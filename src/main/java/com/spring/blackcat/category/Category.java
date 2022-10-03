@@ -1,5 +1,6 @@
-package com.spring.blackcat.domain;
+package com.spring.blackcat.category;
 
+import com.spring.blackcat.tattoo.Tattoo;
 import lombok.Getter;
 import lombok.Setter;
 

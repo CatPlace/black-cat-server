@@ -1,6 +1,8 @@
-package com.spring.blackcat.domain;
+package com.spring.blackcat.user;
 
+import com.spring.blackcat.address.Address;
 import com.spring.blackcat.code.Role;
+import com.spring.blackcat.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 

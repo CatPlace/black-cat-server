@@ -1,35 +1,26 @@
-package com.spring.blackcat.domain;
+package com.spring.blackcat.magazine;
 
 import com.spring.blackcat.code.PostType;
-import com.spring.blackcat.code.TattooType;
+import com.spring.blackcat.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-import static javax.persistence.FetchType.LAZY;
-
 @Entity
-@DiscriminatorValue(PostType.Values.TATTOO)
+@DiscriminatorValue(PostType.Values.MAGAZINE)
 @Getter
 @Setter
-public class Tattoo extends Post {
+public class Magazine extends Post {
 
     @Id
     @GeneratedValue
-    @Column(name = "tattoo_id")
+    @Column(name = "magazine_id")
     private Long id;
 
-    @Column(name = "tattoo_name")
+    @Column(name = "magazine_name")
     private String name;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @Enumerated(EnumType.STRING)
-    private TattooType tattooType;
 
     private String regId;
     private LocalDateTime regDt;

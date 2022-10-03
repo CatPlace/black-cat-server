@@ -1,5 +1,6 @@
 package com.spring.blackcat.post;
 
+import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.List;
 @DiscriminatorColumn(name = "post_division_cd")
 @Getter
 @Setter
-public abstract class Post {
+public abstract class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -22,4 +23,7 @@ public abstract class Post {
 
     @ManyToMany(mappedBy = "likePosts")
     private List<User> likeUsers = new ArrayList<>();
+
+    private String registrantId;
+    private String modifierId;
 }

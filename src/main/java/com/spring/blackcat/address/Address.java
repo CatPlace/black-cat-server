@@ -1,11 +1,11 @@
 package com.spring.blackcat.address;
 
+import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -13,7 +13,7 @@ import static javax.persistence.CascadeType.ALL;
 @Entity
 @Getter
 @Setter
-public class Address {
+public class Address extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -47,18 +47,6 @@ public class Address {
     @OneToMany(mappedBy = "address", cascade = ALL)
     private List<User> users;
 
-    private String regId;
-    private LocalDateTime regDt;
-    private String modId;
-    private LocalDateTime modDt;
-
-    @PrePersist
-    void createdAt() {
-        this.regDt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    void updatedAt() {
-        this.modDt = LocalDateTime.now();
-    }
+    private String registrantId;
+    private String modifierId;
 }

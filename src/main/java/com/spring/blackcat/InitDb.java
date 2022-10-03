@@ -155,21 +155,21 @@ public class InitDb {
             user.setName(name);
             user.setRole(role);
             user.setAddress(address);
-            user.setRegId("Admin");
+            user.setRegistrantId("Admin");
             return user;
         }
 
         private static Address createAddress(String sido) {
             Address address = new Address();
             address.setSido(sido);
-            address.setRegId("Admin");
+            address.setRegistrantId("Admin");
             return address;
         }
 
         private static Category createCategory(String name) {
             Category category = new Category();
             category.setName(name);
-            category.setRegId("Admin");
+            category.setRegistrantId("Admin");
             return category;
         }
 
@@ -178,14 +178,14 @@ public class InitDb {
             tattoo.setCategory(category);
             tattoo.setTattooType(tattooType);
             tattoo.setName(name);
-            tattoo.setRegId("Admin");
+            tattoo.setRegistrantId("Admin");
             return tattoo;
         }
 
         private static Magazine createMagazine(String name) {
             Magazine magazine = new Magazine();
             magazine.setName(name);
-            magazine.setRegId("Admin");
+            magazine.setRegistrantId("Admin");
             return magazine;
         }
     }

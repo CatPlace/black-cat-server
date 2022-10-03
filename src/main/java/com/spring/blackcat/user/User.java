@@ -2,12 +2,12 @@ package com.spring.blackcat.user;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.code.Role;
+import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Setter
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @Column(name = "user_id")
@@ -38,18 +38,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private List<Post> likePosts = new ArrayList<>();
 
-    private String regId;
-    private LocalDateTime regDt;
-    private String modId;
-    private LocalDateTime modDt;
-
-    @PrePersist
-    void createdAt() {
-        this.regDt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    void updatedAt() {
-        this.modDt = LocalDateTime.now();
-    }
+    private String registrantId;
+    private String modifierId;
 }

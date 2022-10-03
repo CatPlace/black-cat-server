@@ -1,5 +1,6 @@
 package com.spring.blackcat.category;
 
+import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.tattoo.Tattoo;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,7 +15,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @Getter
 @Setter
-public class Category {
+public class Category extends BaseTimeEntity {
 
     @Id
     @GeneratedValue

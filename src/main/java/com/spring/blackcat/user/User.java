@@ -3,7 +3,7 @@ package com.spring.blackcat.user;
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.code.Role;
 import com.spring.blackcat.common.BaseTimeEntity;
-import com.spring.blackcat.post.Post;
+import com.spring.blackcat.likes.Likes;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -31,12 +32,9 @@ public class User extends BaseTimeEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
-
-    @ManyToMany
-    @JoinTable(name = "likes",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id"))
-    private List<Post> likePosts = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Likes> likes = new ArrayList<>();
 
     private String registerId;
     private String modifierId;

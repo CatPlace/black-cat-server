@@ -155,21 +155,24 @@ public class InitDb {
             user.setName(name);
             user.setRole(role);
             user.setAddress(address);
-            user.setRegistrantId("Admin");
+            user.setRegisterId("Admin");
+            user.setModifierId("Admin");
             return user;
         }
 
         private static Address createAddress(String sido) {
             Address address = new Address();
             address.setSido(sido);
-            address.setRegistrantId("Admin");
+            address.setRegisterId("Admin");
+            address.setModifierId("Admin");
             return address;
         }
 
         private static Category createCategory(String name) {
             Category category = new Category();
             category.setName(name);
-            category.setRegistrantId("Admin");
+            category.setRegisterId("Admin");
+            category.setModifierId("Admin");
             return category;
         }
 
@@ -178,14 +181,16 @@ public class InitDb {
             tattoo.setCategory(category);
             tattoo.setTattooType(tattooType);
             tattoo.setName(name);
-            tattoo.setRegistrantId("Admin");
+            tattoo.setRegisterId("Admin");
+            tattoo.setModifierId("Admin");
             return tattoo;
         }
 
         private static Magazine createMagazine(String name) {
             Magazine magazine = new Magazine();
             magazine.setName(name);
-            magazine.setRegistrantId("Admin");
+            magazine.setRegisterId("Admin");
+            magazine.setModifierId("Admin");
             return magazine;
         }
     }

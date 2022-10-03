@@ -1,4 +1,4 @@
-package com.spring.blackcat.service;
+package com.spring.blackcat.likes;
 
 public interface LikesService {
 

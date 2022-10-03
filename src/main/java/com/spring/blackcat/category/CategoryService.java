@@ -1,6 +1,4 @@
-package com.spring.blackcat.service;
-
-import com.spring.blackcat.dto.CategoryDto;
+package com.spring.blackcat.category;
 
 import java.util.List;
 

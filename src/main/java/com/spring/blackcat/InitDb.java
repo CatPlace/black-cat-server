@@ -1,15 +1,11 @@
 package com.spring.blackcat;
 
+import com.spring.blackcat.address.AddressRepository;
+import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.code.Role;
 import com.spring.blackcat.code.TattooType;
-import com.spring.blackcat.domain.Address;
-import com.spring.blackcat.domain.Category;
-import com.spring.blackcat.domain.User;
-import com.spring.blackcat.domain.post.Magazine;
-import com.spring.blackcat.domain.post.Tattoo;
-import com.spring.blackcat.repository.AddressRepository;
-import com.spring.blackcat.repository.CategoryRepository;
-import com.spring.blackcat.service.LikesService;
+import com.spring.blackcat.domain.*;
+import com.spring.blackcat.likes.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

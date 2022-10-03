@@ -1,7 +1,5 @@
-package com.spring.blackcat.controller;
+package com.spring.blackcat.category;
 
-import com.spring.blackcat.dto.CategoryDto;
-import com.spring.blackcat.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

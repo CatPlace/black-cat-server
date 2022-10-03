@@ -1,6 +1,5 @@
-package com.spring.blackcat.domain.post;
+package com.spring.blackcat.domain;
 
-import com.spring.blackcat.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 

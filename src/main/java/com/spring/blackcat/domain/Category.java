@@ -1,6 +1,5 @@
 package com.spring.blackcat.domain;
 
-import com.spring.blackcat.domain.post.Tattoo;
 import lombok.Getter;
 import lombok.Setter;
 

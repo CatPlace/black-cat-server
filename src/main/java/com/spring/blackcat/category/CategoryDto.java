@@ -1,4 +1,4 @@
-package com.spring.blackcat.dto;
+package com.spring.blackcat.category;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

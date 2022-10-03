@@ -1,4 +1,4 @@
-package com.spring.blackcat.repository;
+package com.spring.blackcat.address;
 
 import com.spring.blackcat.domain.Address;
 import org.springframework.data.jpa.repository.JpaRepository;

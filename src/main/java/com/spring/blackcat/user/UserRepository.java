@@ -1,4 +1,4 @@
-package com.spring.blackcat.repository;
+package com.spring.blackcat.user;
 
 import com.spring.blackcat.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;

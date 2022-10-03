@@ -1,8 +1,6 @@
-package com.spring.blackcat.service;
+package com.spring.blackcat.category;
 
 import com.spring.blackcat.domain.Category;
-import com.spring.blackcat.dto.CategoryDto;
-import com.spring.blackcat.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.spring.blackcat.domain.post;
+package com.spring.blackcat.domain;
 
 import com.spring.blackcat.code.PostType;
 import lombok.Getter;

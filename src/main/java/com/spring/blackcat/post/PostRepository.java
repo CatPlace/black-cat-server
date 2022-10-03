@@ -1,6 +1,6 @@
-package com.spring.blackcat.repository;
+package com.spring.blackcat.post;
 
-import com.spring.blackcat.domain.post.Post;
+import com.spring.blackcat.domain.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<Post, Long> {

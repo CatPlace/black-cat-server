@@ -1,8 +1,8 @@
-package com.spring.blackcat.service;
+package com.spring.blackcat.likes;
 
 import com.spring.blackcat.domain.User;
-import com.spring.blackcat.repository.PostRepository;
-import com.spring.blackcat.repository.UserRepository;
+import com.spring.blackcat.post.PostRepository;
+import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

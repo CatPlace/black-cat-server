@@ -1,4 +1,4 @@
-package com.spring.blackcat.repository;
+package com.spring.blackcat.category;
 
 import com.spring.blackcat.domain.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

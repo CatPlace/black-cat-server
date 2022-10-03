@@ -1,7 +1,6 @@
 package com.spring.blackcat.domain;
 
 import com.spring.blackcat.code.Role;
-import com.spring.blackcat.domain.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -1,6 +1,5 @@
-package com.spring.blackcat.controller;
+package com.spring.blackcat.likes;
 
-import com.spring.blackcat.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

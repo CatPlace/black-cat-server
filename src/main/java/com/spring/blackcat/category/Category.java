@@ -34,7 +34,7 @@ public class Category {
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
 
-    private String registrantId;
+    private String registerId;
     private String modifierId;
 
     public void addChildCategory(Category child) {

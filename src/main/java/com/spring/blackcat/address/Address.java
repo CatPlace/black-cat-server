@@ -47,6 +47,6 @@ public class Address extends BaseTimeEntity {
     @OneToMany(mappedBy = "address", cascade = ALL)
     private List<User> users;
 
-    private String registrantId;
+    private String registerId;
     private String modifierId;
 }

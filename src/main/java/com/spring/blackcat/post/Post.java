@@ -24,6 +24,6 @@ public abstract class Post extends BaseTimeEntity {
     @ManyToMany(mappedBy = "likePosts")
     private List<User> likeUsers = new ArrayList<>();
 
-    private String registrantId;
+    private String registerId;
     private String modifierId;
 }

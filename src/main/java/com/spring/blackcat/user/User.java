@@ -38,6 +38,6 @@ public class User extends BaseTimeEntity {
             inverseJoinColumns = @JoinColumn(name = "post_id"))
     private List<Post> likePosts = new ArrayList<>();
 
-    private String registrantId;
+    private String registerId;
     private String modifierId;
 }

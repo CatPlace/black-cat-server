@@ -9,24 +9,24 @@ public class LikesController {
 
     private final LikesService likesService;
 
-    @GetMapping("/likes/{post_id}/{user_id}")
+    @GetMapping("/likes/{postId}/{userId}")
     public boolean searchLike(
-            @PathVariable("post_id") Long postId,
-            @PathVariable("user_id") String userId) {
+            @PathVariable("postId") Long postId,
+            @PathVariable("userId") String userId) {
         return likesService.isLikedThisPost(postId, userId);
     }
 
-    @PostMapping("/likes/{post_id}/{user_id}")
+    @PostMapping("/likes/{postId}/{userId}")
     public void likeOn(
-            @PathVariable("post_id") Long postId,
-            @PathVariable("user_id") String userId) {
+            @PathVariable("postId") Long postId,
+            @PathVariable("userId") String userId) {
         likesService.likesOn(postId, userId);
     }
 
-    @DeleteMapping("/likes/{post_id}/{user_id}")
+    @DeleteMapping("/likes/{postId}/{userId}")
     public void likeOff(
-            @PathVariable("post_id") Long postId,
-            @PathVariable("user_id") String userId) {
+            @PathVariable("postId") Long postId,
+            @PathVariable("userId") String userId) {
         likesService.likesOff(postId, userId);
     }
 }

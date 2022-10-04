@@ -5,18 +5,15 @@ import com.spring.blackcat.post.Post;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue(PostType.Values.MAGAZINE)
 @Getter
 @Setter
 public class Magazine extends Post {
-
-    @Id
-    @GeneratedValue
-    @Column(name = "magazine_id")
-    private Long id;
 
     @Column(name = "magazine_name")
     private String name;

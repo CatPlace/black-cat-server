@@ -17,11 +17,6 @@ import static javax.persistence.FetchType.LAZY;
 @Setter
 public class Tattoo extends Post {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "tattoo_id")
-    private Long id;
-
     @Column(name = "tattoo_name")
     private String name;
 

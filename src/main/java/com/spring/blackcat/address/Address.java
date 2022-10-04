@@ -19,9 +19,9 @@ public class Address extends BaseTimeEntity {
     @GeneratedValue
     @Column(name = "address_id")
     private Long id; // 주소ID
-    //    private String zipCode; // 우편번호
+    private String zipCode; // 우편번호
     private String sido; // 시도
-    private String sido_en; // 시도영문
+    private String sidoEn; // 시도영문
     private String sigungu; // 시군구
     private String sigunguEn; // 시군구영문
 //    private String upmyen; // 읍면

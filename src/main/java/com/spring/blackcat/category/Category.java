@@ -33,13 +33,13 @@ public class Category extends BaseTimeEntity {
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
-    private List<Category> child = new ArrayList<>();
+    private List<Category> children = new ArrayList<>();
 
     private String registerId;
     private String modifierId;
 
     public void addChildCategory(Category child) {
-        this.child.add(child);
+        this.children.add(child);
         child.setParent(this);
     }
 }

@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -47,106 +49,82 @@ public class InitDb {
         private final AddressRepository addressRepository;
 
         public void initAddress() {
-            Address address1 = createAddress("서울");
-            Address address2 = createAddress("경기");
-            Address address3 = createAddress("인천");
-            Address address4 = createAddress("충청");
-            Address address5 = createAddress("대전");
-            Address address6 = createAddress("전라");
-            Address address7 = createAddress("광주");
-            Address address8 = createAddress("경북");
-            Address address9 = createAddress("대구");
-            Address address10 = createAddress("경남");
-            Address address11 = createAddress("부산");
-            Address address12 = createAddress("울산");
-            Address address13 = createAddress("강원");
-            Address address14 = createAddress("제주");
-            em.persist(address1);
-            em.persist(address2);
-            em.persist(address3);
-            em.persist(address4);
-            em.persist(address5);
-            em.persist(address6);
-            em.persist(address7);
-            em.persist(address8);
-            em.persist(address9);
-            em.persist(address10);
-            em.persist(address11);
-            em.persist(address12);
-            em.persist(address13);
-            em.persist(address14);
+            List<Address> addressList = new ArrayList<>();
+
+            addressList.add(createAddress("서울"));
+            addressList.add(createAddress("경기"));
+            addressList.add(createAddress("인천"));
+            addressList.add(createAddress("충청"));
+            addressList.add(createAddress("대전"));
+            addressList.add(createAddress("전라"));
+            addressList.add(createAddress("광주"));
+            addressList.add(createAddress("경북"));
+            addressList.add(createAddress("대구"));
+            addressList.add(createAddress("경남"));
+            addressList.add(createAddress("부산"));
+            addressList.add(createAddress("울산"));
+            addressList.add(createAddress("강원"));
+            addressList.add(createAddress("제주"));
+
+            addressList.forEach(em::persist);
         }
 
         public void initUser() {
-            User user1 = createUser("Admin1", "김진호", Role.ADMIN, addressRepository.findBySido("서울"));
-            User user2 = createUser("Admin2", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전"));
-            User user3 = createUser("Admin3", "이현직", Role.BASIC, addressRepository.findBySido("대구"));
-            em.persist(user1);
-            em.persist(user2);
-            em.persist(user3);
+            List<User> userList = new ArrayList<>();
+
+            userList.add(createUser("Admin1", "김진호", Role.ADMIN, addressRepository.findBySido("서울")));
+            userList.add(createUser("Admin2", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전")));
+            userList.add(createUser("Admin3", "이현직", Role.BASIC, addressRepository.findBySido("대구")));
+
+            userList.forEach(em::persist);
         }
 
         public void initCategory() {
-            Category category1 = createCategory("레터링");
-            Category category2 = createCategory("미니타투");
-            Category category3 = createCategory("감성타투");
-            Category category4 = createCategory("이레즈미");
-            Category category5 = createCategory("블랙&그레이");
-            Category category6 = createCategory("라인워크");
-            Category category7 = createCategory("헤나");
-            Category category8 = createCategory("커버업");
-            Category category9 = createCategory("뉴스쿨");
-            Category category10 = createCategory("올드스쿨");
-            Category category11 = createCategory("잉크스플래쉬");
-            Category category12 = createCategory("치카노");
-            Category category13 = createCategory("컬러");
-            Category category14 = createCategory("캐릭터");
-            em.persist(category1);
-            em.persist(category2);
-            em.persist(category3);
-            em.persist(category4);
-            em.persist(category5);
-            em.persist(category6);
-            em.persist(category7);
-            em.persist(category8);
-            em.persist(category9);
-            em.persist(category10);
-            em.persist(category11);
-            em.persist(category12);
-            em.persist(category13);
-            em.persist(category14);
+            List<Category> categoryList = new ArrayList<>();
+
+            categoryList.add(createCategory("레터링"));
+            categoryList.add(createCategory("미니타투"));
+            categoryList.add(createCategory("감성타투"));
+            categoryList.add(createCategory("이레즈미"));
+            categoryList.add(createCategory("블랙&그레이"));
+            categoryList.add(createCategory("라인워크"));
+            categoryList.add(createCategory("헤나"));
+            categoryList.add(createCategory("커버업"));
+            categoryList.add(createCategory("뉴스쿨"));
+            categoryList.add(createCategory("올드스쿨"));
+            categoryList.add(createCategory("잉크스플래쉬"));
+            categoryList.add(createCategory("치카노"));
+            categoryList.add(createCategory("컬러"));
+            categoryList.add(createCategory("캐릭터"));
+
+            categoryList.forEach(em::persist);
         }
 
         public void initTattoo() {
-            Tattoo tattoo1 = createTattoo(categoryRepository.findByName("레터링").get(), TattooType.WORK, "작품1");
-            Tattoo tattoo2 = createTattoo(categoryRepository.findByName("레터링").get(), TattooType.DESIGN, "도안1");
-            Tattoo tattoo3 = createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.WORK, "작품2");
-            Tattoo tattoo4 = createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.DESIGN, "도안2");
-            Tattoo tattoo5 = createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.WORK, "작품3");
-            Tattoo tattoo6 = createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.DESIGN, "도안3");
-            Tattoo tattoo7 = createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.WORK, "작품4");
-            Tattoo tattoo8 = createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.DESIGN, "도안4");
-            Tattoo tattoo9 = createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.WORK, "작품5");
-            Tattoo tattoo10 = createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.DESIGN, "도안5");
-            em.persist(tattoo1);
-            em.persist(tattoo2);
-            em.persist(tattoo3);
-            em.persist(tattoo4);
-            em.persist(tattoo5);
-            em.persist(tattoo6);
-            em.persist(tattoo7);
-            em.persist(tattoo8);
-            em.persist(tattoo9);
-            em.persist(tattoo10);
+            List<Tattoo> tattooList = new ArrayList<>();
+
+            tattooList.add(createTattoo(categoryRepository.findByName("레터링").get(), TattooType.WORK, "작품1"));
+            tattooList.add(createTattoo(categoryRepository.findByName("레터링").get(), TattooType.DESIGN, "도안1"));
+            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.WORK, "작품2"));
+            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.DESIGN, "도안2"));
+            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.WORK, "작품3"));
+            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.DESIGN, "도안3"));
+            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.WORK, "작품4"));
+            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.DESIGN, "도안4"));
+            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.WORK, "작품5"));
+            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.DESIGN, "도안5"));
+
+            tattooList.forEach(em::persist);
         }
 
         public void initMagazine() {
-            Magazine magazine1 = createMagazine("타투하기 전 알아야할 것");
-            Magazine magazine2 = createMagazine("타투 관리 방법");
-            Magazine magazine3 = createMagazine("타투별 의미");
-            em.persist(magazine1);
-            em.persist(magazine2);
-            em.persist(magazine3);
+            List<Magazine> magazineList = new ArrayList<>();
+
+            magazineList.add(createMagazine("타투하기 전 알아야할 것"));
+            magazineList.add(createMagazine("타투 관리 방법"));
+            magazineList.add(createMagazine("타투별 의미"));
+
+            magazineList.forEach(em::persist);
         }
 
         private static User createUser(String id, String name, Role role, Address address) {

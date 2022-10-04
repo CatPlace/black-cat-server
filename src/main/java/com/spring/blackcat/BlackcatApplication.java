@@ -2,13 +2,14 @@ package com.spring.blackcat;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+@EnableJpaAuditing
 @SpringBootApplication
 public class BlackcatApplication {
-    
+
     public static void main(String[] args) {
         SpringApplication.run(BlackcatApplication.class, args);
-        // 내일은 화요일
     }
 
 }

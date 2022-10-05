@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface CategoryService {
 
-    public List<CategoryDto> findAll();
+    List<CategoryDto> findAll();
 }

@@ -103,16 +103,16 @@ public class InitDb {
         public void initTattoo() {
             List<Tattoo> tattooList = new ArrayList<>();
 
-            tattooList.add(createTattoo(categoryRepository.findByName("레터링").get(), TattooType.WORK, "작품1"));
-            tattooList.add(createTattoo(categoryRepository.findByName("레터링").get(), TattooType.DESIGN, "도안1"));
-            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.WORK, "작품2"));
-            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.DESIGN, "도안2"));
-            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.WORK, "작품3"));
-            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.DESIGN, "도안3"));
-            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.WORK, "작품4"));
-            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.DESIGN, "도안4"));
-            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.WORK, "작품5"));
-            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.DESIGN, "도안5"));
+            tattooList.add(createTattoo(categoryRepository.findByName("레터링").orElse(null), TattooType.WORK, "작품1"));
+            tattooList.add(createTattoo(categoryRepository.findByName("레터링").orElse(null), TattooType.DESIGN, "도안1"));
+            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").orElse(null), TattooType.WORK, "작품2"));
+            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").orElse(null), TattooType.DESIGN, "도안2"));
+            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").orElse(null), TattooType.WORK, "작품3"));
+            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").orElse(null), TattooType.DESIGN, "도안3"));
+            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").orElse(null), TattooType.WORK, "작품4"));
+            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").orElse(null), TattooType.DESIGN, "도안4"));
+            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.WORK, "작품5"));
+            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.DESIGN, "도안5"));
 
             tattooList.forEach(em::persist);
         }

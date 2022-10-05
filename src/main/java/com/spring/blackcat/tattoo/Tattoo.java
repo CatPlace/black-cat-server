@@ -34,4 +34,10 @@ public class Tattoo extends Post {
         this.category = category;
         this.tattooType = tattooType;
     }
+
+    public void changeCategory(Category category) {
+        this.category.getTattoos().remove(this);
+        this.category = category;
+        category.getTattoos().add(this);
+    }
 }

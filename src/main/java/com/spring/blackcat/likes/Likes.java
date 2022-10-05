@@ -42,5 +42,7 @@ public class Likes extends BaseTimeEntity {
         this.postType = postType;
         this.registerId = registerId;
         this.modifierId = modifierId;
+        post.getLikes().add(this);
+        user.getLikes().add(this);
     }
 }

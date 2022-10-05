@@ -48,4 +48,10 @@ public class User extends BaseTimeEntity {
         this.registerId = registerId;
         this.modifierId = modifierId;
     }
+
+    public void changeAddress(Address address) {
+        this.address.getUsers().remove(this);
+        this.address = address;
+        address.getUsers().add(this);
+    }
 }

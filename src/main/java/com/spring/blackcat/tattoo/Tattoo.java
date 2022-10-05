@@ -20,6 +20,15 @@ public class Tattoo extends Post {
     @Column(name = "tattoo_name")
     private String name;
 
+    @Column(name = "tattoo_price")
+    private Long price;
+
+    @Column(name = "tattoo_description")
+    private String description;
+
+    @Column(name = "tattoo_star")
+    private int star;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     private Category category;

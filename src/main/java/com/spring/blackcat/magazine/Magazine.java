@@ -6,9 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -16,11 +15,12 @@ import javax.persistence.Entity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Magazine extends Post {
 
-    @Column(name = "magazine_name")
-    private String name;
+    private String title;
 
-    public Magazine(String name, String registerId, String modifierId) {
+    @OneToMany(mappedBy = "magazine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cell> cellList;
+    
+    public Magazine(String title, String registerId, String modifierId) {
         super(registerId, modifierId);
-        this.name = name;
-    }
+        this.name = title;
 }

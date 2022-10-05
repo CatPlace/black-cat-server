@@ -2,8 +2,10 @@ package com.spring.blackcat.category;
 
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.tattoo.Tattoo;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category extends BaseTimeEntity {
 
     @Id
@@ -38,8 +40,19 @@ public class Category extends BaseTimeEntity {
     private String registerId;
     private String modifierId;
 
+    @Builder
+    public Category(String name, String registerId, String modifierId) {
+        this.name = name;
+        this.registerId = registerId;
+        this.modifierId = modifierId;
+    }
+
     public void addChildCategory(Category child) {
         this.children.add(child);
         child.setParent(this);
+    }
+
+    private void setParent(Category parentCategory) {
+        this.parent = parentCategory;
     }
 }

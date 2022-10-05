@@ -4,9 +4,11 @@ import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.code.CellType;
 import com.spring.blackcat.code.Role;
 import com.spring.blackcat.code.TattooType;
 import com.spring.blackcat.likes.LikesService;
+import com.spring.blackcat.magazine.Cell;
 import com.spring.blackcat.magazine.Magazine;
 import com.spring.blackcat.tattoo.Tattoo;
 import com.spring.blackcat.user.User;
@@ -37,7 +39,7 @@ public class InitDb {
         likesService.likesOn(29L, "Admin2");
         likesService.likesOn(30L, "Admin3");
         likesService.likesOn(31L, "Admin1");
-        likesService.likesOn(39L, "Admin1");
+//        likesService.likesOn(39L, "Admin1");
     }
 
     @Component
@@ -119,12 +121,27 @@ public class InitDb {
 
         public void initMagazine() {
             List<Magazine> magazineList = new ArrayList<>();
+            List<Cell> cellList1 = new ArrayList<>();
+            List<Cell> cellList2 = new ArrayList<>();
 
-            magazineList.add(createMagazine("타투하기 전 알아야할 것"));
-            magazineList.add(createMagazine("타투 관리 방법"));
-            magazineList.add(createMagazine("타투별 의미"));
+            cellList1.add(createCell(CellType.GRAYTEXTCELL, "타투 말은 많이 들어보고 주변에서도 요즘 많이 하던데 뭐가 뭔지 잘 모르겠어"));
+            cellList1.add(createCell(CellType.GRAYTEXTCELL, "사람마다 모양, 색깔도 다르던데... 그리고 그거 아픈거 아냐?"));
+            cellList1.add(createCell(CellType.GRAYTEXTCELL, "하는 당신을 위해 타투이스트 깜냥이가 모두 답변해드리겠습니닷!"));
+            cellList1.add(createCell(CellType.IMAGECELL, "https://s3...."));
+            cellList2.add(createCell(CellType.GRAYTEXTCELL, "부위별 타투 통증"));
+            cellList2.add(createCell(CellType.IMAGECELL, "https://www.notion.so/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F90c438c0-35a3-4c51-aaac-1689ba244ad6%2FUntitled.png?table=block&id=05380b3d-e690-404f-8e62-9efd353d0c6f&spaceId=4ace8255-eeda-474a-8bb0-b4b4ff03eb62&width=860&userId=7c8d3a7d-0a81-4344-95b7-90711e3255dc&cache=v2"));
+            cellList2.add(createCell(CellType.TOGGLETEXTCELL, "2010년 연구에 따르면 18세에서 29세 사이의 사람들 중 무려 38%가 일생에 한번 이상 타투를 해본 경험이 있다고 합니다."));
+
+            magazineList.add(createMagazine("타린이들을 위한 안내서", cellList1));
+            magazineList.add(createMagazine("타투를 하면 얼마나 아픈가요?", cellList2));
+
+            cellList1.forEach(cell -> cell.setMagazine(magazineList.get(0)));
+            cellList2.forEach(cell -> cell.setMagazine(magazineList.get(1)));
 
             magazineList.forEach(em::persist);
+            cellList1.forEach(em::persist);
+            cellList2.forEach(em::persist);
+
         }
 
         private static User createUser(String id, String name, Role role, Address address) {
@@ -164,12 +181,20 @@ public class InitDb {
             return tattoo;
         }
 
-        private static Magazine createMagazine(String name) {
+        private static Magazine createMagazine(String title, List<Cell> cells) {
             Magazine magazine = new Magazine();
-            magazine.setName(name);
+            magazine.setTitle(title);
+            magazine.setCellList(cells);
             magazine.setRegisterId("Admin");
             magazine.setModifierId("Admin");
             return magazine;
+        }
+
+        private static Cell createCell(CellType cellType, String content) {
+            return Cell.builder()
+                    .cellType(cellType)
+                    .content(content)
+                    .build();
         }
     }
 }

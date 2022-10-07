@@ -4,17 +4,18 @@ import com.spring.blackcat.category.Category;
 import com.spring.blackcat.code.PostType;
 import com.spring.blackcat.code.TattooType;
 import com.spring.blackcat.post.Post;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@DiscriminatorValue(PostType.Values.TATTOO)
 @Getter
-@Setter
+@DiscriminatorValue(PostType.Values.TATTOO)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tattoo extends Post {
 
     @Column(name = "tattoo_name")
@@ -35,4 +36,17 @@ public class Tattoo extends Post {
 
     @Enumerated(EnumType.STRING)
     private TattooType tattooType;
+
+    public Tattoo(String name, Category category, TattooType tattooType, String registerId, String modifierId) {
+        super(registerId, modifierId);
+        this.name = name;
+        this.category = category;
+        this.tattooType = tattooType;
+    }
+
+    public void changeCategory(Category category) {
+        this.category.getTattoos().remove(this);
+        this.category = category;
+        category.getTattoos().add(this);
+    }
 }

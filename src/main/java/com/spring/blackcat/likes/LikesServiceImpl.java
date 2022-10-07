@@ -37,13 +37,12 @@ public class LikesServiceImpl implements LikesService {
         if (isExists) {
             return new LikesStatusDto(true);
         }
-        Likes likes = new Likes();
-        Post post = postRepository.findById(postId).get();
-        User user = userRepository.findById(userId).get();
-        likes.setPost(post);
-        likes.setUser(user);
-        likes.setPostType(post.getPostTypeCd());
-        likesRepository.save(likes);
+        Post post = postRepository.findById(postId).orElse(null);
+        User user = userRepository.findById(userId).orElse(null);
+        if (post != null && user != null) {
+            Likes likes = new Likes(post, user, post.getPostTypeCd(), userId, userId);
+            likesRepository.save(likes);
+        }
         return new LikesStatusDto(true);
     }
 
@@ -53,8 +52,7 @@ public class LikesServiceImpl implements LikesService {
     @Override
     @Transactional
     public LikesStatusDto likesOff(Long postId, String userId) {
-        Likes likes = likesRepository.findByPostIdAndUserId(postId, userId).get();
-        likesRepository.delete(likes);
+        likesRepository.findByPostIdAndUserId(postId, userId).ifPresent(likesRepository::delete);
         return new LikesStatusDto(false);
     }
 }

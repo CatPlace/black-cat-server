@@ -51,20 +51,20 @@ public class InitDb {
         public void initAddress() {
             List<Address> addressList = new ArrayList<>();
 
-            addressList.add(createAddress("서울"));
-            addressList.add(createAddress("경기"));
-            addressList.add(createAddress("인천"));
-            addressList.add(createAddress("충청"));
-            addressList.add(createAddress("대전"));
-            addressList.add(createAddress("전라"));
-            addressList.add(createAddress("광주"));
-            addressList.add(createAddress("경북"));
-            addressList.add(createAddress("대구"));
-            addressList.add(createAddress("경남"));
-            addressList.add(createAddress("부산"));
-            addressList.add(createAddress("울산"));
-            addressList.add(createAddress("강원"));
-            addressList.add(createAddress("제주"));
+            addressList.add(createAddress("서울", "Seoul"));
+            addressList.add(createAddress("경기", "Gyeonggi"));
+            addressList.add(createAddress("인천", "Incheon"));
+            addressList.add(createAddress("충청", "Chungcheong"));
+            addressList.add(createAddress("대전", "Daejeon"));
+            addressList.add(createAddress("전라", "Jeolla"));
+            addressList.add(createAddress("광주", "Gwangju"));
+            addressList.add(createAddress("경북", "Gyeongbuk"));
+            addressList.add(createAddress("대구", "Daegu"));
+            addressList.add(createAddress("경남", "Gyeongnam"));
+            addressList.add(createAddress("부산", "Busan"));
+            addressList.add(createAddress("울산", "Ulsan"));
+            addressList.add(createAddress("강원", "Gangwon"));
+            addressList.add(createAddress("제주", "Jeju"));
 
             addressList.forEach(em::persist);
         }
@@ -103,16 +103,16 @@ public class InitDb {
         public void initTattoo() {
             List<Tattoo> tattooList = new ArrayList<>();
 
-            tattooList.add(createTattoo(categoryRepository.findByName("레터링").get(), TattooType.WORK, "작품1"));
-            tattooList.add(createTattoo(categoryRepository.findByName("레터링").get(), TattooType.DESIGN, "도안1"));
-            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.WORK, "작품2"));
-            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").get(), TattooType.DESIGN, "도안2"));
-            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.WORK, "작품3"));
-            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").get(), TattooType.DESIGN, "도안3"));
-            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.WORK, "작품4"));
-            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").get(), TattooType.DESIGN, "도안4"));
-            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.WORK, "작품5"));
-            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").get(), TattooType.DESIGN, "도안5"));
+            tattooList.add(createTattoo(categoryRepository.findByName("레터링").orElse(null), TattooType.WORK, "작품1"));
+            tattooList.add(createTattoo(categoryRepository.findByName("레터링").orElse(null), TattooType.DESIGN, "도안1"));
+            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").orElse(null), TattooType.WORK, "작품2"));
+            tattooList.add(createTattoo(categoryRepository.findByName("미니타투").orElse(null), TattooType.DESIGN, "도안2"));
+            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").orElse(null), TattooType.WORK, "작품3"));
+            tattooList.add(createTattoo(categoryRepository.findByName("감성타투").orElse(null), TattooType.DESIGN, "도안3"));
+            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").orElse(null), TattooType.WORK, "작품4"));
+            tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").orElse(null), TattooType.DESIGN, "도안4"));
+            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.WORK, "작품5"));
+            tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.DESIGN, "도안5"));
 
             tattooList.forEach(em::persist);
         }
@@ -128,48 +128,23 @@ public class InitDb {
         }
 
         private static User createUser(String id, String name, Role role, Address address) {
-            User user = new User();
-            user.setId(id);
-            user.setName(name);
-            user.setRole(role);
-            user.setAddress(address);
-            user.setRegisterId("Admin");
-            user.setModifierId("Admin");
-            return user;
+            return new User(id, name, role, address, "Admin", "Admin");
         }
 
-        private static Address createAddress(String sido) {
-            Address address = new Address();
-            address.setSido(sido);
-            address.setRegisterId("Admin");
-            address.setModifierId("Admin");
-            return address;
+        private static Address createAddress(String sido, String sidoEn) {
+            return new Address(sido, sidoEn, "Admin", "Admin");
         }
 
         private static Category createCategory(String name) {
-            Category category = new Category();
-            category.setName(name);
-            category.setRegisterId("Admin");
-            category.setModifierId("Admin");
-            return category;
+            return new Category(name, "Admin", "Admin");
         }
 
         private static Tattoo createTattoo(Category category, TattooType tattooType, String name) {
-            Tattoo tattoo = new Tattoo();
-            tattoo.setCategory(category);
-            tattoo.setTattooType(tattooType);
-            tattoo.setName(name);
-            tattoo.setRegisterId("Admin");
-            tattoo.setModifierId("Admin");
-            return tattoo;
+            return new Tattoo(name, category, tattooType, "Admin", "Admin");
         }
 
         private static Magazine createMagazine(String name) {
-            Magazine magazine = new Magazine();
-            magazine.setName(name);
-            magazine.setRegisterId("Admin");
-            magazine.setModifierId("Admin");
-            return magazine;
+            return new Magazine(name, "Admin", "Admin");
         }
     }
 }

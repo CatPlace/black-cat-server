@@ -2,8 +2,9 @@ package com.spring.blackcat.address;
 
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.user.User;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,18 +13,18 @@ import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Address extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
     @Column(name = "address_id")
     private Long id; // 주소ID
-    private String zipCode; // 우편번호
+    //    private String zipCode; // 우편번호
     private String sido; // 시도
     private String sidoEn; // 시도영문
-    private String sigungu; // 시군구
-    private String sigunguEn; // 시군구영문
+//    private String sigungu; // 시군구
+//    private String sigunguEn; // 시군구영문
 //    private String upmyen; // 읍면
 //    private String upmyenEn; // 읍면영문
 //    private String loadNmCd; // 도로명코드
@@ -49,4 +50,11 @@ public class Address extends BaseTimeEntity {
 
     private String registerId;
     private String modifierId;
+
+    public Address(String sido, String sidoEn, String registerId, String modifierId) {
+        this.sido = sido;
+        this.sidoEn = sidoEn;
+        this.registerId = registerId;
+        this.modifierId = modifierId;
+    }
 }

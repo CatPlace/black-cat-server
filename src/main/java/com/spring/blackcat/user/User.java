@@ -4,8 +4,9 @@ import com.spring.blackcat.address.Address;
 import com.spring.blackcat.code.Role;
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.likes.Likes;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
     @Id
@@ -32,10 +33,25 @@ public class User extends BaseTimeEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
-    
+
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
 
     private String registerId;
     private String modifierId;
+
+    public User(String id, String name, Role role, Address address, String registerId, String modifierId) {
+        this.id = id;
+        this.name = name;
+        this.role = role;
+        this.address = address;
+        this.registerId = registerId;
+        this.modifierId = modifierId;
+    }
+
+    public void changeAddress(Address address) {
+        this.address.getUsers().remove(this);
+        this.address = address;
+        address.getUsers().add(this);
+    }
 }

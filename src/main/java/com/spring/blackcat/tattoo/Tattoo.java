@@ -37,9 +37,12 @@ public class Tattoo extends Post {
     @Enumerated(EnumType.STRING)
     private TattooType tattooType;
 
-    public Tattoo(String name, Category category, TattooType tattooType, String registerId, String modifierId) {
+    public Tattoo(String name, String description, Long price, int star, Category category, TattooType tattooType, String registerId, String modifierId) {
         super(registerId, modifierId);
         this.name = name;
+        this.description = description;
+        this.price = price;
+        this.star = star;
         this.category = category;
         this.tattooType = tattooType;
     }

@@ -1,6 +1,7 @@
 package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.code.TattooType;
 import com.spring.blackcat.tattoo.dto.GetAllTattoosResDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -86,20 +87,21 @@ public class GetAllTattoosTest {
         assertThat(allTattoos.size()).isEqualTo(5);
     }
 
-//    @Test
-//    @DisplayName("쿼리 스트링 모두 넣었을 때 전체 타투 조회")
-//    void getAllTattoosAllQueryString() {
-//        //given
-//        String userName = "Admin1";
-//        //default pageable object
-//        PageRequest pageRequest = PageRequest.of(1, 8, Sort.Direction.DESC, "price");
-//
-//
-//        //when
-//        List<GetAllTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
-//
-//        //then
-//        assertThat(allTattoos.size()).isEqualTo(8);
-//        assertThat(allTattoos.get(0).getPrice())
-//    }
+    @Test
+    @DisplayName("쿼리 스트링 모두 넣었을 때 전체 타투 조회")
+    void getAllTattoosAllQueryString() {
+        //given
+        String userName = "Admin1";
+        //default pageable object
+        PageRequest pageRequest = PageRequest.of(0, 21, Sort.Direction.ASC, "price");
+        Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, 5, categoryRepository.findByName("이레즈미").orElse(null), TattooType.DESIGN, userName, userName);
+        tattooRepository.save(tattoo);
+
+        //when
+        List<GetAllTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
+
+        //then
+        assertThat(allTattoos.size()).isEqualTo(21);
+        assertThat(allTattoos.get(0).getPrice()).isEqualTo(0);
+    }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class GetAllTattoosResDto {
+public class GetTattoosResDto {
     private Long id;
     private Long price;
     private String tattooistName;

@@ -2,7 +2,7 @@ package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.likes.LikesRepository;
 import com.spring.blackcat.post.PostRepository;
-import com.spring.blackcat.tattoo.dto.GetAllTattoosResDto;
+import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,26 @@ public class TattooServiceImpl implements TattooService {
     private final PostRepository postRepository;
 
     @Override
-    public List<GetAllTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
+    public List<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
         return this.tattooRepository.findAll(pageable).stream().map(tattoo -> {
             boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
             String tattooistName = this.getPostingTattooistName(tattoo.getId());
 
-            GetAllTattoosResDto getAllTattoosResDto = new GetAllTattoosResDto(tattoo.getId(), tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked);
+            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked);
 
-            return getAllTattoosResDto;
+            return getTattoosResDto;
+        }).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, String userId, Long categoryId) {
+        return this.tattooRepository.findByCategoryId(pageable, categoryId).stream().map(tattoo -> {
+            boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
+            String tattooistName = this.getPostingTattooistName(tattoo.getId());
+
+            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked);
+
+            return getTattoosResDto;
         }).collect(Collectors.toList());
     }
 

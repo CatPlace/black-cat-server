@@ -2,7 +2,7 @@ package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.code.TattooType;
-import com.spring.blackcat.tattoo.dto.GetAllTattoosResDto;
+import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class GetAllTattoosTest {
         PageRequest pageRequest = PageRequest.of(0, 20, Sort.Direction.DESC, "id");
 
         //when
-        List<GetAllTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
+        List<GetTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
 
         //then
         assertThat(allTattoos.size()).isEqualTo(20);
@@ -50,7 +50,7 @@ public class GetAllTattoosTest {
         PageRequest pageRequest = PageRequest.of(1, 20, Sort.Direction.DESC, "id");
 
         //when
-        List<GetAllTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
+        List<GetTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
 
         //then
         //기본 20개 씩 조회 시, 두 번째 페이지에는 데이터가 없음(총 데이터 20개)
@@ -66,7 +66,7 @@ public class GetAllTattoosTest {
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.Direction.DESC, "id");
 
         //when
-        List<GetAllTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
+        List<GetTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
 
         //then
         assertThat(allTattoos.size()).isEqualTo(10);
@@ -81,7 +81,7 @@ public class GetAllTattoosTest {
         PageRequest pageRequest = PageRequest.of(1, 5, Sort.Direction.DESC, "id");
 
         //when
-        List<GetAllTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
+        List<GetTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
 
         //then
         assertThat(allTattoos.size()).isEqualTo(5);
@@ -98,7 +98,7 @@ public class GetAllTattoosTest {
         tattooRepository.save(tattoo);
 
         //when
-        List<GetAllTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
+        List<GetTattoosResDto> allTattoos = tattooService.getAllTattoos(pageRequest, userName);
 
         //then
         assertThat(allTattoos.size()).isEqualTo(21);

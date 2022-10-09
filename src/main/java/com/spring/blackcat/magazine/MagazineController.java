@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+// TODO: 2022-10-10 ResponseEntity Customize
+// TODO: 2022-10-10 POST Magazine 
 @RestController
 @RequiredArgsConstructor
 public class MagazineController {
@@ -25,7 +27,6 @@ public class MagazineController {
     @GetMapping("/magazines/{magazineId}")
     public ResponseEntity getSpecificMagazine(@PathVariable Long magazineId) {
         List<CellDto> cells = magazineService.getMagazineCells(magazineId);
-
         return ResponseEntity.ok().body(cells);
     }
 

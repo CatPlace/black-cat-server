@@ -6,5 +6,5 @@ public interface MagazineService {
 
     List<MagazineTitleDto> findAll();
 
-    Magazine findById(Long id);
+    List<CellDto> getMagazineCells(Long id);
 }

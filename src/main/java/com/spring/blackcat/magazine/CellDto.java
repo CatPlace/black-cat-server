@@ -4,43 +4,27 @@ import com.spring.blackcat.code.CellType;
 import com.spring.blackcat.code.FontWeightType;
 import com.spring.blackcat.code.TextAlignmentType;
 import com.spring.blackcat.code.TextColor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
-
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Builder
-@Getter
-public class Cell {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cell_id")
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
+public class CellDto {
     private CellType cellType;
 
-    @Column(length = 5000)
     private String text;
 
     private Long fontSize;
 
-    @Enumerated(EnumType.STRING)
     private TextColor textColor;
 
-    @Enumerated(EnumType.STRING)
     private TextAlignmentType textAlignment;
 
-    @Enumerated(EnumType.STRING)
     private FontWeightType fontWeight;
 
     private String imageUrlString;
@@ -59,10 +43,4 @@ public class Cell {
 
     private Long layoutBottomInset;
 
-    @ManyToOne(fetch = EAGER)
-    private Magazine magazine;
-
-    public void setMagazine(Magazine magazine) {
-        this.magazine = magazine;
-    }
 }

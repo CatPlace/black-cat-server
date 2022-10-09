@@ -1,6 +1,9 @@
 package com.spring.blackcat.magazine;
 
 import com.spring.blackcat.code.CellType;
+import com.spring.blackcat.code.FontWeightType;
+import com.spring.blackcat.code.TextAlignmentType;
+import com.spring.blackcat.code.TextColor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -29,11 +32,14 @@ public class Cell {
 
     private Long fontSize;
 
-    private String textColor;
+    @Enumerated(EnumType.STRING)
+    private TextColor textColor;
 
-    private String textAlignment;
+    @Enumerated(EnumType.STRING)
+    private TextAlignmentType textAlignment;
 
-    private String fontWeight;
+    @Enumerated(EnumType.STRING)
+    private FontWeightType fontWeight;
 
     private String imageUrlString;
 

@@ -36,10 +36,11 @@ class MagazineControllerTest {
     @Test
     void getSpecificMagazineTest(){
         //given
-
-        //then
+        Long id = Long.valueOf(39L);
 
         //when
+
+        //then
 
     }
 

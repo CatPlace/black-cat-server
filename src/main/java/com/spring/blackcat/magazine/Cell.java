@@ -24,7 +24,6 @@ public class Cell {
     private String content;
 
     @ManyToOne(fetch = EAGER)
-//    @JoinColumn(name = "post_id")
     private Magazine magazine;
 
     @Builder

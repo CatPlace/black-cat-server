@@ -23,7 +23,8 @@ public class MagazineController {
 
     @GetMapping("/magazines/{magazineId}")
     public ResponseEntity getSpecificMagazine(@PathVariable Long magazineId){
-        return ResponseEntity.of(null);
+        Magazine magazine = magazineService.findById(magazineId);
+        return ResponseEntity.status(200).body(magazine);
     }
 
     @PostMapping

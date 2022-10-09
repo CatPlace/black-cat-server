@@ -13,7 +13,6 @@ public class MagazineServiceImpl implements MagazineService{
 
     private final MagazineRepository magazineRepository;
 
-
     @Override
     public List<MagazineTitleDto> findAll() {
         List<Magazine> magazines = magazineRepository.findAll();
@@ -24,6 +23,7 @@ public class MagazineServiceImpl implements MagazineService{
 
     @Override
     public Magazine findById(Long id) {
-        return magazineRepository.findById(id).orElseThrow(()->new MagazineNotFoundException("존재하지 않는 매거진입니다."));
+        Magazine magazine = magazineRepository.findById(id).orElseThrow(() -> new MagazineNotFoundException("존재하지 않는 매거진입니다."));
+        return magazine;
     }
 }

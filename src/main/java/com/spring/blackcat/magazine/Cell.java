@@ -1,6 +1,7 @@
 package com.spring.blackcat.magazine;
 
 import com.spring.blackcat.code.CellType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,8 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Cell {
 
     @Id
@@ -20,36 +23,36 @@ public class Cell {
 
     @Enumerated(EnumType.STRING)
     private CellType cellType;
+
     @Column(length = 5000)
-    private String content;
+    private String text;
+
+    private Long fontSize;
+
+    private String textColor;
+
+    private String textAlignment;
+
+    private String fontWeight;
+
+    private String imageUrlString;
+
+    private Long imageCornerRadius;
+
+    private Long layoutHeight;
+
+    private Long layoutWidth;
+
+    private Long layoutLeadingInset;
+
+    private Long layoutTrailingInset;
+
+    private Long layoutTopInset;
+
+    private Long layoutBottomInset;
 
     @ManyToOne(fetch = EAGER)
     private Magazine magazine;
-
-    @Builder
-    public Cell(Long id, CellType cellType, String content) {
-        this.id = id;
-        this.cellType = cellType;
-        this.content = content;
-    }
-
-    public Cell(Magazine magazine){
-        this.magazine = magazine;
-    }
-
-    public Cell(Long id, CellType cellType, String content, Magazine magazine) {
-        this.id = id;
-        this.cellType = cellType;
-        this.content = content;
-        this.magazine = magazine;
-        this.magazine.getCellList().add(this);
-    }
-
-    public void addMagazine(Magazine magazine) {
-        magazine.getCellList().remove(this);
-        this.magazine = magazine;
-        magazine.getCellList().add(this);
-    }
 
     public void setMagazine(Magazine magazine) {
         this.magazine = magazine;

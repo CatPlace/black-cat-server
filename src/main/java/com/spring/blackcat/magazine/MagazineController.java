@@ -16,19 +16,21 @@ public class MagazineController {
     private final MagazineService magazineService;
 
     @GetMapping("/magazines")
-    public ResponseEntity getAllMagazines(){
+    public ResponseEntity getAllMagazines() {
         List<MagazineTitleDto> magazineTitles = magazineService.findAll();
         return ResponseEntity.status(200).body(magazineTitles);
     }
 
+
     @GetMapping("/magazines/{magazineId}")
-    public ResponseEntity getSpecificMagazine(@PathVariable Long magazineId){
-        Magazine magazine = magazineService.findById(magazineId);
-        return ResponseEntity.status(200).body(magazine);
+    public ResponseEntity getSpecificMagazine(@PathVariable Long magazineId) {
+        List<CellDto> cells = magazineService.getMagazineCells(magazineId);
+
+        return ResponseEntity.ok().body(cells);
     }
 
     @PostMapping
-    public ResponseEntity registerMagazine(){
+    public ResponseEntity registerMagazine() {
         return ResponseEntity.of(null);
     }
 }

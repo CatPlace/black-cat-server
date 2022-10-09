@@ -8,6 +8,9 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class MagazineTitleDto {
+
+    private Long id;
+
     private String title;
 
     private String imageUrl;

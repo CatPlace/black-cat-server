@@ -7,18 +7,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/magazines")
+import java.util.List;
+
+@RestController
 @RequiredArgsConstructor
 public class MagazineController {
 
-    private final MagazineRepository magazineRepository;
+    private final MagazineService magazineService;
 
-    @GetMapping
+    @GetMapping("/magazines")
     public ResponseEntity getAllMagazines(){
-        return ResponseEntity.of(null);
+        List<MagazineTitleDto> magazineTitles = magazineService.findAll();
+        return ResponseEntity.status(200).body(magazineTitles);
     }
 
-    @GetMapping("/{magazineId}")
+    @GetMapping("/magazines/{magazineId}")
     public ResponseEntity getSpecificMagazine(@PathVariable Long magazineId){
         return ResponseEntity.of(null);
     }

@@ -19,12 +19,14 @@ public class MagazineServiceImpl implements MagazineService{
 
     private final ModelMapper modelMapper;
 
+    // TODO: 2022-10-10 magazine title 가져올 때 얘가 메인인지 아닌지 파악
+    // TODO: 2022-10-10 magazine title 가져올 때 pagable 적용해야 될듯
     @Override
     public List<MagazineTitleDto> findAll() {
         List<Magazine> magazines = magazineRepository.findAll();
         List<MagazineTitleDto> magazineTitles;
-        magazineTitles = magazines.stream().map(
-                (magazine)->MagazineTitleDto.builder().id(magazine.getId()).title(magazine.getTitle()).imageUrl(null).build())
+        magazineTitles = magazines.stream().map( //dto 생성시 modelmapper를 통한 방식으로 통일하기
+                (magazine) -> MagazineTitleDto.builder().id(magazine.getId()).title(magazine.getTitle()).imageUrl(null).build())
                 .collect(Collectors.toList());
         return magazineTitles;
     }

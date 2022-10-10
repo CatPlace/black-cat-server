@@ -14,4 +14,5 @@ public class MagazineTitleDto {
     private String title;
 
     private String imageUrl;
+    // TODO: 2022-10-10 메인 노출 여부 추가 
 }

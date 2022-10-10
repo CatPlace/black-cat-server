@@ -6,11 +6,14 @@ import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.code.*;
 import com.spring.blackcat.likes.Likes;
+import com.spring.blackcat.likes.LikesRepository;
 import com.spring.blackcat.magazine.Cell;
 import com.spring.blackcat.magazine.Magazine;
+import com.spring.blackcat.magazine.MagazineRepository;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.Tattoo;
+import com.spring.blackcat.tattoo.TattooRepository;
 import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,12 +29,20 @@ import java.util.List;
 @RequiredArgsConstructor
 class InitService {
     private final EntityManager em;
-    private final CategoryRepository categoryRepository;
+
     private final AddressRepository addressRepository;
+
+    private final UserRepository userRepository;
+
+    private final CategoryRepository categoryRepository;
 
     private final PostRepository postRepository;
 
-    private final UserRepository userRepository;
+    private final TattooRepository tattooRepository;
+
+    private final MagazineRepository magazineRepository;
+
+    private final LikesRepository likesRepository;
 
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
@@ -51,7 +62,8 @@ class InitService {
         addressList.add(createAddress("강원", "Gangwon"));
         addressList.add(createAddress("제주", "Jeju"));
 
-        addressList.forEach(em::persist);
+        addressRepository.saveAllAndFlush(addressList);
+        em.clear();
     }
 
     public void initUser() {
@@ -61,7 +73,8 @@ class InitService {
         userList.add(createUser("Admin2", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전")));
         userList.add(createUser("Admin3", "이현직", Role.BASIC, addressRepository.findBySido("대구")));
 
-        userList.forEach(em::persist);
+        userRepository.saveAllAndFlush(userList);
+        em.clear();
     }
 
     public void initCategory() {
@@ -82,7 +95,8 @@ class InitService {
         categoryList.add(createCategory("컬러"));
         categoryList.add(createCategory("캐릭터"));
 
-        categoryList.forEach(em::persist);
+        categoryRepository.saveAllAndFlush(categoryList);
+        em.clear();
     }
 
     public void initTattoo() {
@@ -98,19 +112,11 @@ class InitService {
         tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").orElse(null), TattooType.DESIGN, "도안4", "설명", 80000L, 5));
         tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.WORK, "작품5", "설명", 90000L, 5));
         tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.DESIGN, "도안5", "설명", 10000L, 5));
-        tattooList.add(createTattoo(categoryRepository.findByName("레터링").orElse(null), TattooType.WORK, "작품1", "설명", 10000L, 5));
-        tattooList.add(createTattoo(categoryRepository.findByName("레터링").orElse(null), TattooType.DESIGN, "도안1", "설명", 20000L, 4));
-        tattooList.add(createTattoo(categoryRepository.findByName("미니타투").orElse(null), TattooType.WORK, "작품2", "설명", 30000L, 3));
-        tattooList.add(createTattoo(categoryRepository.findByName("미니타투").orElse(null), TattooType.DESIGN, "도안2", "설명", 40000L, 2));
-        tattooList.add(createTattoo(categoryRepository.findByName("감성타투").orElse(null), TattooType.WORK, "작품3", "설명", 50000L, 1));
-        tattooList.add(createTattoo(categoryRepository.findByName("감성타투").orElse(null), TattooType.DESIGN, "도안3", "설명", 60000L, 4));
-        tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").orElse(null), TattooType.WORK, "작품4", "설명", 70000L, 3));
-        tattooList.add(createTattoo(categoryRepository.findByName("이레즈미").orElse(null), TattooType.DESIGN, "도안4", "설명", 80000L, 5));
-        tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.WORK, "작품5", "설명", 90000L, 5));
-        tattooList.add(createTattoo(categoryRepository.findByName("블랙&그레이").orElse(null), TattooType.DESIGN, "도안5", "설명", 10000L, 5));
 
-        tattooList.forEach(em::persist);
+        tattooRepository.saveAllAndFlush(tattooList);
+        em.clear();
     }
+
     public void initMagazine() {
         List<Magazine> magazineList = new ArrayList<>();
         List<Cell> cellList1 = new ArrayList<>();
@@ -130,7 +136,8 @@ class InitService {
         cellList1.forEach(cell -> cell.changeMagazine(magazineList.get(0)));
         cellList2.forEach(cell -> cell.changeMagazine(magazineList.get(1)));
 
-        magazineList.forEach(em::persist);
+        magazineRepository.saveAllAndFlush(magazineList);
+        em.clear();
     }
 
     public void initLikes() {
@@ -151,10 +158,14 @@ class InitService {
         userList.add(userRepository.findById("Admin1").orElse(null));
 
         for (int i = 0; i < postList.size(); i++) {
-            likesList.add(createLikes(postList.get(i), userList.get(i), postList.get(i).getPostTypeCd()));
+            Post post = postList.get(i);
+            User user = userList.get(i);
+            PostType postType = post.getPostTypeCd();
+            likesList.add(createLikes(post, user, postType));
         }
 
-        likesList.forEach(em::persist);
+        likesRepository.saveAllAndFlush(likesList);
+        em.clear();
     }
 
     private static User createUser(String id, String name, Role role, Address address) {
@@ -206,7 +217,7 @@ class InitService {
                 .build();
     }
 
-    private static List<Cell> createCells(String text1, String text2, String text3){
+    private static List<Cell> createCells(String text1, String text2, String text3) {
         List<Cell> cellList = new ArrayList<>();
         cellList.add(createCell(CellType.EMPTYCELL, null, 12L,
                 TextColor.BLACK, TextAlignmentType.LEFT, FontWeightType.REGULAR,

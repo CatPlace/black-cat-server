@@ -23,7 +23,7 @@ public class Magazine extends Post {
 
     public Magazine(String title, String registerId, String modifierId) {
         super(registerId, modifierId);
-        this.name = title;
+        this.title = title;
     }
     
 }

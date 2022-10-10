@@ -1,6 +1,6 @@
 package com.spring.blackcat.tattoo;
 
-import com.spring.blackcat.likes.LikesRepository;
+import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TattooServiceImpl implements TattooService {
     private final TattooRepository tattooRepository;
-    private final LikesRepository likesRepository;
     private final PostRepository postRepository;
 
     @Override
@@ -42,7 +41,11 @@ public class TattooServiceImpl implements TattooService {
     }
 
     private boolean isUserLikedTattoo(Long postId, String userId) {
-        return this.likesRepository.findByPostIdAndUserId(postId, userId).isPresent();
+        List<Likes> likes = this.postRepository.findById(postId).get().getLikes()
+                .stream()
+                .filter(like -> like.getUser().getId().equals(userId)).collect(Collectors.toList());
+
+        return likes.size() > 0 ? true : false;
     }
 
     //수정필요

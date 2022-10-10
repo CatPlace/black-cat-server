@@ -1,5 +1,6 @@
 package com.spring.blackcat.category;
 
+import com.spring.blackcat.category.dto.CategoryResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +17,10 @@ public class CategoryServiceImpl implements CategoryService {
      * 전체 카테고리 조회
      */
     @Override
-    public List<CategoryDto> findAll() {
+    public List<CategoryResDto> findAll() {
         List<Category> categories = categoryRepository.findAll();
         return categories.stream()
-                .map(category -> new CategoryDto(category.getId(), category.getName()))
+                .map(CategoryResDto::new)
                 .collect(Collectors.toList());
     }
 }

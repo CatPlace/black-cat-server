@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
+
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
@@ -62,7 +64,11 @@ public class Cell {
     @ManyToOne(fetch = EAGER)
     private Magazine magazine;
 
-    public void setMagazine(Magazine magazine) {
+    public void changeMagazine(Magazine magazine) {
+        if (this.magazine != null) {
+            this.magazine.getCellList().remove(this);
+        }
         this.magazine = magazine;
+        magazine.getCellList().add(this);
     }
 }

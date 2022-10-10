@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,9 +19,10 @@ public class Magazine extends Post {
     private String title;
 
     @OneToMany(mappedBy = "magazine", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Cell> cellList;
-    
+    private List<Cell> cellList = new ArrayList<>();
+
     public Magazine(String title, String registerId, String modifierId) {
         super(registerId, modifierId);
         this.name = title;
+    
 }

@@ -133,8 +133,8 @@ public class InitDb {
             magazineList.add(createMagazine("타린이들을 위한 안내서", cellList1));
             magazineList.add(createMagazine("타투를 하면 얼마나 아픈가요?", cellList2));
 
-            cellList1.forEach(cell -> cell.setMagazine(magazineList.get(0)));
-            cellList2.forEach(cell -> cell.setMagazine(magazineList.get(1)));
+            cellList1.forEach(cell -> cell.changeMagazine(magazineList.get(0)));
+            cellList2.forEach(cell -> cell.changeMagazine(magazineList.get(1)));
 
             magazineList.forEach(em::persist);
         }
@@ -179,7 +179,6 @@ public class InitDb {
         private static Magazine createMagazine(String title, List<Cell> cells) {
             Magazine magazine = new Magazine();
             magazine.setTitle(title);
-            magazine.setCellList(cells);
             magazine.setRegisterId("Admin");
             magazine.setModifierId("Admin");
             return magazine;

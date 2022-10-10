@@ -1,4 +1,4 @@
-package com.spring.blackcat;
+package com.spring.blackcat.common;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
@@ -14,11 +14,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @Component
 @RequiredArgsConstructor
 public class InitDb {
@@ -26,7 +26,7 @@ public class InitDb {
     private final InitService initService;
     private final LikesService likesService;
 
-    @PostConstruct
+    //    @PostConstruct
     public void init() {
         initService.initAddress();
         initService.initUser();

@@ -4,6 +4,7 @@ import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -17,27 +18,27 @@ public class TattooServiceImpl implements TattooService {
     private final PostRepository postRepository;
 
     @Override
-    public List<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
-        return this.tattooRepository.findAll(pageable).stream().map(tattoo -> {
+    public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
+        return this.tattooRepository.findAll(pageable).map(tattoo -> {
             boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
             String tattooistName = this.getPostingTattooistName(tattoo.getId());
 
             GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked);
 
             return getTattoosResDto;
-        }).collect(Collectors.toList());
+        });
     }
 
     @Override
-    public List<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, String userId, Long categoryId) {
-        return this.tattooRepository.findByCategoryId(pageable, categoryId).stream().map(tattoo -> {
+    public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, String userId, Long categoryId) {
+        return this.tattooRepository.findByCategoryId(pageable, categoryId).map(tattoo -> {
             boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
             String tattooistName = this.getPostingTattooistName(tattoo.getId());
 
             GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked);
 
             return getTattoosResDto;
-        }).collect(Collectors.toList());
+        });
     }
 
     private boolean isUserLikedTattoo(Long postId, String userId) {

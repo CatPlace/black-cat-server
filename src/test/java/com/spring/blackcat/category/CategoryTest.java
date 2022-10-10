@@ -1,5 +1,6 @@
 package com.spring.blackcat.category;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CategoryTest {
 
     @Test
+    @DisplayName("하위 카테고리 등록")
     void addChildCategory() {
         // given
         Category parentCategory = new Category("흑백", "Admin", "Admin");
@@ -23,12 +25,10 @@ class CategoryTest {
         // then
         assertThat(contains).isTrue();
         assertThat(childCategory.getParent()).isEqualTo(parentCategory);
-
-        System.out.println("parentCategory.getChildren().get(0) = " + parentCategory.getChildren().get(0).getName());
-        System.out.println("childCategory.getParent() = " + childCategory.getParent().getName());
     }
 
     @Test
+    @DisplayName("상위 카테고리 등록")
     void changeParentCategory() {
         // given
         Category firstParentCategory = new Category("흑백", "Admin", "Admin");
@@ -52,9 +52,5 @@ class CategoryTest {
         assertThat(containsFirstAfterChange).isFalse();
         assertThat(firstParent).isEqualTo(firstParentCategory);
         assertThat(secondParent).isEqualTo(secondParentCategory);
-
-        System.out.println("firstParentCategory.getChildren().size() = " + firstParentCategory.getChildren().size());
-        System.out.println("secondParentCategory.getChildren().get(0).getName() = " + secondParentCategory.getChildren().get(0).getName());
-        System.out.println("childCategory.getParent() = " + childCategory.getParent().getName());
     }
 }

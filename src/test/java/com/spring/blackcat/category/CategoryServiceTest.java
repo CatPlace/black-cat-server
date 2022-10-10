@@ -1,6 +1,7 @@
 package com.spring.blackcat.category;
 
 import com.spring.blackcat.category.dto.CategoryResDto;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,6 +22,7 @@ class CategoryServiceTest {
     CategoryRepository categoryRepository;
 
     @Test
+    @DisplayName("전체 카테고리 조회")
     void findAll() {
         // given
         Category category1 = new Category("레터링", "Admin", "Admin");

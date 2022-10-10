@@ -1,5 +1,6 @@
 package com.spring.blackcat.tattoo;
 
+import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.code.TattooType;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
@@ -7,10 +8,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,13 +35,15 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 20, Sort.Direction.DESC, "id");
-        Long categoryId = 15L;
+        Long categoryId = 1L;
+        this.Insert();
 
         //when
-        List<GetTattoosResDto> tattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
 
         //then
-        assertThat(tattoos.size()).isEqualTo(4);
+        assertThat(allTattoos.getNumber()).isEqualTo(0);
+        assertThat(allTattoos.getNumberOfElements()).isEqualTo(2);
     }
 
     @Test
@@ -48,14 +53,15 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(1, 20, Sort.Direction.DESC, "id");
-        Long categoryId = 15L;
+        Long categoryId = 1L;
+        this.Insert();
 
         //when
-        List<GetTattoosResDto> tattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
 
         //then
-        //기본 20개 씩 조회 시, 두 번째 페이지에는 데이터가 없음(총 데이터 20개)
-        assertThat(tattoos.size()).isEqualTo(0);
+        assertThat(allTattoos.getNumber()).isEqualTo(1);
+        assertThat(allTattoos.getNumberOfElements()).isEqualTo(0);
     }
 
     @Test
@@ -65,13 +71,15 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 2, Sort.Direction.DESC, "id");
-        Long categoryId = 15L;
+        Long categoryId = 1L;
+        this.Insert();
 
         //when
-        List<GetTattoosResDto> tattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
 
         //then
-        assertThat(tattoos.size()).isEqualTo(2);
+        assertThat(allTattoos.getNumber()).isEqualTo(0);
+        assertThat(allTattoos.getNumberOfElements()).isEqualTo(2);
     }
 
     @Test
@@ -81,13 +89,15 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(1, 2, Sort.Direction.DESC, "id");
-        Long categoryId = 15L;
+        Long categoryId = 1L;
+        this.Insert();
 
         //when
-        List<GetTattoosResDto> tattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
 
         //then
-        assertThat(tattoos.size()).isEqualTo(2);
+        assertThat(allTattoos.getNumber()).isEqualTo(1);
+        assertThat(allTattoos.getNumberOfElements()).isEqualTo(0);
     }
 
     @Test
@@ -96,17 +106,35 @@ public class GetTattoosByCategoryIdTest {
         //given
         String userName = "Admin1";
         //default pageable object
-        PageRequest pageRequest = PageRequest.of(0, 21, Sort.Direction.ASC, "price");
-        Long categoryId = 15L;
-
-        Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, 5, categoryRepository.findByName("레터링").orElse(null), TattooType.DESIGN, userName, userName);
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.Direction.ASC, "price");
+        Long categoryId = 1L;
+        this.Insert();
+        Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, 5, categoryRepository.findById(categoryId).orElse(null), TattooType.DESIGN, userName, userName);
         tattooRepository.save(tattoo);
 
         //when
-        List<GetTattoosResDto> tattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
 
         //then
-        assertThat(tattoos.size()).isEqualTo(5);
-        assertThat(tattoos.get(0).getPrice()).isEqualTo(0);
+        assertThat(allTattoos.getNumber()).isEqualTo(0);
+        assertThat(allTattoos.getNumberOfElements()).isEqualTo(3);
+        assertThat(allTattoos.getContent().get(0).getPrice()).isEqualTo(0);
+    }
+
+    private void Insert() {
+        String userName = "Admin1";
+
+        Category category1 = new Category("감성타투", userName, userName);
+        Category category2 = new Category("안감성타투", userName, userName);
+
+        List<Tattoo> tattoos = new ArrayList<>();
+        tattoos.add(new Tattoo("타투1", "설명근", 10000L, 5, category1, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투2", "설명근", 20000L, 4, category1, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투3", "설명근", 30000L, 3, category2, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투4", "설명근", 40000L, 2, category2, TattooType.DESIGN, userName, userName));
+
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
+        tattooRepository.saveAll(tattoos);
     }
 }

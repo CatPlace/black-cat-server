@@ -35,8 +35,9 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 20, Sort.Direction.DESC, "id");
-        Long categoryId = 1L;
         this.Insert();
+        Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
+
 
         //when
         Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
@@ -53,8 +54,9 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(1, 20, Sort.Direction.DESC, "id");
-        Long categoryId = 1L;
         this.Insert();
+        Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
+
 
         //when
         Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
@@ -71,8 +73,8 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 2, Sort.Direction.DESC, "id");
-        Long categoryId = 1L;
         this.Insert();
+        Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
 
         //when
         Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
@@ -89,8 +91,8 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(1, 2, Sort.Direction.DESC, "id");
-        Long categoryId = 1L;
         this.Insert();
+        Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
 
         //when
         Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
@@ -107,8 +109,8 @@ public class GetTattoosByCategoryIdTest {
         String userName = "Admin1";
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.Direction.ASC, "price");
-        Long categoryId = 1L;
         this.Insert();
+        Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
         Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, 5, categoryRepository.findById(categoryId).orElse(null), TattooType.DESIGN, userName, userName);
         tattooRepository.save(tattoo);
 

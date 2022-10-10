@@ -3,7 +3,6 @@ package com.spring.blackcat.category;
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.tattoo.Tattoo;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,7 +39,6 @@ public class Category extends BaseTimeEntity {
     private String registerId;
     private String modifierId;
 
-    @Builder
     public Category(String name, String registerId, String modifierId) {
         this.name = name;
         this.registerId = registerId;

@@ -21,6 +21,15 @@ public class Tattoo extends Post {
     @Column(name = "tattoo_name")
     private String name;
 
+    @Column(name = "tattoo_price")
+    private Long price;
+
+    @Column(name = "tattoo_description")
+    private String description;
+
+    @Column(name = "tattoo_star")
+    private int star;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -28,9 +37,12 @@ public class Tattoo extends Post {
     @Enumerated(EnumType.STRING)
     private TattooType tattooType;
 
-    public Tattoo(String name, Category category, TattooType tattooType, String registerId, String modifierId) {
+    public Tattoo(String name, String description, Long price, int star, Category category, TattooType tattooType, String registerId, String modifierId) {
         super(registerId, modifierId);
         this.name = name;
+        this.description = description;
+        this.price = price;
+        this.star = star;
         this.category = category;
         this.tattooType = tattooType;
     }

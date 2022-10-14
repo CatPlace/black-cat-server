@@ -1,6 +1,8 @@
 package com.spring.blackcat.likes;
 
+import com.spring.blackcat.likes.dto.LikesPostResDto;
 import com.spring.blackcat.likes.dto.LikesStatusResDto;
+import com.spring.blackcat.likes.dto.LikesUserResDto;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.user.User;
@@ -9,7 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +59,25 @@ public class LikesServiceImpl implements LikesService {
     public LikesStatusResDto likesOff(Long postId, String userId) {
         likesRepository.findByPostIdAndUserId(postId, userId).ifPresent(likesRepository::delete);
         return new LikesStatusResDto(false);
+    }
+
+    /**
+     * 특정 게시물을 좋아요한 유저 리스트 조회
+     */
+    @Override
+    @Transactional
+    public List<LikesUserResDto> findUsersByPostId(Long postId) {
+        List<Likes> likesList = likesRepository.findByPostId(postId);
+        return likesList.stream().map(likes -> new LikesUserResDto(likes.getUser())).collect(Collectors.toList());
+    }
+
+    /**
+     * 특정 유저의 좋아요한 게시물 리스트 조회
+     */
+    @Override
+    @Transactional
+    public List<LikesPostResDto> findPostsByUserId(String userId) {
+        List<Likes> likesList = likesRepository.findByUserId(userId);
+        return likesList.stream().map(likes -> new LikesPostResDto(likes.getPost())).collect(Collectors.toList());
     }
 }

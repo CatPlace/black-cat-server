@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LikesStatusResDto {
-    boolean likesStatus;
+    private boolean likesStatus;
 }

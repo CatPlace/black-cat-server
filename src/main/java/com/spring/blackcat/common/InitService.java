@@ -189,7 +189,7 @@ class InitService {
     }
 
     private static Likes createLikes(Post post, User user, PostType postType) {
-        return new Likes(post, user, postType, "Admin", "Admin");
+        return new Likes(post, user, postType);
     }
 
     private static Cell createCell(

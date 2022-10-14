@@ -40,7 +40,7 @@ public class LikesServiceImpl implements LikesService {
         Post post = postRepository.findById(postId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
         if (post != null && user != null) {
-            Likes likes = new Likes(post, user, post.getPostTypeCd(), userId, userId);
+            Likes likes = new Likes(post, user, post.getPostTypeCd());
             likesRepository.save(likes);
         }
         return new LikesStatusDto(true);

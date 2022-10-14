@@ -1,5 +1,6 @@
 package com.spring.blackcat.likes;
 
+import com.spring.blackcat.likes.dto.LikesStatusResDto;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.user.User;
@@ -22,9 +23,9 @@ public class LikesServiceImpl implements LikesService {
      * 특정 게시물 좋아요 조회
      */
     @Override
-    public LikesStatusDto isLikedThisPost(Long postId, String userId) {
+    public LikesStatusResDto isLikedThisPost(Long postId, String userId) {
         Optional<Likes> likes = likesRepository.findByPostIdAndUserId(postId, userId);
-        return new LikesStatusDto(likes.isPresent());
+        return new LikesStatusResDto(likes.isPresent());
     }
 
     /**
@@ -32,10 +33,10 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public LikesStatusDto likesOn(Long postId, String userId) {
+    public LikesStatusResDto likesOn(Long postId, String userId) {
         boolean isExists = likesRepository.findByPostIdAndUserId(postId, userId).isPresent();
         if (isExists) {
-            return new LikesStatusDto(true);
+            return new LikesStatusResDto(true);
         }
         Post post = postRepository.findById(postId).orElse(null);
         User user = userRepository.findById(userId).orElse(null);
@@ -43,7 +44,7 @@ public class LikesServiceImpl implements LikesService {
             Likes likes = new Likes(post, user, post.getPostTypeCd());
             likesRepository.save(likes);
         }
-        return new LikesStatusDto(true);
+        return new LikesStatusResDto(true);
     }
 
     /**
@@ -51,8 +52,8 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public LikesStatusDto likesOff(Long postId, String userId) {
+    public LikesStatusResDto likesOff(Long postId, String userId) {
         likesRepository.findByPostIdAndUserId(postId, userId).ifPresent(likesRepository::delete);
-        return new LikesStatusDto(false);
+        return new LikesStatusResDto(false);
     }
 }

@@ -1,10 +1,10 @@
-package com.spring.blackcat.likes;
+package com.spring.blackcat.likes.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LikesStatusDto {
+public class LikesStatusResDto {
     boolean likesStatus;
 }

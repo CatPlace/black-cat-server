@@ -1,5 +1,6 @@
 package com.spring.blackcat.likes;
 
+import com.spring.blackcat.likes.dto.LikesStatusResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +12,7 @@ public class LikesController {
 
     // TODO: userId 제거
     @GetMapping("/user/{userId}/likes/post/{postId}")
-    public LikesStatusDto isLikedThisPost(
+    public LikesStatusResDto isLikedThisPost(
             @PathVariable("postId") Long postId,
             @PathVariable("userId") String userId) {
         return likesService.isLikedThisPost(postId, userId);
@@ -19,7 +20,7 @@ public class LikesController {
 
     // TODO: userId 제거
     @PostMapping("/user/{userId}/likes/post/{postId}")
-    public LikesStatusDto likesOn(
+    public LikesStatusResDto likesOn(
             @PathVariable("postId") Long postId,
             @PathVariable("userId") String userId) {
         return likesService.likesOn(postId, userId);
@@ -27,7 +28,7 @@ public class LikesController {
 
     // TODO: userId 제거
     @DeleteMapping("/user/{userId}/likes/post/{postId}")
-    public LikesStatusDto likesOff(
+    public LikesStatusResDto likesOff(
             @PathVariable("postId") Long postId,
             @PathVariable("userId") String userId) {
         return likesService.likesOff(postId, userId);

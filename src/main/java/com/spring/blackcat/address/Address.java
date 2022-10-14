@@ -10,16 +10,15 @@ import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(name = "ADDRESS_SEQ_GENERATOR", sequenceName = "ADDRESS_SEQ")
 public class Address extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue(strategy = SEQUENCE, generator = "ADDRESS_SEQ_GENERATOR")
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "address_id")
     private Long id; // 주소ID
     private String zipCode; // 우편번호

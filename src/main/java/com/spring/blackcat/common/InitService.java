@@ -47,6 +47,9 @@ class InitService {
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
 
+        addressList.add(new Address("07281", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154433", "선유로13길", "Seonyu-ro 13-gil", "0", "5", "0", "1156012400100020002037439", "", "문래동 현대홈시티2", "1156012400", "문래동6가", "", "문래동", "0", "2", "01", "2", "", "", "Admin", "Admin"));
+        addressList.add(new Address("07282", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154461", "선유로9길", "Seonyu-ro 9-gil", "0", "30", "0", "1156012400100210000000005", "", "문래롯데캐슬", "1156012400", "문래동6가", "", "문래동", "0", "57", "02", "0", "", "", "Admin", "Admin"));
+
         addressList.add(createAddress("서울", "Seoul"));
         addressList.add(createAddress("경기", "Gyeonggi"));
         addressList.add(createAddress("인천", "Incheon"));
@@ -69,9 +72,9 @@ class InitService {
     public void initUser() {
         List<User> userList = new ArrayList<>();
 
-        userList.add(createUser("Admin1", "김진호", Role.ADMIN, addressRepository.findBySido("서울")));
-        userList.add(createUser("Admin2", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전")));
-        userList.add(createUser("Admin3", "이현직", Role.BASIC, addressRepository.findBySido("대구")));
+        userList.add(createUser("Admin1", "김진호", Role.ADMIN, addressRepository.findBySido("서울").orElse(null)));
+        userList.add(createUser("Admin2", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전").orElse(null)));
+        userList.add(createUser("Admin3", "이현직", Role.BASIC, addressRepository.findBySido("대구").orElse(null)));
 
         userRepository.saveAllAndFlush(userList);
         em.clear();
@@ -145,11 +148,11 @@ class InitService {
         List<User> userList = new ArrayList<>();
         List<Likes> likesList = new ArrayList<>();
 
-        postList.add(postRepository.findById(29L).orElse(null));
-        postList.add(postRepository.findById(29L).orElse(null));
-        postList.add(postRepository.findById(30L).orElse(null));
-        postList.add(postRepository.findById(31L).orElse(null));
-        postList.add(postRepository.findById(39L).orElse(null));
+        postList.add(postRepository.findById(1L).orElse(null));
+        postList.add(postRepository.findById(1L).orElse(null));
+        postList.add(postRepository.findById(2L).orElse(null));
+        postList.add(postRepository.findById(3L).orElse(null));
+        postList.add(postRepository.findById(11L).orElse(null));
 
         userList.add(userRepository.findById("Admin1").orElse(null));
         userList.add(userRepository.findById("Admin2").orElse(null));

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -21,7 +22,7 @@ import static javax.persistence.CascadeType.ALL;
 public abstract class Post extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "post_id")
     private Long id;
 

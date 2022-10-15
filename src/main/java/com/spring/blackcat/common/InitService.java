@@ -119,14 +119,11 @@ class InitService {
 
     public void initMagazine() {
         List<Magazine> magazineList = new ArrayList<>();
-        List<Cell> cellList1 = new ArrayList<>();
-        List<Cell> cellList2 = new ArrayList<>();
-
-        cellList1 = createCells("타투 말은 많이 들어보고 주변에서도 요즘 많이 하던데 뭐가 뭔지 잘 모르겠어",
+        List<Cell> cellList1 = createCells("타투 말은 많이 들어보고 주변에서도 요즘 많이 하던데 뭐가 뭔지 잘 모르겠어",
                 "사람마다 모양, 색깔도 다르던데... 그리고 그거 아픈거 아냐?",
                 "하는 당신을 위해 타투이스트 깜냥이가 모두 답변해드리겠습니닷!");
 
-        cellList2 = createCells("2010년 연구에 따르면 18세에서 29세 사이의 사람들 중 무려 38%가 일생에 한 번 이상 타투를 해본 경험이 있다고 합니다.",
+        List<Cell> cellList2 = createCells("2010년 연구에 따르면 18세에서 29세 사이의 사람들 중 무려 38%가 일생에 한 번 이상 타투를 해본 경험이 있다고 합니다.",
                 "약 10년이 넘게 지난 지금 타투에 관한 인식이 이전보다 많이 좋아졌기 때문에 훨씬 더 많은 사람이 타투를 해본 경험이 있을 것입니다.",
                 "하지만 처음 타투를 하기로 다짐했다면 '타투를 하면 아프나요?'가 자연스러운 질문일 것입니다.");
 
@@ -229,17 +226,17 @@ class InitService {
                 "https://이미지링크", 0L, 10L,
                 10L, 20L, 20L,
                 20L, 20L));
-        cellList.add(createCell(CellType.TEXTCELL, "타투 말은 많이 들어보고 주변에서도 요즘 많이 하던데 뭐가 뭔지 잘 모르겠어", 10L,
+        cellList.add(createCell(CellType.TEXTCELL, text1, 10L,
                 TextColor.WHITE, TextAlignmentType.NATURAL, FontWeightType.BOLD,
                 null, 0L, 10L,
                 10L, 20L, 20L,
                 20L, 20L));
-        cellList.add(createCell(CellType.TEXTCELL, "사람마다 모양, 색깔도 다르던데... 그리고 그거 아픈거 아냐?", 10L,
+        cellList.add(createCell(CellType.TEXTCELL, text2, 10L,
                 TextColor.WHITE, TextAlignmentType.NATURAL, FontWeightType.BOLD,
                 null, 0L, 10L,
                 10L, 20L, 20L,
                 20L, 20L));
-        cellList.add(createCell(CellType.TEXTCELL, "하는 당신을 위해 타투이스트 깜냥이가 모두 답변해드리겠습니닷!", 10L,
+        cellList.add(createCell(CellType.TEXTCELL, text3, 10L,
                 TextColor.WHITE, TextAlignmentType.NATURAL, FontWeightType.BOLD,
                 null, 0L, 10L,
                 10L, 20L, 20L,

@@ -1,14 +1,13 @@
-package com.spring.blackcat.magazine;
+package com.spring.blackcat.magazine.dto;
 
 import com.spring.blackcat.code.CellType;
 import com.spring.blackcat.code.FontWeightType;
 import com.spring.blackcat.code.TextAlignmentType;
 import com.spring.blackcat.code.TextColor;
-import lombok.*;
-
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor

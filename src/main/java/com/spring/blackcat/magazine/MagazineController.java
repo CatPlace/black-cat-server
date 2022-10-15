@@ -1,6 +1,8 @@
 package com.spring.blackcat.magazine;
 
 import com.spring.blackcat.common.Response;
+import com.spring.blackcat.magazine.dto.CellDto;
+import com.spring.blackcat.magazine.dto.MagazineTitleDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

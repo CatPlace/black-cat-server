@@ -1,4 +1,4 @@
-package com.spring.blackcat.magazine;
+package com.spring.blackcat.magazine.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

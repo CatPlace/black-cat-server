@@ -4,10 +4,7 @@ import com.spring.blackcat.code.CellType;
 import com.spring.blackcat.code.FontWeightType;
 import com.spring.blackcat.code.TextAlignmentType;
 import com.spring.blackcat.code.TextColor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
@@ -19,6 +16,7 @@ import static javax.persistence.FetchType.EAGER;
 @AllArgsConstructor
 @Builder
 @Getter
+@Setter
 @DynamicInsert
 public class Cell {
 
@@ -73,7 +71,7 @@ public class Cell {
 
     @Builder.Default
     private Long layoutBottomInset = 20L;
-    
+
     @ManyToOne(fetch = EAGER)
     private Magazine magazine;
 

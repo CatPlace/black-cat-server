@@ -1,7 +1,8 @@
 package com.spring.blackcat.magazine;
 
 import com.spring.blackcat.magazine.dto.CellDto;
-import com.spring.blackcat.magazine.dto.MagazineTitleDto;
+import com.spring.blackcat.magazine.dto.MagazineTitleReqDto;
+import com.spring.blackcat.magazine.dto.MagazineTitleResDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -23,20 +24,10 @@ public class MagazineServiceImpl implements MagazineService {
     // TODO: 2022-10-10 magazine title 가져올 때 얘가 메인인지 아닌지 파악
 
     @Override
-    public Page<MagazineTitleDto> findAll(Pageable pageable) {
+    public Page<MagazineTitleResDto> findAll(Pageable pageable) {
         Page<Magazine> magazines = magazineRepository.findAll(pageable);
-        return magazines.map(magazine -> modelMapper.map(magazine, MagazineTitleDto.class));
+        return magazines.map(magazine -> modelMapper.map(magazine, MagazineTitleResDto.class));
     }
-
-//    @Override
-//    public List<MagazineTitleDto> findAll() {
-//        List<Magazine> magazines = magazineRepository.findAll();
-//        List<MagazineTitleDto> magazineTitles;
-//        magazineTitles = magazines.stream().map( //dto 생성시 modelmapper를 통한 방식으로 통일하기
-//                        (magazine) -> MagazineTitleDto.builder().id(magazine.getId()).title(magazine.getTitle()).imageUrl(null).build())
-//                .collect(Collectors.toList());
-//        return magazineTitles;
-//    }
 
     @Override
     public List<CellDto> getMagazineCells(Long id) {
@@ -45,6 +36,28 @@ public class MagazineServiceImpl implements MagazineService {
         List<CellDto> cellDtos = cells.stream().map(cell -> modelMapper.map(cell, CellDto.class))
                 .collect(Collectors.toList());
         return cellDtos;
+    }
+
+    @Override
+    public MagazineTitleResDto postMagazine(MagazineTitleReqDto reqDto) {
+        Magazine magazine = Magazine.builder()
+                .title(reqDto.getTitle())
+                .imageUrl(reqDto.getImageUrl())
+                .isMain(true)
+                .build();
+
+        List<CellDto> cellDtos = reqDto.getData();
+
+        List<Cell> cellList = cellDtos.stream().map(cellDto -> modelMapper.map(cellDto, Cell.class)).collect(Collectors.toList());
+
+        cellList.forEach(cell -> cell.changeMagazine(magazine));
+
+        List<Magazine> mainTrueList = magazineRepository.findAllByIsMainTrue();
+        mainTrueList.forEach(m -> m.setIsMain(false));
+
+        Magazine newMagazine = magazineRepository.save(magazine);
+
+        return MagazineTitleResDto.builder().id(newMagazine.getId()).title(newMagazine.getTitle()).isMain(newMagazine.getIsMain()).imageUrl(newMagazine.getImageUrl()).build();
     }
 
 }

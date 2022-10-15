@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MagazineTitleDto {
+public class MagazineTitleResDto {
 
     private Long id;
 

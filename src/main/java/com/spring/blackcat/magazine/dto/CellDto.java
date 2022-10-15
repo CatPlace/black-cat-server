@@ -9,37 +9,61 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
 public class CellDto {
-    private CellType cellType;
+    
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private CellType cellType = CellType.EMPTYCELL;
 
-    private String text;
+    @Builder.Default
+    @Column(length = 5000)
+    private String text = null;
 
-    private Long fontSize;
+    @Builder.Default
+    private Long fontSize = 12L;
 
-    private TextColor textColor;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private TextColor textColor = TextColor.BLACK;
 
-    private TextAlignmentType textAlignment;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private TextAlignmentType textAlignment = TextAlignmentType.LEFT;
 
-    private FontWeightType fontWeight;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private FontWeightType fontWeight = FontWeightType.REGULAR;
 
-    private String imageUrlString;
+    @Builder.Default
+    private String imageUrlString = null;
 
-    private Long imageCornerRadius;
+    @Builder.Default
+    private Long imageCornerRadius = 0L;
 
-    private Long layoutHeight;
+    @Builder.Default
+    private Long layoutHeight = 10L;
 
-    private Long layoutWidth;
+    @Builder.Default
+    private Long layoutWidth = 10L;
 
-    private Long layoutLeadingInset;
+    @Builder.Default
+    private Long layoutLeadingInset = 20L;
 
-    private Long layoutTrailingInset;
+    @Builder.Default
+    private Long layoutTrailingInset = 20L;
 
-    private Long layoutTopInset;
+    @Builder.Default
+    private Long layoutTopInset = 20L;
 
-    private Long layoutBottomInset;
+    @Builder.Default
+    private Long layoutBottomInset = 20L;
 
 }

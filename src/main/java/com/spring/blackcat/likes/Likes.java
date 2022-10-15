@@ -34,15 +34,10 @@ public class Likes extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private PostType postType;
 
-    private String registerId;
-    private String modifierId;
-
-    public Likes(Post post, User user, PostType postType, String registerId, String modifierId) {
+    public Likes(Post post, User user, PostType postType) {
         this.post = post;
         this.user = user;
         this.postType = postType;
-        this.registerId = registerId;
-        this.modifierId = modifierId;
         post.getLikes().add(this);
         user.getLikes().add(this);
     }

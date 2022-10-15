@@ -16,7 +16,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-@DiscriminatorColumn(name = "postTypeCd")
+@DiscriminatorColumn(name = "postType")
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Post extends BaseTimeEntity {
@@ -31,7 +31,7 @@ public abstract class Post extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(insertable = false, updatable = false)
-    private PostType postTypeCd;
+    private PostType postType;
 
     private String registerId;
     private String modifierId;

@@ -1,21 +1,30 @@
 package com.spring.blackcat.magazine;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.spring.blackcat.code.CellType;
 import com.spring.blackcat.code.FontWeightType;
 import com.spring.blackcat.code.TextAlignmentType;
 import com.spring.blackcat.code.TextColor;
+import com.spring.blackcat.magazine.dto.CellDto;
+import com.spring.blackcat.magazine.dto.MagazineTitleReqDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
@@ -28,6 +37,9 @@ class MagazineControllerTest {
 
     @Autowired
     MagazineRepository magazineRepository;
+
+    @Autowired
+    ModelMapper modelMapper;
 
     @Test
     @DisplayName("전체 매거진 목록 조회")
@@ -63,11 +75,9 @@ class MagazineControllerTest {
                 "사람마다 모양, 색깔도 다르던데... 그리고 그거 아픈거 아냐?",
                 "하는 당신을 위해 타투이스트 깜냥이가 모두 답변해드리겠습니닷!");
 
-        List<Cell> cellList2 = createCells("2010년 연구에 따르면 18세에서 29세 사이의 사람들 중 무려 38%가 일생에 한 번 이상 타투를 해본 경험이 있다고 합니다.",
+        cellList1.addAll(createCells("2010년 연구에 따르면 18세에서 29세 사이의 사람들 중 무려 38%가 일생에 한 번 이상 타투를 해본 경험이 있다고 합니다.",
                 "약 10년이 넘게 지난 지금 타투에 관한 인식이 이전보다 많이 좋아졌기 때문에 훨씬 더 많은 사람이 타투를 해본 경험이 있을 것입니다.",
-                "하지만 처음 타투를 하기로 다짐했다면 '타투를 하면 아프나요?'가 자연스러운 질문일 것입니다.");
-
-        cellList1.addAll(cellList2);
+                "하지만 처음 타투를 하기로 다짐했다면 '타투를 하면 아프나요?'가 자연스러운 질문일 것입니다."));
 
         cellList1.forEach(c -> c.changeMagazine(magazine));
 
@@ -84,14 +94,33 @@ class MagazineControllerTest {
                 .andExpect(jsonPath("data", hasSize(cellList1.size())));
     }
 
-    @DisplayName("매거진 등록")
+    @DisplayName("매거진 등록 테스트")
     @Test
-    void registerMagazineTest() {
+    void postMagazineTest() throws Exception {
         //given
+        Magazine magazine = createMagazine("Test Magazine 1");
+
+        List<Cell> cellList = createCells("Test Cell1", "Test Cell2", "Test Cell3");
+        cellList.addAll(createCells("Test Cell4", "Test Cell5", "Test Cell6"));
+
+        List<CellDto> dtoList = cellList.stream().map(cell -> modelMapper.map(cell, CellDto.class)).collect(Collectors.toList());
 
         //when
+        MagazineTitleReqDto reqDto = MagazineTitleReqDto.builder()
+                .title(magazine.getTitle())
+                .data(dtoList)
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectWriter objectWriter = objectMapper.writer().withDefaultPrettyPrinter();
+        String reqJson = objectWriter.writeValueAsString(reqDto);
 
         //then
+        mockMvc.perform(post("/magazines").contentType(MediaType.APPLICATION_JSON).content(reqJson))
+                .andDo(print())
+                .andExpect(jsonPath("$.data.title").value(magazine.getTitle()));
+
+        Optional<Magazine> savedMagazine = magazineRepository.findById(1L);
     }
 
     private static Magazine createMagazine(String title) {

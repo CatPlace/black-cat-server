@@ -21,7 +21,7 @@ class MagazineTest {
         //given
         List<Magazine> newMagazines = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            Magazine mm = new Magazine("test" + i, "admin", "admin");
+            Magazine mm = createMagazine("test" + i);
             newMagazines.add(mm);
         }
         magazineRepository.saveAll(newMagazines);
@@ -34,5 +34,9 @@ class MagazineTest {
             assertThat(m.getIsMain()).isFalse();
         }
 
+    }
+
+    private static Magazine createMagazine(String title) {
+        return new Magazine(title, "Admin", "Admin");
     }
 }

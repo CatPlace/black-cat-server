@@ -20,7 +20,6 @@ public class AddressController {
     public Page<AddressResDto> findAddress(
             @PageableDefault(size = 20) @SortDefault(sort = "zipCode") Pageable pageable,
             @RequestParam String query) {
-        String findString = query.replaceAll("\\s", "");
-        return addressService.findAddress(pageable, findString);
+        return addressService.findAddress(pageable, query);
     }
 }

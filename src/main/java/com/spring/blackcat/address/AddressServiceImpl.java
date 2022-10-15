@@ -12,8 +12,12 @@ public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepository;
 
+    /**
+     * 특정 문자열을 포함하는 주소 검색
+     */
     @Override
-    public Page<AddressResDto> findAddress(Pageable pageable, String findString) {
+    public Page<AddressResDto> findAddress(Pageable pageable, String query) {
+        String findString = query.replaceAll("\\s", "");
         Page<Address> addresses = addressRepository.findBySearchStringContains(pageable, findString);
         return addresses.map(AddressResDto::new);
     }

@@ -12,6 +12,7 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -19,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 public class Category extends BaseTimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "category_id")
     private Long id;
 

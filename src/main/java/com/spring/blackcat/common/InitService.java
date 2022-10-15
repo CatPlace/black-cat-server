@@ -160,7 +160,7 @@ class InitService {
         for (int i = 0; i < postList.size(); i++) {
             Post post = postList.get(i);
             User user = userList.get(i);
-            PostType postType = post.getPostTypeCd();
+            PostType postType = post.getPostType();
             likesList.add(createLikes(post, user, postType));
         }
 

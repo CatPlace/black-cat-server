@@ -70,7 +70,7 @@ class LikesTest {
         Post post = postRepository.findById(tattooId).orElseThrow();
 
         // when
-        Likes likes = new Likes(post, user, post.getPostTypeCd());
+        Likes likes = new Likes(post, user, post.getPostType());
 
         // then
         assertThat(post.getLikes().contains(likes)).isTrue();

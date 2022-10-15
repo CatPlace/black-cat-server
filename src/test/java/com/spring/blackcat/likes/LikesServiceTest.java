@@ -76,7 +76,7 @@ class LikesServiceTest {
 
         Post post = postRepository.findById(tattooId).orElseThrow();
 
-        Likes likes = new Likes(post, user, post.getPostTypeCd());
+        Likes likes = new Likes(post, user, post.getPostType());
         likesRepository.save(likes);
 
         // when
@@ -135,7 +135,7 @@ class LikesServiceTest {
 
         Post post = postRepository.findById(tattooId).orElseThrow();
 
-        Likes likes = new Likes(post, user, post.getPostTypeCd());
+        Likes likes = new Likes(post, user, post.getPostType());
         likesRepository.save(likes);
 
         // when
@@ -169,10 +169,10 @@ class LikesServiceTest {
 
         Post post = postRepository.findById(tattooId).orElseThrow();
 
-        Likes likes1 = new Likes(post, user1, post.getPostTypeCd());
+        Likes likes1 = new Likes(post, user1, post.getPostType());
         likesRepository.save(likes1);
 
-        Likes likes2 = new Likes(post, user2, post.getPostTypeCd());
+        Likes likes2 = new Likes(post, user2, post.getPostType());
         likesRepository.save(likes2);
 
         // when
@@ -208,10 +208,10 @@ class LikesServiceTest {
         Post post1 = postRepository.findById(tattooId1).orElseThrow();
         Post post2 = postRepository.findById(tattooId2).orElseThrow();
 
-        Likes likes1 = new Likes(post1, user, post2.getPostTypeCd());
+        Likes likes1 = new Likes(post1, user, post2.getPostType());
         likesRepository.save(likes1);
 
-        Likes likes2 = new Likes(post2, user, post2.getPostTypeCd());
+        Likes likes2 = new Likes(post2, user, post2.getPostType());
         likesRepository.save(likes2);
 
         // when

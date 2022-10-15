@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LikesPostResDto {
     private Long id;
-    private PostType postTypeCd;
+    private PostType postType;
 
     public LikesPostResDto(Post post) {
         this.id = post.getId();
-        this.postTypeCd = post.getPostTypeCd();
+        this.postType = post.getPostType();
     }
 }

@@ -3,8 +3,8 @@ package com.spring.blackcat.likes;
 import com.spring.blackcat.likes.dto.LikesPostResDto;
 import com.spring.blackcat.likes.dto.LikesStatusResDto;
 import com.spring.blackcat.likes.dto.LikesUserResDto;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface LikesService {
 
@@ -14,7 +14,7 @@ public interface LikesService {
 
     LikesStatusResDto likesOff(Long postId, String userId);
 
-    List<LikesUserResDto> findUsersByPostId(Long postId);
+    Page<LikesUserResDto> findUsersByPostId(Pageable pageable, Long postId);
 
-    List<LikesPostResDto> findPostsByUserId(String userId);
+    Page<LikesPostResDto> findPostsByUserId(Pageable pageable, String userId);
 }

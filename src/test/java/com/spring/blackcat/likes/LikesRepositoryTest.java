@@ -16,11 +16,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -110,11 +112,15 @@ class LikesRepositoryTest {
         Likes likes2 = new Likes(post, user2, post.getPostType());
         likesRepository.save(likes2);
 
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+
         // when
-        List<Likes> findList = likesRepository.findByPostId(post.getId());
+        Page<Likes> findList = likesRepository.findByPostId(pageRequest, post.getId());
 
         // then
-        assertThat(findList.size()).isEqualTo(2);
+        assertThat(findList.getNumber()).isEqualTo(0);
+        assertThat(findList.getSize()).isEqualTo(50);
+        assertThat(findList.getNumberOfElements()).isEqualTo(2);
     }
 
     @Test
@@ -149,11 +155,15 @@ class LikesRepositoryTest {
         Likes likes2 = new Likes(post2, user, post2.getPostType());
         likesRepository.save(likes2);
 
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+
         // when
-        List<Likes> findList = likesRepository.findByUserId(user.getId());
+        Page<Likes> findList = likesRepository.findByUserId(pageRequest, user.getId());
 
         // then
-        assertThat(findList.size()).isEqualTo(2);
+        assertThat(findList.getNumber()).isEqualTo(0);
+        assertThat(findList.getSize()).isEqualTo(50);
+        assertThat(findList.getNumberOfElements()).isEqualTo(2);
     }
 
     @Test

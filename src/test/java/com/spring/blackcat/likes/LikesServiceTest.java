@@ -19,11 +19,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -175,11 +177,15 @@ class LikesServiceTest {
         Likes likes2 = new Likes(post, user2, post.getPostType());
         likesRepository.save(likes2);
 
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+
         // when
-        List<LikesUserResDto> findList = likesService.findUsersByPostId(post.getId());
+        Page<LikesUserResDto> findList = likesService.findUsersByPostId(pageRequest, post.getId());
 
         // then
-        assertThat(findList.size()).isEqualTo(2);
+        assertThat(findList.getNumber()).isEqualTo(0);
+        assertThat(findList.getSize()).isEqualTo(50);
+        assertThat(findList.getNumberOfElements()).isEqualTo(2);
     }
 
     @Test
@@ -214,10 +220,14 @@ class LikesServiceTest {
         Likes likes2 = new Likes(post2, user, post2.getPostType());
         likesRepository.save(likes2);
 
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+
         // when
-        List<LikesPostResDto> findList = likesService.findPostsByUserId(user.getId());
+        Page<LikesPostResDto> findList = likesService.findPostsByUserId(pageRequest, user.getId());
 
         // then
-        assertThat(findList.size()).isEqualTo(2);
+        assertThat(findList.getNumber()).isEqualTo(0);
+        assertThat(findList.getSize()).isEqualTo(50);
+        assertThat(findList.getNumberOfElements()).isEqualTo(2);
     }
 }

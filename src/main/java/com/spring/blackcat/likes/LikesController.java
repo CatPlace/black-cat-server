@@ -4,9 +4,12 @@ import com.spring.blackcat.likes.dto.LikesPostResDto;
 import com.spring.blackcat.likes.dto.LikesStatusResDto;
 import com.spring.blackcat.likes.dto.LikesUserResDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,13 +42,17 @@ public class LikesController {
     }
 
     @GetMapping("posts/{postId}/likes/users")
-    public List<LikesUserResDto> likesUsers(@PathVariable Long postId) {
-        return likesService.findUsersByPostId(postId);
+    public Page<LikesUserResDto> likesUsers(
+            @PageableDefault(size = 50) @SortDefault(direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+            @PathVariable Long postId) {
+        return likesService.findUsersByPostId(pageable, postId);
     }
 
     // TODO: userId 제거
     @GetMapping("users/{userId}/likes/posts")
-    public List<LikesPostResDto> likesPosts(@PathVariable String userId) {
-        return likesService.findPostsByUserId(userId);
+    public Page<LikesPostResDto> likesPosts(
+            @PageableDefault(size = 50) @SortDefault(direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+            @PathVariable String userId) {
+        return likesService.findPostsByUserId(pageable, userId);
     }
 }

@@ -1,6 +1,14 @@
 package com.spring.blackcat.likes;
 
+import com.spring.blackcat.likes.dto.LikesPostResDto;
+import com.spring.blackcat.likes.dto.LikesStatusResDto;
+import com.spring.blackcat.likes.dto.LikesUserResDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.data.web.SortDefault;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -9,24 +17,42 @@ public class LikesController {
 
     private final LikesService likesService;
 
-    @GetMapping("/likes/{postId}/{userId}")
-    public LikesStatusDto isLikedThisPost(
+    // TODO: userId 제거
+    @GetMapping("/users/{userId}/likes/posts/{postId}")
+    public LikesStatusResDto isLikedThisPost(
             @PathVariable("postId") Long postId,
             @PathVariable("userId") String userId) {
         return likesService.isLikedThisPost(postId, userId);
     }
 
-    @PostMapping("/likes/{postId}/{userId}")
-    public LikesStatusDto likesOn(
+    // TODO: userId 제거
+    @PostMapping("/users/{userId}/likes/posts/{postId}")
+    public LikesStatusResDto likesOn(
             @PathVariable("postId") Long postId,
             @PathVariable("userId") String userId) {
         return likesService.likesOn(postId, userId);
     }
 
-    @DeleteMapping("/likes/{postId}/{userId}")
-    public LikesStatusDto likesOff(
+    // TODO: userId 제거
+    @DeleteMapping("/users/{userId}/likes/posts/{postId}")
+    public LikesStatusResDto likesOff(
             @PathVariable("postId") Long postId,
             @PathVariable("userId") String userId) {
         return likesService.likesOff(postId, userId);
+    }
+
+    @GetMapping("posts/{postId}/likes/users")
+    public Page<LikesUserResDto> likesUsers(
+            @PageableDefault(size = 50) @SortDefault(direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+            @PathVariable Long postId) {
+        return likesService.findUsersByPostId(pageable, postId);
+    }
+
+    // TODO: userId 제거
+    @GetMapping("users/{userId}/likes/posts")
+    public Page<LikesPostResDto> likesPosts(
+            @PageableDefault(size = 50) @SortDefault(direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+            @PathVariable String userId) {
+        return likesService.findPostsByUserId(pageable, userId);
     }
 }

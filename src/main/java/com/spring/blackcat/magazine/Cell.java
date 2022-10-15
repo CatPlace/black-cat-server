@@ -8,19 +8,18 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 
-import java.util.ArrayList;
-
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
+@DynamicInsert
 public class Cell {
 
     @Id
@@ -28,39 +27,53 @@ public class Cell {
     @Column(name = "cell_id")
     private Long id;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private CellType cellType;
+    private CellType cellType = CellType.EMPTYCELL;
 
+    @Builder.Default
     @Column(length = 5000)
-    private String text;
+    private String text = null;
 
-    private Long fontSize;
+    @Builder.Default
+    private Long fontSize = 12L;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private TextColor textColor;
+    private TextColor textColor = TextColor.BLACK;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private TextAlignmentType textAlignment;
+    private TextAlignmentType textAlignment = TextAlignmentType.LEFT;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private FontWeightType fontWeight;
+    private FontWeightType fontWeight = FontWeightType.REGULAR;
 
-    private String imageUrlString;
+    @Builder.Default
+    private String imageUrlString = null;
 
-    private Long imageCornerRadius;
+    @Builder.Default
+    private Long imageCornerRadius = 0L;
 
-    private Long layoutHeight;
+    @Builder.Default
+    private Long layoutHeight = 10L;
 
-    private Long layoutWidth;
+    @Builder.Default
+    private Long layoutWidth = 10L;
 
-    private Long layoutLeadingInset;
+    @Builder.Default
+    private Long layoutLeadingInset = 20L;
 
-    private Long layoutTrailingInset;
+    @Builder.Default
+    private Long layoutTrailingInset = 20L;
 
-    private Long layoutTopInset;
+    @Builder.Default
+    private Long layoutTopInset = 20L;
 
-    private Long layoutBottomInset;
-
+    @Builder.Default
+    private Long layoutBottomInset = 20L;
+    
     @ManyToOne(fetch = EAGER)
     private Magazine magazine;
 

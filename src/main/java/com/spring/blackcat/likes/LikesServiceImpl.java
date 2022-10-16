@@ -1,5 +1,6 @@
 package com.spring.blackcat.likes;
 
+import com.spring.blackcat.code.PostType;
 import com.spring.blackcat.likes.dto.LikesPostResDto;
 import com.spring.blackcat.likes.dto.LikesStatusResDto;
 import com.spring.blackcat.likes.dto.LikesUserResDto;
@@ -72,12 +73,24 @@ public class LikesServiceImpl implements LikesService {
     }
 
     /**
-     * 특정 유저의 좋아요한 게시물 리스트 조회
+     * 게시물 타입 필터링 조건으로 특정 유저의 좋아요한 게시물 리스트 조회
      */
     @Override
     @Transactional
-    public Page<LikesPostResDto> findPostsByUserId(Pageable pageable, String userId) {
-        Page<Likes> likesList = likesRepository.findByUserId(pageable, userId);
+    public Page<LikesPostResDto> findPostByUserIdAndFilter(Pageable pageable, String userId, String postType) {
+        PostType postTypeEnum;
+        if (postType != null) {
+            postType = postType.toUpperCase();
+            try {
+                postTypeEnum = PostType.valueOf(postType);
+            } catch (IllegalArgumentException e) {
+                // TODO: Enum Type 에 없는 값 파라미터로 넘어오면 [ 오류처리 | 전체조회 | 0건조회 ] 상의 필요
+                postTypeEnum = null;
+            }
+        } else {
+            postTypeEnum = null;
+        }
+        Page<Likes> likesList = likesRepository.findPostByUserIdAndFilter(pageable, userId, postTypeEnum);
         return likesList.map(likes -> new LikesPostResDto(likes.getPost()));
     }
 }

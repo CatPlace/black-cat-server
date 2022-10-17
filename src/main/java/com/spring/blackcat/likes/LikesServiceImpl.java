@@ -10,10 +10,12 @@ import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -67,30 +69,28 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public Page<LikesUserResDto> findUsersByPostId(Pageable pageable, Long postId) {
-        Page<Likes> likesList = likesRepository.findByPostId(pageable, postId);
-        return likesList.map(likes -> new LikesUserResDto(likes.getUser()));
+    public Page<LikesUserResDto> findLikesUsersByPostId(Pageable pageable, Long postId) {
+        return likesRepository.findLikesUsersByPostId(pageable, postId);
     }
 
     /**
-     * 게시물 타입 필터링 조건으로 특정 유저의 좋아요한 게시물 리스트 조회
+     * 특정 유저의 좋아요한 게시물 리스트 조회 - 게시물 타입 필터링
      */
     @Override
     @Transactional
-    public Page<LikesPostResDto> findPostByUserIdAndFilter(Pageable pageable, String userId, String postType) {
-        PostType postTypeEnum;
+    public Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, String userId, String postType) {
+        PostType postTypeEnum = null;
         if (postType != null) {
-            postType = postType.toUpperCase();
             try {
-                postTypeEnum = PostType.valueOf(postType);
+                postTypeEnum = PostType.valueOf(postType.toUpperCase());
             } catch (IllegalArgumentException e) {
-                // TODO: Enum Type 에 없는 값 파라미터로 넘어오면 [ 오류처리 | 전체조회 | 0건조회 ] 상의 필요
-                postTypeEnum = null;
+                // TODO: Enum Type 에 없는 값 파라미터로 넘어오면 [ 전체조회 | 결과없음 | 오류처리 ] 상의 필요
+                // 전체조회 : catch 블록 처리 안하고 null 값 그대로 전달
+                // 결과없음 : return new PageImpl<>(new ArrayList<>(), pageable, 0);
+                // 오류처리 : throw new NotFoundException(HttpStatus.BAD_REQUEST, "게시물 타입을 찾을 수 없습니다.");
+                return new PageImpl<>(new ArrayList<>(), pageable, 0);
             }
-        } else {
-            postTypeEnum = null;
         }
-        Page<Likes> likesList = likesRepository.findPostByUserIdAndFilter(pageable, userId, postTypeEnum);
-        return likesList.map(likes -> new LikesPostResDto(likes.getPost()));
+        return likesRepository.findLikesPostsByUserIdAndPostType(pageable, userId, postTypeEnum);
     }
 }

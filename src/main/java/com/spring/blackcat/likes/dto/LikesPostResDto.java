@@ -1,19 +1,26 @@
 package com.spring.blackcat.likes.dto;
 
 import com.spring.blackcat.code.PostType;
-import com.spring.blackcat.post.Post;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LikesPostResDto {
-    private Long id;
-    private PostType postType;
 
-    public LikesPostResDto(Post post) {
-        this.id = post.getId();
-        this.postType = post.getPostType();
+    // TODO: Post 엔티티에 Title, Image 공통 속성으로 두고 함께 반환
+    private Long likesId;
+    private Long postId;
+    private PostType postType;
+    private LocalDateTime createdDate;
+
+    public LikesPostResDto(Long likesId, Long postId, PostType postType, LocalDateTime createdDate) {
+        this.likesId = likesId;
+        this.postId = postId;
+        this.postType = postType;
+        this.createdDate = createdDate;
     }
 }

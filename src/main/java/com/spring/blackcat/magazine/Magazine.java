@@ -34,6 +34,8 @@ public class Magazine extends Post {
     public Magazine(String title, String registerId, String modifierId) {
         super(registerId, modifierId);
         this.title = title;
+        this.isMain = false;
+        this.cellList = new ArrayList<>();
     }
 
 }

@@ -1,6 +1,6 @@
 package com.spring.blackcat.post;
 
-import com.spring.blackcat.code.PostType;
+import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.likes.Likes;
 import lombok.AccessLevel;

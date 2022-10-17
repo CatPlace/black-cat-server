@@ -1,7 +1,7 @@
 package com.spring.blackcat.magazine;
 
-import com.spring.blackcat.code.CellType;
-import com.spring.blackcat.code.FontWeightType;
+import com.spring.blackcat.common.code.CellType;
+import com.spring.blackcat.common.code.FontWeightType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +34,6 @@ public class CellTest {
         //then
         assertThat(res.getFontWeight()).isEqualTo(FontWeightType.REGULAR);
         assertThat(res.getLayoutHeight()).isEqualTo(10L);
-        
+
     }
 }

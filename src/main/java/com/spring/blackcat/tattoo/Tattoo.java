@@ -1,8 +1,8 @@
 package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.category.Category;
-import com.spring.blackcat.code.PostType;
-import com.spring.blackcat.code.TattooType;
+import com.spring.blackcat.common.code.PostType;
+import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.post.Post;
 import lombok.AccessLevel;
 import lombok.Getter;

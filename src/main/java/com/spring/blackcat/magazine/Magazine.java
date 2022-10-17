@@ -1,6 +1,6 @@
 package com.spring.blackcat.magazine;
 
-import com.spring.blackcat.code.PostType;
+import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.post.Post;
 import lombok.*;
 

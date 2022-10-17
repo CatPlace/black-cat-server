@@ -1,6 +1,6 @@
 package com.spring.blackcat.likes;
 
-import com.spring.blackcat.code.PostType;
+import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.likes.dto.LikesPostResDto;
 import com.spring.blackcat.likes.dto.LikesUserResDto;
 import org.springframework.data.domain.Page;

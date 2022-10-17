@@ -2,7 +2,7 @@ package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
-import com.spring.blackcat.code.TattooType;
+import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

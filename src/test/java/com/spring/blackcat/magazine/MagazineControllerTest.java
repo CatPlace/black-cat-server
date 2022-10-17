@@ -2,10 +2,10 @@ package com.spring.blackcat.magazine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.spring.blackcat.code.CellType;
-import com.spring.blackcat.code.FontWeightType;
-import com.spring.blackcat.code.TextAlignmentType;
-import com.spring.blackcat.code.TextColor;
+import com.spring.blackcat.common.code.CellType;
+import com.spring.blackcat.common.code.FontWeightType;
+import com.spring.blackcat.common.code.TextAlignmentType;
+import com.spring.blackcat.common.code.TextColor;
 import com.spring.blackcat.magazine.dto.CellDto;
 import com.spring.blackcat.magazine.dto.MagazineTitleReqDto;
 import org.junit.jupiter.api.DisplayName;

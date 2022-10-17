@@ -1,9 +1,9 @@
 package com.spring.blackcat.magazine.dto;
 
-import com.spring.blackcat.code.CellType;
-import com.spring.blackcat.code.FontWeightType;
-import com.spring.blackcat.code.TextAlignmentType;
-import com.spring.blackcat.code.TextColor;
+import com.spring.blackcat.common.code.CellType;
+import com.spring.blackcat.common.code.FontWeightType;
+import com.spring.blackcat.common.code.TextAlignmentType;
+import com.spring.blackcat.common.code.TextColor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +18,7 @@ import javax.persistence.Enumerated;
 @Data
 @Builder
 public class CellDto {
-    
+
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private CellType cellType = CellType.EMPTYCELL;

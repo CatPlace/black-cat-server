@@ -5,6 +5,8 @@ import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.common.code.*;
+import com.spring.blackcat.image.Image;
+import com.spring.blackcat.image.ImageRepository;
 import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.likes.LikesRepository;
 import com.spring.blackcat.magazine.Cell;
@@ -43,6 +45,8 @@ class InitService {
     private final MagazineRepository magazineRepository;
 
     private final LikesRepository likesRepository;
+
+    private final ImageRepository imageRepository;
 
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
@@ -168,6 +172,17 @@ class InitService {
         em.clear();
     }
 
+    public void initImage() {
+        List<Image> imageList = new ArrayList<>();
+
+        imageList.add(createImage("/image/url/1", postRepository.findById(1L).orElse(null), true));
+        imageList.add(createImage("/image/url/2", postRepository.findById(3L).orElse(null), true));
+        imageList.add(createImage("/image/url/3", postRepository.findById(11L).orElse(null), true));
+
+        imageRepository.saveAllAndFlush(imageList);
+        em.clear();
+    }
+
     private static User createUser(String id, String name, Role role, Address address) {
         return new User(id, name, role, address, "Admin", "Admin");
     }
@@ -246,5 +261,9 @@ class InitService {
                 20L, 20L));
 
         return cellList;
+    }
+
+    private static Image createImage(String imageUrl, Post post, boolean isMain) {
+        return new Image(imageUrl, post, isMain);
     }
 }

@@ -11,15 +11,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LikesPostResDto {
 
-    // TODO: Post 엔티티에 Title, Image 공통 속성으로 두고 함께 반환
     private Long likesId;
     private Long postId;
     private PostType postType;
+    private String title;
+    private String imageUrl;
     private LocalDateTime createdDate;
 
-    public LikesPostResDto(Long likesId, Long postId, PostType postType, LocalDateTime createdDate) {
+    public LikesPostResDto(Long likesId, Long postId, String title, String imageUrl, PostType postType, LocalDateTime createdDate) {
         this.likesId = likesId;
         this.postId = postId;
+        this.title = title;
+        this.imageUrl = imageUrl;
         this.postType = postType;
         this.createdDate = createdDate;
     }

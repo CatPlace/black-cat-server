@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static com.spring.blackcat.common.Querydsl.getOrder;
+import static com.spring.blackcat.image.QImage.image;
 import static com.spring.blackcat.likes.QLikes.likes;
 import static com.spring.blackcat.post.QPost.post;
 
@@ -48,12 +49,15 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
         List<LikesPostResDto> results = query
                 .select(Projections.constructor(LikesPostResDto.class,
                         likes.id,
-                        likes.post.id,
-                        likes.post.postType,
+                        post.id,
+                        post.title,
+                        image.imageUrl,
+                        post.postType,
                         likes.createdDate))
                 .from(likes)
                 .join(likes.post, post)
-                .where(userIdEqual(userId), postTypeEqual(postType))
+                .leftJoin(post.images, image)
+                .where(userIdEqual(userId), postTypeEqual(postType), mainImage())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getOrder(pageable, likes))
@@ -74,5 +78,9 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
             return null;
         }
         return post.postType.eq(postType);
+    }
+
+    private static BooleanExpression mainImage() {
+        return image.isMain.isTrue();
     }
 }

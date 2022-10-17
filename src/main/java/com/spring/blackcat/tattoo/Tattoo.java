@@ -17,10 +17,6 @@ import static javax.persistence.FetchType.LAZY;
 @DiscriminatorValue(PostType.Values.TATTOO)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Tattoo extends Post {
-
-    @Column(name = "tattoo_name")
-    private String name;
-
     @Column(name = "tattoo_price")
     private Long price;
 
@@ -34,9 +30,8 @@ public class Tattoo extends Post {
     @Enumerated(EnumType.STRING)
     private TattooType tattooType;
 
-    public Tattoo(String name, String description, Long price, Category category, TattooType tattooType, String registerId, String modifierId) {
-        super(registerId, modifierId);
-        this.name = name;
+    public Tattoo(String title, String description, Long price, Category category, TattooType tattooType, String registerId, String modifierId) {
+        super(title, registerId, modifierId);
         this.description = description;
         this.price = price;
         this.category = category;

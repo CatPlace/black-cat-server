@@ -3,6 +3,7 @@ package com.spring.blackcat.magazine;
 import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.post.Post;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
@@ -16,11 +17,8 @@ import java.util.List;
 @DiscriminatorValue(PostType.Values.MAGAZINE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Magazine extends Post {
-
-    private String title;
-
     @Builder.Default
     @Setter
     private Boolean isMain = false;
@@ -32,8 +30,7 @@ public class Magazine extends Post {
     private List<Cell> cellList = new ArrayList<>();
 
     public Magazine(String title, String registerId, String modifierId) {
-        super(registerId, modifierId);
-        this.title = title;
+        super(title, registerId, modifierId);
         this.isMain = false;
         this.cellList = new ArrayList<>();
     }

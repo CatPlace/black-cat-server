@@ -55,7 +55,7 @@ class LikesTest {
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, 0, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 

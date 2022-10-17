@@ -11,4 +11,5 @@ public class GetTattoosResDto {
     private String tattooistName;
     private String description;
     private boolean isLiked;
+    private String address;
 }

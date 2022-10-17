@@ -1,9 +1,14 @@
 package com.spring.blackcat.tattoo;
 
+import com.spring.blackcat.address.Address;
+import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
+import com.spring.blackcat.user.User;
+import com.spring.blackcat.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +30,10 @@ public class GetAllTattoosTest {
     CategoryRepository categoryRepository;
     @Autowired
     TattooRepository tattooRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    AddressRepository addressRepository;
     @Autowired
     TattooService tattooService;
 
@@ -104,7 +113,7 @@ public class GetAllTattoosTest {
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 5, Sort.Direction.ASC, "price");
         this.Insert();
-        Tattoo tattoo = new Tattoo("작품5", "설명근", 0L, 5, categoryRepository.findByName("감성타투").orElse(null), TattooType.DESIGN, userName, userName);
+        Tattoo tattoo = new Tattoo("작품5", "설명근", 0L, categoryRepository.findByName("감성타투").orElse(null), TattooType.DESIGN, userName, userName);
         tattooRepository.save(tattoo);
 
         //when
@@ -119,14 +128,18 @@ public class GetAllTattoosTest {
     private void Insert() {
         String userName = "Admin1";
 
+        Address address = new Address("서울", "Seoul", userName, userName);
+        User user = new User(userName, userName, Role.ADMIN, address, userName, userName);
         Category category = new Category("감성타투", userName, userName);
 
         List<Tattoo> tattoos = new ArrayList<>();
-        tattoos.add(new Tattoo("타투1", "설명근", 10000L, 5, category, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투2", "설명근", 20000L, 4, category, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투3", "설명근", 30000L, 3, category, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투4", "설명근", 40000L, 2, category, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투1", "설명근", 10000L, category, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투2", "설명근", 20000L, category, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투3", "설명근", 30000L, category, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투4", "설명근", 4000L, category, TattooType.DESIGN, userName, userName));
 
+        addressRepository.save(address);
+        userRepository.save(user);
         categoryRepository.save(category);
         tattooRepository.saveAll(tattoos);
     }

@@ -64,7 +64,7 @@ class LikesServiceTest {
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, 0, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
@@ -95,7 +95,7 @@ class LikesServiceTest {
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, 0, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
@@ -123,7 +123,7 @@ class LikesServiceTest {
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, 0, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
@@ -154,7 +154,7 @@ class LikesServiceTest {
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, 0, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
@@ -195,11 +195,11 @@ class LikesServiceTest {
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
 
-        Tattoo tattoo1 = new Tattoo("타투", "테스트타투", 0L, 0, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo1 = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
         tattooRepository.save(tattoo1);
         Long tattooId1 = tattoo1.getId();
 
-        Tattoo tattoo2 = new Tattoo("타투", "테스트타투", 0L, 0, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo2 = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
         tattooRepository.save(tattoo2);
         Long tattooId2 = tattoo2.getId();
 

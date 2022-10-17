@@ -177,10 +177,10 @@ class LikesServiceTest {
         Likes likes2 = new Likes(post, user2, post.getPostType());
         likesRepository.save(likes2);
 
-        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "id");
 
         // when
-        Page<LikesUserResDto> findList = likesService.findUsersByPostId(pageRequest, post.getId());
+        Page<LikesUserResDto> findList = likesService.findLikesUsersByPostId(pageRequest, post.getId());
 
         // then
         assertThat(findList.getNumber()).isEqualTo(0);
@@ -220,14 +220,39 @@ class LikesServiceTest {
         Likes likes2 = new Likes(post2, user, post2.getPostType());
         likesRepository.save(likes2);
 
-        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "id");
 
         // when
-        Page<LikesPostResDto> findList = likesService.findPostsByUserId(pageRequest, user.getId());
+        Page<LikesPostResDto> findListWithPostTypeEmpty = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "");
+        Page<LikesPostResDto> findListWithPostTypeSpace = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), " ");
+        Page<LikesPostResDto> findListWithPostTypeInvalid = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "unknown");
+        Page<LikesPostResDto> findListWithPostTypeLower = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "tattoo");
+        Page<LikesPostResDto> findListWithPostTypeUpper = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "TATTOO");
+        Page<LikesPostResDto> findPostTypeNullList = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), null);
 
         // then
-        assertThat(findList.getNumber()).isEqualTo(0);
-        assertThat(findList.getSize()).isEqualTo(50);
-        assertThat(findList.getNumberOfElements()).isEqualTo(2);
+        assertThat(findListWithPostTypeEmpty.getNumber()).isEqualTo(0);
+        assertThat(findListWithPostTypeEmpty.getSize()).isEqualTo(50);
+        assertThat(findListWithPostTypeEmpty.getNumberOfElements()).isEqualTo(0);
+
+        assertThat(findListWithPostTypeSpace.getNumber()).isEqualTo(0);
+        assertThat(findListWithPostTypeSpace.getSize()).isEqualTo(50);
+        assertThat(findListWithPostTypeSpace.getNumberOfElements()).isEqualTo(0);
+
+        assertThat(findListWithPostTypeInvalid.getNumber()).isEqualTo(0);
+        assertThat(findListWithPostTypeInvalid.getSize()).isEqualTo(50);
+        assertThat(findListWithPostTypeInvalid.getNumberOfElements()).isEqualTo(0);
+
+        assertThat(findListWithPostTypeLower.getNumber()).isEqualTo(0);
+        assertThat(findListWithPostTypeLower.getSize()).isEqualTo(50);
+        assertThat(findListWithPostTypeLower.getNumberOfElements()).isEqualTo(2);
+
+        assertThat(findListWithPostTypeUpper.getNumber()).isEqualTo(0);
+        assertThat(findListWithPostTypeUpper.getSize()).isEqualTo(50);
+        assertThat(findListWithPostTypeUpper.getNumberOfElements()).isEqualTo(2);
+
+        assertThat(findPostTypeNullList.getNumber()).isEqualTo(0);
+        assertThat(findPostTypeNullList.getSize()).isEqualTo(50);
+        assertThat(findPostTypeNullList.getNumberOfElements()).isEqualTo(2);
     }
 }

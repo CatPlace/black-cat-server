@@ -45,7 +45,7 @@ public class LikesController {
     public Page<LikesUserResDto> likesUsers(
             @PageableDefault(size = 50) @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable Long postId) {
-        return likesService.findUsersByPostId(pageable, postId);
+        return likesService.findLikesUsersByPostId(pageable, postId);
     }
 
     // TODO: userId 제거
@@ -54,6 +54,6 @@ public class LikesController {
             @PageableDefault(size = 50) @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable String userId,
             @RequestParam(required = false) String postType) {
-        return likesService.findPostByUserIdAndFilter(pageable, userId, postType);
+        return likesService.findLikesPostsByUserIdAndPostType(pageable, userId, postType);
     }
 }

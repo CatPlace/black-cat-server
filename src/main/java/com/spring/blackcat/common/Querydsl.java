@@ -9,7 +9,7 @@ import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryDsl {
+public class Querydsl {
 
     public static OrderSpecifier[] getOrder(Pageable pageable, EntityPathBase<?> target) {
         List<OrderSpecifier<?>> orders = new ArrayList<>();

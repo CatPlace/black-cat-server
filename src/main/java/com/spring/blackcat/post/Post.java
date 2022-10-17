@@ -2,6 +2,7 @@ package com.spring.blackcat.post;
 
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.common.code.PostType;
+import com.spring.blackcat.image.Image;
 import com.spring.blackcat.likes.Likes;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,13 +29,17 @@ public abstract class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
+    private String title;
+
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+    private Image image;
 
     @Enumerated(EnumType.STRING)
     @Column(insertable = false, updatable = false)
     private PostType postType;
-    private String title;
     private String registerId;
     private String modifierId;
 

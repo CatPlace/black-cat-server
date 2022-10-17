@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class MagazineControllerTest {
 
     @Autowired
@@ -82,8 +84,8 @@ class MagazineControllerTest {
         cellList1.forEach(c -> c.changeMagazine(magazine));
 
         //when
-        magazineRepository.save(magazine);
-        Magazine newMagazine = magazineRepository.findById(1L).get();
+        Magazine save = magazineRepository.save(magazine);
+        Magazine newMagazine = magazineRepository.findById(save.getId()).get();
 
         //then
         mockMvc.perform(get("/magazines/" + newMagazine.getId()))

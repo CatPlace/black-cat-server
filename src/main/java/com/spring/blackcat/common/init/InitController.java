@@ -1,7 +1,8 @@
-package com.spring.blackcat.common;
+package com.spring.blackcat.common.init;
 
+import com.spring.blackcat.common.init.dto.InitResDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -12,22 +13,19 @@ public class InitController {
 
     private boolean isFirstRequest = true;
 
-
-    @GetMapping("/init")
-    public String init() {
+    @PostMapping("/init")
+    public InitResDto init() {
         if (isFirstRequest) {
             isFirstRequest = false;
-
             initService.initAddress();
             initService.initUser();
             initService.initCategory();
             initService.initTattoo();
             initService.initMagazine();
             initService.initLikes();
-
-            return "Completed successfully";
+            return new InitResDto("success");
         } else {
-            return "Initial data already exists.";
+            return new InitResDto("already exists");
         }
     }
 }

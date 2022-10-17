@@ -1,4 +1,4 @@
-package com.spring.blackcat.common;
+package com.spring.blackcat.common.init;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;

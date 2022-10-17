@@ -81,6 +81,6 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
     }
 
     private static BooleanExpression mainImage() {
-        return image.isMain.isTrue();
+        return image.isMain.isNull().or(image.isMain.isTrue());
     }
 }

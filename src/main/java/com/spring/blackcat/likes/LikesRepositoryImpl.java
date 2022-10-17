@@ -13,7 +13,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static com.spring.blackcat.common.QueryDsl.getOrder;
+import static com.spring.blackcat.common.Querydsl.getOrder;
 import static com.spring.blackcat.likes.QLikes.likes;
 import static com.spring.blackcat.post.QPost.post;
 

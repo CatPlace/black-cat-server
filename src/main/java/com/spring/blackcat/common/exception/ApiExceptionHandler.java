@@ -1,7 +1,7 @@
 package com.spring.blackcat.common.exception;
 
 import com.spring.blackcat.common.exception.custom.MagazineNotFoundException;
-import com.spring.blackcat.common.exception.custom.PostNotFoundException;
+import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,10 @@ public class ApiExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ue.getErrorInfo().getStatusCode()));
     }
 
-    @ExceptionHandler(value = {PostNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handlePostNotFoundException(PostNotFoundException pe) {
-        ErrorResponse errorResponse = new ErrorResponse(pe.getErrorInfo());
+    @ExceptionHandler(value = {TattooNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handlePostNotFoundException(TattooNotFoundException te) {
+        ErrorResponse errorResponse = new ErrorResponse(te.getErrorInfo());
 
-        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(pe.getErrorInfo().getStatusCode()));
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(te.getErrorInfo().getStatusCode()));
     }
 }

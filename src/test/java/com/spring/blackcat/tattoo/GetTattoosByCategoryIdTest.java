@@ -1,9 +1,14 @@
 package com.spring.blackcat.tattoo;
 
+import com.spring.blackcat.address.Address;
+import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
+import com.spring.blackcat.user.User;
+import com.spring.blackcat.user.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +30,10 @@ public class GetTattoosByCategoryIdTest {
     CategoryRepository categoryRepository;
     @Autowired
     TattooRepository tattooRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    AddressRepository addressRepository;
     @Autowired
     TattooService tattooService;
 
@@ -126,6 +135,8 @@ public class GetTattoosByCategoryIdTest {
     private void Insert() {
         String userName = "Admin1";
 
+        Address address = new Address("서울", "Seoul", userName, userName);
+        User user = new User(userName, userName, Role.ADMIN, address, userName, userName);
         Category category1 = new Category("감성타투", userName, userName);
         Category category2 = new Category("안감성타투", userName, userName);
 
@@ -135,6 +146,8 @@ public class GetTattoosByCategoryIdTest {
         tattoos.add(new Tattoo("타투3", "설명근", 30000L, category2, TattooType.DESIGN, userName, userName));
         tattoos.add(new Tattoo("타투4", "설명근", 40000L, category2, TattooType.DESIGN, userName, userName));
 
+        addressRepository.save(address);
+        userRepository.save(user);
         categoryRepository.save(category1);
         categoryRepository.save(category2);
         tattooRepository.saveAll(tattoos);

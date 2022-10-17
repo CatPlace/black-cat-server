@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum ErrorInfo {
     MAGAZINE_NOT_FOUND_EXCEPTION(400, 1000, "존재하지 않는 매거진 입니다."),
     USER_NOT_FOUND_EXCEPTION(400, 1001, "존재하지 않는 사용자 입니다."),
-    POST_NOT_FOUND_EXCEPTION(400, 1002, "존재하지 않는 게시물 입니다.");
+    TATTOO_NOT_FOUND_EXCEPTION(400, 1002, "존재하지 않는 타투 입니다.");
 
     private int statusCode;
     private int errorCode;

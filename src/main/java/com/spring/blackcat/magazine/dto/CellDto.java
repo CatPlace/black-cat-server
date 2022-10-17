@@ -1,30 +1,24 @@
-package com.spring.blackcat.magazine;
+package com.spring.blackcat.magazine.dto;
 
 import com.spring.blackcat.code.CellType;
 import com.spring.blackcat.code.FontWeightType;
 import com.spring.blackcat.code.TextAlignmentType;
 import com.spring.blackcat.code.TextColor;
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
-import static javax.persistence.FetchType.EAGER;
-
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Builder
-@Getter
-@Setter
-@DynamicInsert
-public class Cell {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cell_id")
-    private Long id;
-
+public class CellDto {
+    
     @Builder.Default
     @Enumerated(EnumType.STRING)
     private CellType cellType = CellType.EMPTYCELL;
@@ -72,14 +66,4 @@ public class Cell {
     @Builder.Default
     private Long layoutBottomInset = 20L;
 
-    @ManyToOne(fetch = EAGER)
-    private Magazine magazine;
-
-    public void changeMagazine(Magazine magazine) {
-        if (this.magazine != null) {
-            this.magazine.getCellList().remove(this);
-        }
-        this.magazine = magazine;
-        magazine.getCellList().add(this);
-    }
 }

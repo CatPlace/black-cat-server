@@ -43,16 +43,17 @@ public class LikesController {
 
     @GetMapping("posts/{postId}/likes/users")
     public Page<LikesUserResDto> likesUsers(
-            @PageableDefault(size = 50) @SortDefault(direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
+            @PageableDefault(size = 50) @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable Long postId) {
-        return likesService.findUsersByPostId(pageable, postId);
+        return likesService.findLikesUsersByPostId(pageable, postId);
     }
 
     // TODO: userId 제거
     @GetMapping("users/{userId}/likes/posts")
     public Page<LikesPostResDto> likesPosts(
-            @PageableDefault(size = 50) @SortDefault(direction = Sort.Direction.DESC, sort = "createdDate") Pageable pageable,
-            @PathVariable String userId) {
-        return likesService.findPostsByUserId(pageable, userId);
+            @PageableDefault(size = 50) @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+            @PathVariable String userId,
+            @RequestParam(required = false) String postType) {
+        return likesService.findLikesPostsByUserIdAndPostType(pageable, userId, postType);
     }
 }

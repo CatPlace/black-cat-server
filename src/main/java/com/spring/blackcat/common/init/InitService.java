@@ -1,10 +1,10 @@
-package com.spring.blackcat.common;
+package com.spring.blackcat.common.init;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
-import com.spring.blackcat.code.*;
+import com.spring.blackcat.common.code.*;
 import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.likes.LikesRepository;
 import com.spring.blackcat.magazine.Cell;

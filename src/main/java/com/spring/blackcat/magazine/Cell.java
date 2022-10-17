@@ -1,9 +1,9 @@
 package com.spring.blackcat.magazine;
 
-import com.spring.blackcat.code.CellType;
-import com.spring.blackcat.code.FontWeightType;
-import com.spring.blackcat.code.TextAlignmentType;
-import com.spring.blackcat.code.TextColor;
+import com.spring.blackcat.common.code.CellType;
+import com.spring.blackcat.common.code.FontWeightType;
+import com.spring.blackcat.common.code.TextAlignmentType;
+import com.spring.blackcat.common.code.TextColor;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 

@@ -1,4 +1,4 @@
-package com.spring.blackcat.code;
+package com.spring.blackcat.common.code;
 
 public enum PostType {
     PROFILE(Values.PROFILE), TATTOO(Values.TATTOO), MAGAZINE(Values.MAGAZINE);

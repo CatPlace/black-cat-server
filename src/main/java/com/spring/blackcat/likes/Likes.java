@@ -1,6 +1,6 @@
 package com.spring.blackcat.likes;
 
-import com.spring.blackcat.code.PostType;
+import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.user.User;

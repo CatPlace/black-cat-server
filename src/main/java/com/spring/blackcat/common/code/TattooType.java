@@ -1,4 +1,4 @@
-package com.spring.blackcat.code;
+package com.spring.blackcat.common.code;
 
 public enum TattooType {
     DESIGN(Values.DESIGN), WORK(Values.WORK);

@@ -14,7 +14,7 @@ public interface LikesService {
 
     LikesStatusResDto likesOff(Long postId, String userId);
 
-    Page<LikesUserResDto> findUsersByPostId(Pageable pageable, Long postId);
+    Page<LikesUserResDto> findLikesUsersByPostId(Pageable pageable, Long postId);
 
-    Page<LikesPostResDto> findPostsByUserId(Pageable pageable, String userId);
+    Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, String userId, String postType);
 }

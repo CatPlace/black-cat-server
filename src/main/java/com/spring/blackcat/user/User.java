@@ -1,7 +1,7 @@
 package com.spring.blackcat.user;
 
 import com.spring.blackcat.address.Address;
-import com.spring.blackcat.code.Role;
+import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.likes.Likes;
 import lombok.AccessLevel;

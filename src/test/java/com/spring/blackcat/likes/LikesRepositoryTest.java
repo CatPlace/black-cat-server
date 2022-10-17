@@ -4,8 +4,11 @@ import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
-import com.spring.blackcat.code.Role;
-import com.spring.blackcat.code.TattooType;
+import com.spring.blackcat.common.code.PostType;
+import com.spring.blackcat.common.code.Role;
+import com.spring.blackcat.common.code.TattooType;
+import com.spring.blackcat.likes.dto.LikesPostResDto;
+import com.spring.blackcat.likes.dto.LikesUserResDto;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.Tattoo;
@@ -53,7 +56,7 @@ class LikesRepositoryTest {
 
     @Test
     @DisplayName("Post ID와 User ID로 좋아요 조회")
-    public void findByPostIdAndUserId() throws Exception {
+    public void findByPostIdAndUserId() {
         // given
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
@@ -84,7 +87,7 @@ class LikesRepositoryTest {
 
     @Test
     @DisplayName("Post ID로 좋아요 리스트 조회")
-    public void findByPostId() throws Exception {
+    public void findByPostId() {
         // given
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
@@ -112,10 +115,10 @@ class LikesRepositoryTest {
         Likes likes2 = new Likes(post, user2, post.getPostType());
         likesRepository.save(likes2);
 
-        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "id");
 
         // when
-        Page<Likes> findList = likesRepository.findByPostId(pageRequest, post.getId());
+        Page<LikesUserResDto> findList = likesRepository.findLikesUsersByPostId(pageRequest, post.getId());
 
         // then
         assertThat(findList.getNumber()).isEqualTo(0);
@@ -125,7 +128,7 @@ class LikesRepositoryTest {
 
     @Test
     @DisplayName("User ID로 좋아요 리스트 조회")
-    public void findByUserId() throws Exception {
+    public void findByUserId() {
         // given
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);
@@ -155,20 +158,24 @@ class LikesRepositoryTest {
         Likes likes2 = new Likes(post2, user, post2.getPostType());
         likesRepository.save(likes2);
 
-        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "createdDate");
+        PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "id");
 
         // when
-        Page<Likes> findList = likesRepository.findByUserId(pageRequest, user.getId());
+        Page<LikesPostResDto> findListWithPostType = likesRepository.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), PostType.TATTOO);
+        Page<LikesPostResDto> findPostTypeNullList = likesRepository.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), null);
 
         // then
-        assertThat(findList.getNumber()).isEqualTo(0);
-        assertThat(findList.getSize()).isEqualTo(50);
-        assertThat(findList.getNumberOfElements()).isEqualTo(2);
+        assertThat(findListWithPostType.getNumber()).isEqualTo(0);
+        assertThat(findListWithPostType.getSize()).isEqualTo(50);
+        assertThat(findListWithPostType.getNumberOfElements()).isEqualTo(2);
+        assertThat(findPostTypeNullList.getNumber()).isEqualTo(0);
+        assertThat(findPostTypeNullList.getSize()).isEqualTo(50);
+        assertThat(findPostTypeNullList.getNumberOfElements()).isEqualTo(2);
     }
 
     @Test
     @DisplayName("좋아요 삭제")
-    public void delete() throws Exception {
+    public void delete() {
         // given
         Category category = new Category("카테고리", "Test", "Test");
         categoryRepository.save(category);

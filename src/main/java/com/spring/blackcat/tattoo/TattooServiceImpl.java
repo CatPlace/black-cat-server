@@ -1,8 +1,10 @@
 package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.likes.Likes;
+import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
+import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,13 +19,17 @@ public class TattooServiceImpl implements TattooService {
     private final TattooRepository tattooRepository;
     private final PostRepository postRepository;
 
+    private final UserRepository userRepository;
+
     @Override
     public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
         return this.tattooRepository.findAll(pageable).map(tattoo -> {
             boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
             String tattooistName = this.getPostingTattooistName(tattoo.getId());
+            String tattooistAddress = this.getTattooistAddress(tattoo.getId());
 
-            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked);
+            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
+                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress);
 
             return getTattoosResDto;
         });
@@ -34,8 +40,10 @@ public class TattooServiceImpl implements TattooService {
         return this.tattooRepository.findByCategoryId(pageable, categoryId).map(tattoo -> {
             boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
             String tattooistName = this.getPostingTattooistName(tattoo.getId());
+            String tattooistAddress = this.getTattooistAddress(tattoo.getId());
 
-            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked);
+            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
+                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress);
 
             return getTattoosResDto;
         });
@@ -52,5 +60,11 @@ public class TattooServiceImpl implements TattooService {
     //수정필요
     private String getPostingTattooistName(Long postId) {
         return this.postRepository.findById(postId).get().getRegisterId();
+    }
+
+    private String getTattooistAddress(Long postId) {
+        Post post = this.postRepository.findById(postId).get();
+
+        return this.userRepository.findById(post.getRegisterId()).get().getAddress().getSido();
     }
 }

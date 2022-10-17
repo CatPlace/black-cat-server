@@ -1,5 +1,6 @@
 package com.spring.blackcat.common.exception;
 
+import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
 import com.spring.blackcat.common.exception.custom.MagazineNotFoundException;
 import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
@@ -29,5 +30,12 @@ public class ApiExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(te.getErrorInfo());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(te.getErrorInfo().getStatusCode()));
+    }
+
+    @ExceptionHandler(value = {CategoryNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleCategoryNotFoundException(CategoryNotFoundException ce) {
+        ErrorResponse errorResponse = new ErrorResponse(ce.getErrorInfo());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ce.getErrorInfo().getStatusCode()));
     }
 }

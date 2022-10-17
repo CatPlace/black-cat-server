@@ -1,5 +1,7 @@
 package com.spring.blackcat.magazine;
 
+import com.spring.blackcat.common.exception.ErrorInfo;
+import com.spring.blackcat.common.exception.custom.MagazineNotFoundException;
 import com.spring.blackcat.magazine.dto.CellDto;
 import com.spring.blackcat.magazine.dto.MagazineTitleReqDto;
 import com.spring.blackcat.magazine.dto.MagazineTitleResDto;
@@ -31,7 +33,8 @@ public class MagazineServiceImpl implements MagazineService {
 
     @Override
     public List<CellDto> getMagazineCells(Long id) {
-        Magazine magazine = magazineRepository.findById(id).orElseThrow(() -> new MagazineNotFoundException("존재하지 않는 매거진입니다."));
+        Magazine magazine = magazineRepository
+                .findById(id).orElseThrow(() -> new MagazineNotFoundException("존재하지 않는 매거진입니다.", ErrorInfo.MAGAZINE_NOT_FOUND_EXCEPTION));
         List<Cell> cells = cellRepository.findCellsByMagazine(magazine);
         List<CellDto> cellDtos = cells.stream().map(cell -> modelMapper.map(cell, CellDto.class))
                 .collect(Collectors.toList());

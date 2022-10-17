@@ -1,5 +1,8 @@
 package com.spring.blackcat.tattoo;
 
+import com.spring.blackcat.common.exception.ErrorInfo;
+import com.spring.blackcat.common.exception.custom.PostNotFoundException;
+import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
@@ -59,12 +62,15 @@ public class TattooServiceImpl implements TattooService {
 
     //수정필요
     private String getPostingTattooistName(Long postId) {
-        return this.postRepository.findById(postId).get().getRegisterId();
+        return this.postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("존재하지 않는 게시물 입니다.", ErrorInfo.POST_NOT_FOUND_EXCEPTION)).getRegisterId();
     }
 
     private String getTattooistAddress(Long postId) {
-        Post post = this.postRepository.findById(postId).get();
+        Post post = this.postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException("존재하지 않는 게시물 입니다.", ErrorInfo.POST_NOT_FOUND_EXCEPTION));
 
-        return this.userRepository.findById(post.getRegisterId()).get().getAddress().getSido();
+        return this.userRepository.findById(post.getRegisterId())
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getAddress().getSido();
     }
 }

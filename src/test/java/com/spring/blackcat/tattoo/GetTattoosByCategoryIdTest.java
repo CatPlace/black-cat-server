@@ -111,7 +111,7 @@ public class GetTattoosByCategoryIdTest {
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.Direction.ASC, "price");
         this.Insert();
         Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
-        Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, 5, categoryRepository.findById(categoryId).orElse(null), TattooType.DESIGN, userName, userName);
+        Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, categoryRepository.findById(categoryId).orElse(null), TattooType.DESIGN, userName, userName);
         tattooRepository.save(tattoo);
 
         //when
@@ -130,10 +130,10 @@ public class GetTattoosByCategoryIdTest {
         Category category2 = new Category("안감성타투", userName, userName);
 
         List<Tattoo> tattoos = new ArrayList<>();
-        tattoos.add(new Tattoo("타투1", "설명근", 10000L, 5, category1, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투2", "설명근", 20000L, 4, category1, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투3", "설명근", 30000L, 3, category2, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투4", "설명근", 40000L, 2, category2, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투1", "설명근", 10000L, category1, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투2", "설명근", 20000L, category1, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투3", "설명근", 30000L, category2, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투4", "설명근", 40000L, category2, TattooType.DESIGN, userName, userName));
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);

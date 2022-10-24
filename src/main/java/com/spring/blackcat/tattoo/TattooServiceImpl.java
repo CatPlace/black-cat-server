@@ -46,9 +46,10 @@ public class TattooServiceImpl implements TattooService {
             boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
             String tattooistName = this.getPostingTattooistName(tattoo);
             String tattooistAddress = this.getTattooistAddress(tattoo);
+            List<String> imageUrls = this.getImageUrls(tattoo.getId());
 
             GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress);
+                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
 
             return getTattoosResDto;
         });
@@ -60,9 +61,10 @@ public class TattooServiceImpl implements TattooService {
             boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
             String tattooistName = this.getPostingTattooistName(tattoo);
             String tattooistAddress = this.getTattooistAddress(tattoo);
+            List<String> imageUrls = this.getImageUrls(tattoo.getId());
 
             GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress);
+                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
 
             return getTattoosResDto;
         });
@@ -77,9 +79,9 @@ public class TattooServiceImpl implements TattooService {
 
         Tattoo createdTattoo = this.tattooRepository.save(tattoo);
 
-        List<String> imageUrls = uploadImages(images);
+        List<String> imageUrls = this.uploadImages(images);
 
-        saveImages(createdTattoo.getId(), imageUrls);
+        this.saveImages(createdTattoo.getId(), imageUrls);
 
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(createdTattoo.getId(), imageUrls);
 
@@ -110,6 +112,17 @@ public class TattooServiceImpl implements TattooService {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+
+        return imageUrls;
+    }
+
+    private List<String> getImageUrls(Long tattooId) {
+        List<String> imageUrls = new ArrayList<>();
+        List<Image> images = this.imageRepository.findByPostId(tattooId);
+
+        images.forEach(image -> {
+            imageUrls.add(image.getImageUrl());
         });
 
         return imageUrls;

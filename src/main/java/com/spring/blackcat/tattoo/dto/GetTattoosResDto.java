@@ -3,6 +3,8 @@ package com.spring.blackcat.tattoo.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class GetTattoosResDto {
@@ -12,4 +14,5 @@ public class GetTattoosResDto {
     private String description;
     private boolean isLiked;
     private String address;
+    private List<String> imageUrls;
 }

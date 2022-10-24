@@ -6,26 +6,39 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
 import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
+import com.spring.blackcat.image.Image;
+import com.spring.blackcat.image.ImageRepository;
 import com.spring.blackcat.likes.Likes;
+import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.dto.CreateTattooDto;
+import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class TattooServiceImpl implements TattooService {
+    @Value("${file.path}")
+    private String saveImagePath;
     private final TattooRepository tattooRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
 
     @Override
     public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
@@ -56,7 +69,7 @@ public class TattooServiceImpl implements TattooService {
     }
 
     @Override
-    public Long createTattoo(String userId, CreateTattooDto createTattooDto) {
+    public CreateTattooResDto createTattoo(String userId, CreateTattooDto createTattooDto, List<MultipartFile> images) {
         Category category = this.categoryRepository.findById(createTattooDto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
         Tattoo tattoo = new Tattoo(
@@ -64,7 +77,42 @@ public class TattooServiceImpl implements TattooService {
 
         Tattoo createdTattoo = this.tattooRepository.save(tattoo);
 
-        return createdTattoo.getId();
+        List<String> imageUrls = saveImages(images);
+
+        saveImageInfos(createdTattoo.getId(), imageUrls);
+
+        CreateTattooResDto createTattooResDto = new CreateTattooResDto(createdTattoo.getId(), imageUrls);
+
+        return createTattooResDto;
+    }
+
+    private void saveImageInfos(Long postId, List<String> imageUrls) {
+        Post post = this.postRepository.findById(postId)
+                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
+
+        imageUrls.forEach(imageUrl -> {
+            Image createdImage = new Image(imageUrl, post);
+            this.imageRepository.save(createdImage);
+        });
+    }
+
+    private List<String> saveImages(List<MultipartFile> images) {
+        List<String> imageUrls = new ArrayList<>();
+
+        images.forEach(image -> {
+            String extension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
+            String fileName = UUID.randomUUID().toString() + extension;
+            File convertFile = new File(saveImagePath + "/tattoo/" + fileName);
+
+            try {
+                image.transferTo(convertFile);
+                imageUrls.add(convertFile.getPath());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+
+        return imageUrls;
     }
 
     private boolean isUserLikedTattoo(Long postId, String userId) {

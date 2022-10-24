@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TattooServiceImpl implements TattooService {
     @Value("${file.path}")
-    private String saveImagePath;
+    private String imageSavePath;
     private final TattooRepository tattooRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
@@ -77,16 +77,16 @@ public class TattooServiceImpl implements TattooService {
 
         Tattoo createdTattoo = this.tattooRepository.save(tattoo);
 
-        List<String> imageUrls = saveImages(images);
+        List<String> imageUrls = uploadImages(images);
 
-        saveImageInfos(createdTattoo.getId(), imageUrls);
+        saveImages(createdTattoo.getId(), imageUrls);
 
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(createdTattoo.getId(), imageUrls);
 
         return createTattooResDto;
     }
 
-    private void saveImageInfos(Long postId, List<String> imageUrls) {
+    private void saveImages(Long postId, List<String> imageUrls) {
         Post post = this.postRepository.findById(postId)
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
 
@@ -96,13 +96,13 @@ public class TattooServiceImpl implements TattooService {
         });
     }
 
-    private List<String> saveImages(List<MultipartFile> images) {
+    private List<String> uploadImages(List<MultipartFile> images) {
         List<String> imageUrls = new ArrayList<>();
 
         images.forEach(image -> {
             String extension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
             String fileName = UUID.randomUUID().toString() + extension;
-            File convertFile = new File(saveImagePath + "/tattoo/" + fileName);
+            File convertFile = new File(imageSavePath + "/tattoo/" + fileName);
 
             try {
                 image.transferTo(convertFile);

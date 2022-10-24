@@ -43,30 +43,14 @@ public class TattooServiceImpl implements TattooService {
     @Override
     public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
         return this.tattooRepository.findAll(pageable).map(tattoo -> {
-            boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
-            String tattooistName = this.getPostingTattooistName(tattoo);
-            String tattooistAddress = this.getTattooistAddress(tattoo);
-            List<String> imageUrls = this.getImageUrls(tattoo.getId());
-
-            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
-
-            return getTattoosResDto;
+            return this.getTattoos(tattoo, userId);
         });
     }
 
     @Override
     public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, String userId, Long categoryId) {
         return this.tattooRepository.findByCategoryId(pageable, categoryId).map(tattoo -> {
-            boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
-            String tattooistName = this.getPostingTattooistName(tattoo);
-            String tattooistAddress = this.getTattooistAddress(tattoo);
-            List<String> imageUrls = this.getImageUrls(tattoo.getId());
-
-            GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                    tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
-
-            return getTattoosResDto;
+            return this.getTattoos(tattoo, userId);
         });
     }
 
@@ -86,6 +70,18 @@ public class TattooServiceImpl implements TattooService {
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(createdTattoo.getId(), imageUrls);
 
         return createTattooResDto;
+    }
+
+    private GetTattoosResDto getTattoos(Tattoo tattoo, String userId) {
+        boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
+        String tattooistName = this.getPostingTattooistName(tattoo);
+        String tattooistAddress = this.getTattooistAddress(tattoo);
+        List<String> imageUrls = this.getImageUrls(tattoo.getId());
+
+        GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
+                tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
+
+        return getTattoosResDto;
     }
 
     private void saveImages(Long postId, List<String> imageUrls) {

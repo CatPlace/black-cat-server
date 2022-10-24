@@ -23,6 +23,7 @@ public class InitController {
             initService.initTattoo();
             initService.initMagazine();
             initService.initLikes();
+            initService.initImage();
             return new InitResDto("success");
         } else {
             return new InitResDto("already exists");

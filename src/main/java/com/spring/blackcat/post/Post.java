@@ -35,7 +35,7 @@ public abstract class Post extends BaseTimeEntity {
     private List<Likes> likes = new ArrayList<>();
 
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
-    private Image image;
+    private List<Image> images = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(insertable = false, updatable = false)

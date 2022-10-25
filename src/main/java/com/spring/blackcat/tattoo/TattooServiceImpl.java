@@ -4,6 +4,7 @@ import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
+import com.spring.blackcat.common.exception.custom.ImageUploadFailedException;
 import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.image.Image;
@@ -106,7 +107,7 @@ public class TattooServiceImpl implements TattooService {
 
     private void saveImages(Long postId, List<String> imageUrls) {
         Post post = this.postRepository.findById(postId)
-                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
 
         imageUrls.forEach(imageUrl -> {
             Image createdImage = new Image(imageUrl, post);
@@ -123,10 +124,11 @@ public class TattooServiceImpl implements TattooService {
             File convertFile = new File(imageSavePath + "/tattoo/" + fileName);
 
             try {
-                image.transferTo(convertFile);
-                imageUrls.add(convertFile.getPath());
+                throw new IOException();
+//                image.transferTo(convertFile);
+//                imageUrls.add(convertFile.getPath());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new ImageUploadFailedException("이미지 업로드 실패", ErrorInfo.IMAGE_UPLOAD_FAILED);
             }
         });
 

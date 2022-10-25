@@ -13,6 +13,7 @@ import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.dto.CreateTattooDto;
 import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
+import com.spring.blackcat.tattoo.dto.GetTattooResDto;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,15 +44,23 @@ public class TattooServiceImpl implements TattooService {
     @Override
     public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
         return this.tattooRepository.findAll(pageable).map(tattoo -> {
-            return this.getTattoos(tattoo, userId);
+            return this.convertToGetTattoosRes(tattoo, userId);
         });
     }
 
     @Override
     public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, String userId, Long categoryId) {
         return this.tattooRepository.findByCategoryId(pageable, categoryId).map(tattoo -> {
-            return this.getTattoos(tattoo, userId);
+            return this.convertToGetTattoosRes(tattoo, userId);
         });
+    }
+
+    @Override
+    public GetTattooResDto getTattooById(Long tattooId, String userId) {
+        Tattoo tattoo = this.tattooRepository.findById(tattooId)
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
+
+        return this.convertToGetTattooRes(tattoo, userId);
     }
 
     @Override
@@ -72,7 +81,7 @@ public class TattooServiceImpl implements TattooService {
         return createTattooResDto;
     }
 
-    private GetTattoosResDto getTattoos(Tattoo tattoo, String userId) {
+    private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, String userId) {
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
         String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
@@ -82,6 +91,17 @@ public class TattooServiceImpl implements TattooService {
                 tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
 
         return getTattoosResDto;
+    }
+
+    private GetTattooResDto convertToGetTattooRes(Tattoo tattoo, String userId) {
+        GetTattoosResDto getTattoosResDto = this.convertToGetTattoosRes(tattoo, userId);
+        int likeCount = this.getLikeCount(getTattoosResDto.getId());
+
+        GetTattooResDto getTattooResDto = new GetTattooResDto(
+                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(),
+                getTattoosResDto.isLiked(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), likeCount);
+
+        return getTattooResDto;
     }
 
     private void saveImages(Long postId, List<String> imageUrls) {
@@ -130,6 +150,12 @@ public class TattooServiceImpl implements TattooService {
                 .filter(like -> like.getUser().getId().equals(userId)).collect(Collectors.toList());
 
         return likes.size() > 0 ? true : false;
+    }
+
+    private int getLikeCount(Long tattooId) {
+        List<Likes> likes = this.postRepository.findById(tattooId).get().getLikes();
+
+        return likes.size();
     }
 
     //수정필요

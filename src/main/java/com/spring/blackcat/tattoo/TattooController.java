@@ -2,6 +2,7 @@ package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.tattoo.dto.CreateTattooDto;
 import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
+import com.spring.blackcat.tattoo.dto.GetTattooResDto;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,12 @@ public class TattooController {
     public Page<GetTattoosResDto> getTattoosByCategoryId(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                                                          @PathVariable("userId") String userId, @PathVariable("categoryId") Long categoryId) {
         return this.tattooService.getTattoosByCategoryId(pageable, userId, categoryId);
+    }
+
+    @GetMapping("/tattoos/{tattooId}/{userId}")
+    public GetTattooResDto getTattooById(@PathVariable("tattooId") Long tattooId,
+                                         @PathVariable("userId") String userId) {
+        return this.tattooService.getTattooById(tattooId, userId);
     }
 
     @PostMapping("/tattoos/{userId}")

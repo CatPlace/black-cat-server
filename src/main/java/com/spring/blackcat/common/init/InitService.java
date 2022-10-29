@@ -76,9 +76,9 @@ class InitService {
     public void initUser() {
         List<User> userList = new ArrayList<>();
 
-        userList.add(createUser("Admin1", "김진호", Role.ADMIN, addressRepository.findBySido("서울").orElse(null)));
-        userList.add(createUser("Admin2", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전").orElse(null)));
-        userList.add(createUser("Admin3", "이현직", Role.BASIC, addressRepository.findBySido("대구").orElse(null)));
+        userList.add(createUser("Admin1", "0000", "김진호", Role.ADMIN, addressRepository.findBySido("서울").orElse(null)));
+        userList.add(createUser("Admin2", "0000", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전").orElse(null)));
+        userList.add(createUser("Admin3", "0000", "이현직", Role.BASIC, addressRepository.findBySido("대구").orElse(null)));
 
         userRepository.saveAllAndFlush(userList);
         em.clear();
@@ -183,8 +183,8 @@ class InitService {
         em.clear();
     }
 
-    private static User createUser(String id, String name, Role role, Address address) {
-        return new User(id, name, role, address, "Admin", "Admin");
+    private static User createUser(String id, String password, String name, Role role, Address address) {
+        return new User(id, password, name, role, address, "Admin", "Admin");
     }
 
     private static Address createAddress(String sido, String sidoEn) {

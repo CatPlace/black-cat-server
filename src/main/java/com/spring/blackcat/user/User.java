@@ -1,8 +1,8 @@
 package com.spring.blackcat.user;
 
 import com.spring.blackcat.address.Address;
-import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.BaseTimeEntity;
+import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.likes.Likes;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,9 +20,12 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
+    // TODO: 사용자 정의 ID 와 별개로 Auto Increment 식별자 ID 가지도록 변경
     @Id
     @Column(name = "user_id")
     private String id;
+
+    private String password;
 
     @Column(name = "user_name")
     private String name;
@@ -40,8 +43,9 @@ public class User extends BaseTimeEntity {
     private String registerId;
     private String modifierId;
 
-    public User(String id, String name, Role role, Address address, String registerId, String modifierId) {
+    public User(String id, String password, String name, Role role, Address address, String registerId, String modifierId) {
         this.id = id;
+        this.password = password;
         this.name = name;
         this.role = role;
         this.address = address;
@@ -53,5 +57,9 @@ public class User extends BaseTimeEntity {
         this.address.getUsers().remove(this);
         this.address = address;
         address.getUsers().add(this);
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
     }
 }

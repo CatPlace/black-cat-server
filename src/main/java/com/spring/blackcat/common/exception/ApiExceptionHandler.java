@@ -1,9 +1,6 @@
 package com.spring.blackcat.common.exception;
 
-import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
-import com.spring.blackcat.common.exception.custom.MagazineNotFoundException;
-import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
-import com.spring.blackcat.common.exception.custom.UserNotFoundException;
+import com.spring.blackcat.common.exception.custom.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,5 +34,12 @@ public class ApiExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(ce.getErrorInfo());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ce.getErrorInfo().getStatusCode()));
+    }
+
+    @ExceptionHandler(value = {ImageUploadFailedException.class})
+    public ResponseEntity<ErrorResponse> handleImageUploadFailedException(ImageUploadFailedException ie) {
+        ErrorResponse errorResponse = new ErrorResponse(ie.getErrorInfo());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ie.getErrorInfo().getStatusCode()));
     }
 }

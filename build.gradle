@@ -40,6 +40,8 @@ dependencies {
     // QueryDSL
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-apt'
+    // JWT
+    implementation 'com.auth0:java-jwt:4.2.1'
 
     annotationProcessor 'org.projectlombok:lombok'
 

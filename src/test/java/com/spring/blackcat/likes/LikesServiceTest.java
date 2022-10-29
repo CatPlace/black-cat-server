@@ -71,7 +71,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", "Test", "Test");
         addressRepository.save(address);
 
-        User user = new User("Test", "테스트", Role.BASIC, address, "Test", "Test");
+        User user = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
         userRepository.save(user);
 
         em.flush();
@@ -102,7 +102,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", "Test", "Test");
         addressRepository.save(address);
 
-        User user = new User("Test", "테스트", Role.BASIC, address, "Test", "Test");
+        User user = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
         userRepository.save(user);
 
         em.flush();
@@ -130,7 +130,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", "Test", "Test");
         addressRepository.save(address);
 
-        User user = new User("Test", "테스트", Role.BASIC, address, "Test", "Test");
+        User user = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
         userRepository.save(user);
 
         em.flush();
@@ -161,10 +161,10 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", "Test", "Test");
         addressRepository.save(address);
 
-        User user1 = new User("Test", "테스트", Role.BASIC, address, "Test", "Test");
+        User user1 = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
         userRepository.save(user1);
 
-        User user2 = new User("Test", "테스트", Role.BASIC, address, "Test", "Test");
+        User user2 = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
         userRepository.save(user2);
 
         em.flush();
@@ -206,7 +206,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", "Test", "Test");
         addressRepository.save(address);
 
-        User user = new User("Test", "테스트", Role.BASIC, address, "Test", "Test");
+        User user = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
         userRepository.save(user);
 
         em.flush();

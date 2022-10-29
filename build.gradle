@@ -30,6 +30,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // Conversion between Dto and Entity
     implementation 'org.modelmapper:modelmapper:3.1.0'
@@ -38,13 +40,18 @@ dependencies {
     // QueryDSL
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.querydsl:querydsl-apt'
+    // JWT
+    implementation 'com.auth0:java-jwt:4.2.1'
 
     annotationProcessor 'org.projectlombok:lombok'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java'
 
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.projectlombok:lombok'
 }
 

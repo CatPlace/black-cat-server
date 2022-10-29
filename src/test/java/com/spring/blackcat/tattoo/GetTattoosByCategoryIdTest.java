@@ -134,9 +134,10 @@ public class GetTattoosByCategoryIdTest {
 
     private void Insert() {
         String userName = "Admin1";
+        String password = "0000";
 
         Address address = new Address("서울", "Seoul", userName, userName);
-        User user = new User(userName, userName, Role.ADMIN, address, userName, userName);
+        User user = new User(userName, password, userName, Role.ADMIN, address, userName, userName);
         Category category1 = new Category("감성타투", userName, userName);
         Category category2 = new Category("안감성타투", userName, userName);
 

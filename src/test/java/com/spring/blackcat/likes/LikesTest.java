@@ -62,7 +62,7 @@ class LikesTest {
         Address address = new Address("서울", "Seoul", "Test", "Test");
         addressRepository.save(address);
 
-        User user = new User("Test", "테스트", Role.BASIC, address, "Test", "Test");
+        User user = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
         userRepository.save(user);
 
         em.flush();

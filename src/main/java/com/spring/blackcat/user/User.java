@@ -20,7 +20,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
 
-    // TODO: 사용자 정의 ID 와 별개로 Auto Increment 식별자 ID 가지도록 변경
+    // TODO: 사용자 정의 ID 와 별개로 Auto Increment 식별자 ID 가지도록 변경 검토
     @Id
     @Column(name = "user_id")
     private String id;

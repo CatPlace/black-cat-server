@@ -42,4 +42,18 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ie.getErrorInfo().getStatusCode()));
     }
+
+    @ExceptionHandler(value = {InvalidLoginInputException.class})
+    public ResponseEntity<ErrorResponse> handleInvalidLoginInputException(InvalidLoginInputException iie) {
+        ErrorResponse errorResponse = new ErrorResponse(iie.getErrorInfo());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(iie.getErrorInfo().getStatusCode()));
+    }
+
+    @ExceptionHandler(value = {InvalidTokenException.class})
+    public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException ite) {
+        ErrorResponse errorResponse = new ErrorResponse(ite.getErrorInfo());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ite.getErrorInfo().getStatusCode()));
+    }
 }

@@ -1,7 +1,7 @@
 package com.spring.blackcat.user;
 
-import com.spring.blackcat.user.dto.UserJoinReqDto;
-import com.spring.blackcat.user.dto.UserJoinResDto;
+import com.spring.blackcat.user.dto.UserLoginReqDto;
+import com.spring.blackcat.user.dto.UserLoginResDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,9 +13,9 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/users/join")
-    public UserJoinResDto join(@RequestBody UserJoinReqDto userJoinReqDto) {
-        return userService.join(userJoinReqDto);
+    @PostMapping("/login")
+    public UserLoginResDto login(@RequestBody UserLoginReqDto userJoinReqDto) {
+        return userService.login(userJoinReqDto);
     }
 
 }

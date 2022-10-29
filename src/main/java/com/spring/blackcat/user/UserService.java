@@ -1,9 +1,9 @@
 package com.spring.blackcat.user;
 
-import com.spring.blackcat.user.dto.UserJoinReqDto;
-import com.spring.blackcat.user.dto.UserJoinResDto;
+import com.spring.blackcat.user.dto.UserLoginReqDto;
+import com.spring.blackcat.user.dto.UserLoginResDto;
 
 public interface UserService {
 
-    UserJoinResDto join(UserJoinReqDto userJoinReqDto);
+    UserLoginResDto login(UserLoginReqDto userJoinReqDto);
 }

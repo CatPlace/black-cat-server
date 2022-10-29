@@ -1,38 +1,59 @@
 package com.spring.blackcat.user;
 
-import com.spring.blackcat.address.Address;
-import com.spring.blackcat.common.code.Role;
-import com.spring.blackcat.user.dto.UserJoinReqDto;
-import com.spring.blackcat.user.dto.UserJoinResDto;
+import com.spring.blackcat.common.code.ProviderType;
+import com.spring.blackcat.common.exception.ErrorInfo;
+import com.spring.blackcat.common.exception.custom.InvalidLoginInputException;
+import com.spring.blackcat.common.security.auth.OAuthService;
+import com.spring.blackcat.common.security.jwt.JwtProvider;
+import com.spring.blackcat.user.dto.UserLoginReqDto;
+import com.spring.blackcat.user.dto.UserLoginResDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
     private final UserRepository userRepository;
+    private final OAuthService oAuthService;
+    private final JwtProvider jwtProvider;
 
     /**
-     * 회원가입
+     * 로그인
      */
     @Override
-    public UserJoinResDto join(UserJoinReqDto userJoinReqDto) {
+    public UserLoginResDto login(UserLoginReqDto userJoinReqDto) {
+        String providerId = this.getProviderId(userJoinReqDto);
+        User user = this.getUser(userJoinReqDto, providerId);
+        String accessToken = this.jwtProvider.createAccessToken(user.getId());
+        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken);
 
-        String id = userJoinReqDto.getId();
-        String password = bCryptPasswordEncoder.encode(userJoinReqDto.getPassword());
-        String name = userJoinReqDto.getName();
-        // TODO: Address 선택 값으로 입력 받아 회원가입 진행
-        Address address = null;
-        Role role = Role.BASIC;
+        return userLoginResDto;
+    }
 
-        User user = new User(id, password, name, role, address, "SYSTEM", "SYSTEM");
+    private String getProviderId(UserLoginReqDto userJoinReqDto) {
+        String providerId;
 
-        userRepository.save(user);
+        if (userJoinReqDto.getProviderType().equals(ProviderType.KAKAO.name())) {
+            providerId = this.oAuthService.verifyKakao(userJoinReqDto.getProviderToken());
+        } else if (userJoinReqDto.getProviderType().equals(ProviderType.APPLE.name())) {
+            providerId = this.oAuthService.verifyApple(userJoinReqDto.getProviderToken());
+        } else {
+            throw new InvalidLoginInputException("값이 유효하지 않은 로그인 요청입니다.", ErrorInfo.INVALID_LOGIN_INPUT_EXCEPTION);
+        }
 
-        return new UserJoinResDto("success");
+        return providerId;
+    }
+
+    private User getUser(UserLoginReqDto userJoinReqDto, String providerId) {
+        User user = this.userRepository.findUserByProviderIdAndProviderType(providerId, userJoinReqDto.getProviderType())
+                .orElseGet(() -> {
+                    User createdUser = new User(providerId, userJoinReqDto.getProviderType());
+
+                    this.userRepository.save(createdUser);
+
+                    return createdUser;
+                });
+
+        return user;
     }
 }

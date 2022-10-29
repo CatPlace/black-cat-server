@@ -14,10 +14,11 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
+        // TODO: 정책 협의 및 변경 필요
         config.addAllowedOrigin("*"); // IP
         config.addAllowedHeader("*"); // Header
         config.addAllowedMethod("*"); // HTTP Method
-        source.registerCorsConfiguration("/security/**", config);
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 }

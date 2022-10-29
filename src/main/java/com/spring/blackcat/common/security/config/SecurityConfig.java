@@ -41,6 +41,7 @@ public class SecurityConfig {
                 .addFilter(new JwtAuthenticationFilter(authenticationManager))
                 .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
                 .authorizeRequests()
+                // TODO: 적용 URL 협의 및 변경 필요
                 .antMatchers("/security/**")
                 .access("hasRole('BASIC') or hasRole('TATTOOIST') or hasRole('ADMIN')")
                 .anyRequest().permitAll();

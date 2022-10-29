@@ -19,6 +19,7 @@ import com.spring.blackcat.tattoo.TattooRepository;
 import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,8 @@ import java.util.List;
 @RequiredArgsConstructor
 class InitService {
     private final EntityManager em;
+
+    private final PasswordEncoder bCryptPasswordEncoder;
 
     private final AddressRepository addressRepository;
 
@@ -76,9 +79,9 @@ class InitService {
     public void initUser() {
         List<User> userList = new ArrayList<>();
 
-        userList.add(createUser("Admin1", "0000", "김진호", Role.ADMIN, addressRepository.findBySido("서울").orElse(null)));
-        userList.add(createUser("Admin2", "0000", "이연중", Role.TATTOOIST, addressRepository.findBySido("대전").orElse(null)));
-        userList.add(createUser("Admin3", "0000", "이현직", Role.BASIC, addressRepository.findBySido("대구").orElse(null)));
+        userList.add(createUser("Admin1", bCryptPasswordEncoder.encode("0000"), "김진호", Role.ADMIN, addressRepository.findBySido("서울").orElse(null)));
+        userList.add(createUser("Admin2", bCryptPasswordEncoder.encode("0000"), "이연중", Role.TATTOOIST, addressRepository.findBySido("대전").orElse(null)));
+        userList.add(createUser("Admin3", bCryptPasswordEncoder.encode("0000"), "이현직", Role.BASIC, addressRepository.findBySido("대구").orElse(null)));
 
         userRepository.saveAllAndFlush(userList);
         em.clear();

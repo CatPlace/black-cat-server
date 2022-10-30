@@ -8,13 +8,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface LikesService {
 
-    LikesStatusResDto isLikedThisPost(Long postId, String userId);
+    LikesStatusResDto isLikedThisPost(Long postId, Long userId);
 
-    LikesStatusResDto likesOn(Long postId, String userId);
+    LikesStatusResDto likesOn(Long postId, Long userId);
 
-    LikesStatusResDto likesOff(Long postId, String userId);
+    LikesStatusResDto likesOff(Long postId, Long userId);
 
     Page<LikesUserResDto> findLikesUsersByPostId(Pageable pageable, Long postId);
 
-    Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, String userId, String postType);
+    Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, Long userId, String postType);
 }

@@ -79,9 +79,9 @@ class InitService {
     public void initUser() {
         List<User> userList = new ArrayList<>();
 
-        userList.add(createUser("Admin1", bCryptPasswordEncoder.encode("0000"), "김진호", Role.ADMIN, addressRepository.findBySido("서울").orElse(null)));
-        userList.add(createUser("Admin2", bCryptPasswordEncoder.encode("0000"), "이연중", Role.TATTOOIST, addressRepository.findBySido("대전").orElse(null)));
-        userList.add(createUser("Admin3", bCryptPasswordEncoder.encode("0000"), "이현직", Role.BASIC, addressRepository.findBySido("대구").orElse(null)));
+        userList.add(createUser("123456789", ProviderType.KAKAO));
+        userList.add(createUser("asdqweqwr", ProviderType.APPLE));
+        userList.add(createUser("!@#!@!$%!@eqw", ProviderType.KAKAO));
 
         userRepository.saveAllAndFlush(userList);
         em.clear();
@@ -158,11 +158,11 @@ class InitService {
         postList.add(postRepository.findById(3L).orElse(null));
         postList.add(postRepository.findById(11L).orElse(null));
 
-        userList.add(userRepository.findById("Admin1").orElse(null));
-        userList.add(userRepository.findById("Admin2").orElse(null));
-        userList.add(userRepository.findById("Admin3").orElse(null));
-        userList.add(userRepository.findById("Admin1").orElse(null));
-        userList.add(userRepository.findById("Admin1").orElse(null));
+        userList.add(userRepository.findById(1L).orElse(null));
+        userList.add(userRepository.findById(2L).orElse(null));
+        userList.add(userRepository.findById(3L).orElse(null));
+        userList.add(userRepository.findById(1L).orElse(null));
+        userList.add(userRepository.findById(1L).orElse(null));
 
         for (int i = 0; i < postList.size(); i++) {
             Post post = postList.get(i);
@@ -186,8 +186,8 @@ class InitService {
         em.clear();
     }
 
-    private static User createUser(String id, String password, String name, Role role, Address address) {
-        return new User(id, password, name, role, address, "Admin", "Admin");
+    private static User createUser(String providerId, ProviderType providerType) {
+        return new User(providerId, providerType);
     }
 
     private static Address createAddress(String sido, String sidoEn) {
@@ -199,11 +199,11 @@ class InitService {
     }
 
     private static Tattoo createTattoo(Category category, TattooType tattooType, String name, String description, Long price) {
-        return new Tattoo(name, description, price, category, tattooType, "Admin", "Admin");
+        return new Tattoo(name, description, price, category, tattooType, 1L, 1L);
     }
 
     private static Magazine createMagazine(String title) {
-        return new Magazine(title, "Admin", "Admin");
+        return new Magazine(title, 1L, 1L);
     }
 
     private static Likes createLikes(Post post, User user, PostType postType) {

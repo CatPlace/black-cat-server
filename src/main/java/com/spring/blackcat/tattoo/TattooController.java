@@ -1,5 +1,6 @@
 package com.spring.blackcat.tattoo;
 
+import com.spring.blackcat.common.security.interceptor.UserId;
 import com.spring.blackcat.tattoo.dto.CreateTattooDto;
 import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
 import com.spring.blackcat.tattoo.dto.GetTattooResDto;
@@ -14,34 +15,35 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-//path variable userId 수정 필요, request url userId 수정  필요)
+@RequestMapping("/api/v1/tattoos")
 @RequiredArgsConstructor
 @RestController
 public class TattooController {
     private final TattooService tattooService;
 
-    @GetMapping("/tattoos/{userId}")
+    @GetMapping()
     public Page<GetTattoosResDto> getAllTattoos(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                                                @PathVariable("userId") String userId) {
+                                                @UserId Long userId) {
         return this.tattooService.getAllTattoos(pageable, userId);
     }
 
-    @GetMapping("/tattoos/{userId}/categories/{categoryId}")
+    @GetMapping("/categories/{categoryId}")
     public Page<GetTattoosResDto> getTattoosByCategoryId(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                                                         @PathVariable("userId") String userId, @PathVariable("categoryId") Long categoryId) {
+                                                         @UserId Long userId,
+                                                         @PathVariable("categoryId") Long categoryId) {
         return this.tattooService.getTattoosByCategoryId(pageable, userId, categoryId);
     }
 
-    @GetMapping("/tattoos/{tattooId}/{userId}")
+    @GetMapping("/{tattooId}")
     public GetTattooResDto getTattooById(@PathVariable("tattooId") Long tattooId,
-                                         @PathVariable("userId") String userId) {
+                                         @UserId Long userId) {
         return this.tattooService.getTattooById(tattooId, userId);
     }
 
-    @PostMapping("/tattoos/{userId}")
+    @PostMapping()
     public CreateTattooResDto createTattoo(@RequestPart("tattooInfo") CreateTattooDto createTattooDto,
                                            @RequestPart("images") List<MultipartFile> images,
-                                           @PathVariable("userId") String userId) {
+                                           @UserId Long userId) {
         return this.tattooService.createTattoo(userId, createTattooDto, images);
     }
 

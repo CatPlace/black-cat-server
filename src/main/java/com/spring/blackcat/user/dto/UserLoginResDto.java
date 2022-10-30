@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class UserJoinResDto {
-    private String status;
+public class UserLoginResDto {
+    private Long userId;
+    private String accessToken;
 }

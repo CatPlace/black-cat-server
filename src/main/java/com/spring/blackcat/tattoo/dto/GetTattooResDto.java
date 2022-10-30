@@ -8,8 +8,9 @@ import java.util.List;
 public class GetTattooResDto extends GetTattoosResDto {
     private int likeCount;
 
-    public GetTattooResDto(Long id, Long price, String tattooistName, String description, boolean isLiked, String address, List<String> imageUrls, int likeCount) {
-        super(id, price, tattooistName, description, isLiked, address, imageUrls);
+    //@TODO: 타투이스트 이름 추가
+    public GetTattooResDto(Long id, Long price, String description, boolean isLiked, String address, List<String> imageUrls, int likeCount) {
+        super(id, price, description, isLiked, address, imageUrls);
         this.likeCount = likeCount;
     }
 }

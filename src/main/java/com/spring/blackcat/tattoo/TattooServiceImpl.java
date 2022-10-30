@@ -44,21 +44,21 @@ public class TattooServiceImpl implements TattooService {
     private final ImageRepository imageRepository;
 
     @Override
-    public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, String userId) {
+    public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, Long userId) {
         return this.tattooRepository.findAll(pageable).map(tattoo -> {
             return this.convertToGetTattoosRes(tattoo, userId);
         });
     }
 
     @Override
-    public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, String userId, Long categoryId) {
+    public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long userId, Long categoryId) {
         return this.tattooRepository.findByCategoryId(pageable, categoryId).map(tattoo -> {
             return this.convertToGetTattoosRes(tattoo, userId);
         });
     }
 
     @Override
-    public GetTattooResDto getTattooById(Long tattooId, String userId) {
+    public GetTattooResDto getTattooById(Long tattooId, Long userId) {
         Tattoo tattoo = this.tattooRepository.findById(tattooId)
                 .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
 
@@ -67,7 +67,7 @@ public class TattooServiceImpl implements TattooService {
 
     @Override
     @Transactional
-    public CreateTattooResDto createTattoo(String userId, CreateTattooDto createTattooDto, List<MultipartFile> images) {
+    public CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images) {
         Category category = this.categoryRepository.findById(createTattooDto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
         Tattoo tattoo = new Tattoo(
@@ -84,24 +84,25 @@ public class TattooServiceImpl implements TattooService {
         return createTattooResDto;
     }
 
-    private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, String userId) {
+    private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, Long userId) {
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
-        String tattooistName = this.getPostingTattooistName(tattoo);
+        //@TODO: 타투이스트 이름 추가
+//        String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
         List<String> imageUrls = this.getImageUrls(tattoo.getId());
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
+                tattoo.getPrice(), tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
 
         return getTattoosResDto;
     }
 
-    private GetTattooResDto convertToGetTattooRes(Tattoo tattoo, String userId) {
+    private GetTattooResDto convertToGetTattooRes(Tattoo tattoo, Long userId) {
         GetTattoosResDto getTattoosResDto = this.convertToGetTattoosRes(tattoo, userId);
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
-                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(),
+                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getDescription(),
                 getTattoosResDto.isLiked(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), likeCount);
 
         return getTattooResDto;
@@ -147,7 +148,7 @@ public class TattooServiceImpl implements TattooService {
         return imageUrls;
     }
 
-    private boolean isUserLikedTattoo(Long postId, String userId) {
+    private boolean isUserLikedTattoo(Long postId, Long userId) {
         List<Likes> likes = this.postRepository.findById(postId).get().getLikes()
                 .stream()
                 .filter(like -> like.getUser().getId().equals(userId)).collect(Collectors.toList());
@@ -162,10 +163,11 @@ public class TattooServiceImpl implements TattooService {
     }
 
     //수정필요
-    private String getPostingTattooistName(Tattoo tattoo) {
-        return this.tattooRepository.findById(tattoo.getId())
-                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getRegisterId();
-    }
+    //@TODO: 타투이스트 이름 추가
+//    private String getPostingTattooistName(Tattoo tattoo) {
+//        return this.tattooRepository.findById(tattoo.getId())
+//                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getRegisterId();
+//    }
 
     private String getTattooistAddress(Tattoo tattoo) {
         return this.userRepository.findById(tattoo.getRegisterId())

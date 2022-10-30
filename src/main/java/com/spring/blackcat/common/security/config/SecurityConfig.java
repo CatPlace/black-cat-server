@@ -1,61 +1,71 @@
 package com.spring.blackcat.common.security.config;
 
-import com.spring.blackcat.common.security.config.jwt.JwtAuthenticationFilter;
-import com.spring.blackcat.common.security.config.jwt.JwtAuthorizationFilter;
-import com.spring.blackcat.user.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.blackcat.common.exception.ErrorInfo;
+import com.spring.blackcat.common.exception.custom.InvalidTokenException;
+import com.spring.blackcat.common.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import java.util.HashMap;
+import java.util.Map;
 
-@Configuration
-@EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
+@EnableWebSecurity
 public class SecurityConfig {
+    private final ObjectMapper objectMapper;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private final CorsFilter corsFilter;
-    private final UserRepository userRepository;
-    private final AuthenticationConfiguration authenticationConfiguration;
-//    private final PrincipalOAuth2UserService principalOAuth2UserService;
+    @Bean
+    public WebSecurityCustomizer configure() {
+        return (web) -> web.ignoring().mvcMatchers(
+                "/api/v1/users/login"
+        );
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-        AuthenticationManager authenticationManager = authenticationConfiguration.getAuthenticationManager();
-
-        http.csrf().disable()
-                .formLogin().disable()
-                .httpBasic().disable()
-                .sessionManagement().sessionCreationPolicy(STATELESS)
-                .and()
-                .addFilter(corsFilter)
-                .addFilter(new JwtAuthenticationFilter(authenticationManager))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager, userRepository))
+        return http.antMatcher("/**")
                 .authorizeRequests()
-                // TODO: 적용 URL 협의 및 변경 필요
-                .antMatchers("/security/**")
-                .access("hasRole('BASIC') or hasRole('TATTOOIST') or hasRole('ADMIN')")
-                .anyRequest().permitAll();
+                .mvcMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Preflight Request 허용해주기
+//                .antMatchers("/api/v1/**").hasAuthority()
+                .and()
+                .httpBasic().disable()
+                .formLogin().disable()
+                .cors().disable()
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 
-        // TODO: OAuth 로그인
-//        http.oauth2Login()
-//                .userInfoEndpoint()
-//                .userService(principalOAuth2UserService)
-//                .and()
-//                .permitAll()
-//                .and()
-//                .oauth2ResourceServer()
-//                .jwt();
+                .exceptionHandling()
+                .authenticationEntryPoint(((request, response, authException) -> {
+                    InvalidTokenException ite = new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorInfo.INVALID_TOKEN_EXCEPTION);
+                    Map<String, Object> errDetail = new HashMap<>();
+                    errDetail.put("message", ite.getErrorInfo().getMessage());
+                    errDetail.put("errorCode", ite.getErrorInfo().getErrorCode());
+                    errDetail.put("statusCode", ite.getErrorInfo().getStatusCode());
 
-        return http.build();
+                    response.setStatus((HttpStatus.UNAUTHORIZED.value()));
+                    response.setContentType("application/json;charset=UTF-8");
+                    objectMapper.writeValue(response.getWriter(), errDetail);
+
+                    return;
+                }))
+//                .accessDeniedHandler(((request, response, accessDeniedException) -> {
+//
+//                }))
+                .and().build();
     }
 }

@@ -2,7 +2,7 @@ package com.spring.blackcat.user;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.common.BaseTimeEntity;
-import com.spring.blackcat.common.code.Role;
+import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.likes.Likes;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,52 +14,65 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
-
-    // TODO: 사용자 정의 ID 와 별개로 Auto Increment 식별자 ID 가지도록 변경 검토
     @Id
-    @Column(name = "user_id")
-    private String id;
+    @GeneratedValue(strategy = IDENTITY)
+    private Long id;
 
-    private String password;
-
-    @Column(name = "user_name")
-    private String name;
+    private String providerId;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private ProviderType providerType;
+
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<Likes> likes = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
-    private List<Likes> likes = new ArrayList<>();
+    // TODO: 추후 타투이스트 및 관리자 권한 구현 시 Profile 정보 필요
 
-    private String registerId;
-    private String modifierId;
-
-    public User(String id, String password, String name, Role role, Address address, String registerId, String modifierId) {
-        this.id = id;
-        this.password = password;
-        this.name = name;
-        this.role = role;
-        this.address = address;
-        this.registerId = registerId;
-        this.modifierId = modifierId;
+    public User(String providerId, ProviderType providerType) {
+        this.providerId = providerId;
+        this.providerType = providerType;
     }
 
-    public void changeAddress(Address address) {
-        this.address.getUsers().remove(this);
-        this.address = address;
-        address.getUsers().add(this);
-    }
+    // TODO: 사용자 정의 ID 와 별개로 Auto Increment 식별자 ID 가지도록 변경 검토
+//    @Id
+//    @Column(name = "user_id")
+//    private String id;
+//
+//    private String password;
+//
+//    @Column(name = "user_name")
+//    private String name;
+//
+//    @Enumerated(EnumType.STRING)
+//    private Role role;
+//
+//    @ManyToOne(fetch = LAZY)
+//    @JoinColumn(name = "address_id")
+//    private Address address;
+//
 
-    public void changePassword(String password) {
-        this.password = password;
-    }
+//
+//    private String registerId;
+//    private String modifierId;
+
+
+//    public void changeAddress(Address address) {
+//        this.address.getUsers().remove(this);
+//        this.address = address;
+//        address.getUsers().add(this);
+//    }
+
+//    public void changePassword(String password) {
+//        this.password = password;
+//    }
 }

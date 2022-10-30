@@ -30,7 +30,7 @@ public class LikesServiceImpl implements LikesService {
      * 특정 게시물 좋아요 조회
      */
     @Override
-    public LikesStatusResDto isLikedThisPost(Long postId, String userId) {
+    public LikesStatusResDto isLikedThisPost(Long postId, Long userId) {
         Optional<Likes> likes = likesRepository.findByPostIdAndUserId(postId, userId);
         return new LikesStatusResDto(likes.isPresent());
     }
@@ -40,7 +40,7 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public LikesStatusResDto likesOn(Long postId, String userId) {
+    public LikesStatusResDto likesOn(Long postId, Long userId) {
         boolean isExists = likesRepository.findByPostIdAndUserId(postId, userId).isPresent();
         if (isExists) {
             return new LikesStatusResDto(true);
@@ -59,7 +59,7 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public LikesStatusResDto likesOff(Long postId, String userId) {
+    public LikesStatusResDto likesOff(Long postId, Long userId) {
         likesRepository.findByPostIdAndUserId(postId, userId).ifPresent(likesRepository::delete);
         return new LikesStatusResDto(false);
     }
@@ -78,7 +78,7 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, String userId, String postType) {
+    public Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, Long userId, String postType) {
         PostType postTypeEnum = null;
         if (postType != null) {
             try {

@@ -29,7 +29,7 @@ public class Magazine extends Post {
     @OneToMany(mappedBy = "magazine", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cell> cellList = new ArrayList<>();
 
-    public Magazine(String title, String registerId, String modifierId) {
+    public Magazine(String title, Long registerId, Long modifierId) {
         super(title, registerId, modifierId);
         this.isMain = false;
         this.cellList = new ArrayList<>();

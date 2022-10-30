@@ -10,7 +10,8 @@ import java.util.List;
 public class GetTattoosResDto {
     private Long id;
     private Long price;
-    private String tattooistName;
+    //@TODO: 타투이스트 이름 추가
+//    private String tattooistName;
     private String description;
     private boolean isLiked;
     private String address;

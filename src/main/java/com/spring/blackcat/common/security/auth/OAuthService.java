@@ -1,5 +1,6 @@
 package com.spring.blackcat.common.security.auth;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.HttpHeaders;
@@ -13,9 +14,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Service
 public class OAuthService {
-    private RestTemplateService restTemplateService;
+    private final RestTemplateService restTemplateService;
 
     private static final String KAKAO_OAUTH_URL = "https://kapi.kakao.com/v2/user/me";
     private static final String HEADER = "Authorization";
@@ -32,6 +34,7 @@ public class OAuthService {
                 new HttpHeaders(header),
                 KakaoResponse.class
         );
+        System.out.println(response);
 
         return response.getBody().getId();
     }

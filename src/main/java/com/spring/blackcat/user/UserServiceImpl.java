@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     private String getProviderId(UserLoginReqDto userJoinReqDto) {
         String providerId;
 
-        if (userJoinReqDto.getProviderType().equals(ProviderType.KAKAO.name())) {
+        if (userJoinReqDto.getProviderType().toString().equals(ProviderType.KAKAO.name())) {
             providerId = this.oAuthService.verifyKakao(userJoinReqDto.getProviderToken());
-        } else if (userJoinReqDto.getProviderType().equals(ProviderType.APPLE.name())) {
+        } else if (userJoinReqDto.getProviderType().toString().equals(ProviderType.APPLE.name())) {
             providerId = this.oAuthService.verifyApple(userJoinReqDto.getProviderToken());
         } else {
             throw new InvalidLoginInputException("값이 유효하지 않은 로그인 요청입니다.", ErrorInfo.INVALID_LOGIN_INPUT_EXCEPTION);

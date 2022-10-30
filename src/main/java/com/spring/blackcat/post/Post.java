@@ -40,10 +40,10 @@ public abstract class Post extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(insertable = false, updatable = false)
     private PostType postType;
-    private String registerId;
-    private String modifierId;
+    private Long registerId;
+    private Long modifierId;
 
-    public Post(String title, String registerId, String modifierId) {
+    public Post(String title, Long registerId, Long modifierId) {
         this.title = title;
         this.registerId = registerId;
         this.modifierId = modifierId;

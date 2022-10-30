@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtProvider {
     //@TODO: Property 변경
     @Value("${jwt.secret.key}")
-    private final String jwtSecretKey;
+    private String jwtSecretKey;
 
     private final Long jwtValidTime = 6000000 * 30L;
 

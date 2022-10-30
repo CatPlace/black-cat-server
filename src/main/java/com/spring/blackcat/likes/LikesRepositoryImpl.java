@@ -32,7 +32,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
                 .select(Projections.constructor(LikesUserResDto.class,
                         likes.id,
                         likes.user.id,
-                        likes.user.name,
+//                        likes.user.name,
                         likes.createdDate))
                 .from(likes)
                 .join(likes.post, post)
@@ -45,7 +45,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
     }
 
     @Override
-    public Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, String userId, PostType postType) {
+    public Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, Long userId, PostType postType) {
         List<LikesPostResDto> results = query
                 .select(Projections.constructor(LikesPostResDto.class,
                         likes.id,
@@ -69,7 +69,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
         return likes.post.id.eq(postId);
     }
 
-    private static BooleanExpression userIdEqual(String userId) {
+    private static BooleanExpression userIdEqual(Long userId) {
         return likes.user.id.eq(userId);
     }
 

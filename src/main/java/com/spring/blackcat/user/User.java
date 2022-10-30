@@ -1,5 +1,6 @@
 package com.spring.blackcat.user;
 
+import com.spring.blackcat.address.Address;
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.likes.Likes;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -29,6 +31,10 @@ public class User extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     // TODO: 추후 타투이스트 및 관리자 권한 구현 시 Profile 정보 필요
 

@@ -11,13 +11,13 @@ import java.time.LocalDateTime;
 public class LikesUserResDto {
     private Long likesId;
     private String userId;
-    private String userName;
+    //    private String userName;
     private LocalDateTime createdDate;
 
-    public LikesUserResDto(Long likesId, String userId, String name, LocalDateTime createdDate) {
+    public LikesUserResDto(Long likesId, String userId, LocalDateTime createdDate) {
         this.likesId = likesId;
         this.userId = userId;
-        this.userName = name;
+//        this.userName = name;
         this.createdDate = createdDate;
     }
 }

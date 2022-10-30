@@ -18,6 +18,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -40,9 +42,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userDetails.getUsername(), "", userDetails.getAuthorities()));
             } catch (Exception e) {
                 InvalidTokenException ite = new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorInfo.INVALID_TOKEN_EXCEPTION);
+                Map<String, Object> errDetail = new HashMap<>();
+                errDetail.put("message", ite.getErrorInfo().getMessage());
+                errDetail.put("errorCode", ite.getErrorInfo().getErrorCode());
+                errDetail.put("statusCode", ite.getErrorInfo().getStatusCode());
+
                 response.setStatus((HttpStatus.UNAUTHORIZED.value()));
-                response.setContentType("application/json");
-                response.getWriter().write(ite.toString());
+                response.setContentType("application/json;charset=UTF-8");
+                objectMapper.writeValue(response.getWriter(), errDetail);
+                System.out.println(errDetail);
                 return;
             }
         }

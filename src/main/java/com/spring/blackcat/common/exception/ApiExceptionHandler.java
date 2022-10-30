@@ -56,4 +56,11 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ite.getErrorInfo().getStatusCode()));
     }
+
+    @ExceptionHandler(value = {IllegalTokenException.class})
+    public ResponseEntity<ErrorResponse> handleIllegalTokenException(IllegalTokenException ilte) {
+        ErrorResponse errorResponse = new ErrorResponse(ilte.getErrorInfo());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ilte.getErrorInfo().getStatusCode()));
+    }
 }

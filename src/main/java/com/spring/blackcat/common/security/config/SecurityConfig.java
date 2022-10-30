@@ -7,6 +7,7 @@ import com.spring.blackcat.common.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -23,7 +24,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer configure() {
         return (web) -> web.ignoring().mvcMatchers(
-                "/users/login"
+                "/api/v1/users/login"
         );
     }
 
@@ -47,7 +48,10 @@ public class SecurityConfig {
 
                 .exceptionHandling()
                 .authenticationEntryPoint(((request, response, authException) -> {
-                    throw new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorInfo.INVALID_TOKEN_EXCEPTION);
+                    InvalidTokenException ite = new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorInfo.INVALID_TOKEN_EXCEPTION);
+                    response.setStatus((HttpStatus.UNAUTHORIZED.value()));
+                    response.setContentType("application/json");
+                    response.getWriter().write(ite.toString());
                 }))
 //                .accessDeniedHandler(((request, response, accessDeniedException) -> {
 //

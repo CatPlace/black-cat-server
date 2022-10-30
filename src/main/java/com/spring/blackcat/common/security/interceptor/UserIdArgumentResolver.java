@@ -1,5 +1,7 @@
 package com.spring.blackcat.common.security.interceptor;
 
+import com.spring.blackcat.common.exception.ErrorInfo;
+import com.spring.blackcat.common.exception.custom.IllegalTokenException;
 import com.spring.blackcat.common.security.jwt.JwtProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -31,14 +33,19 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        String[] authorizations = Objects.requireNonNull(webRequest.getHeader(AUTHORIZATION)).split(SPACE);
-        String type = authorizations[HEADER_KEY_INDEX];
-        String accessToken = authorizations[HEADER_VALUE_INDEX];
+        try {
+            String[] authorizations = Objects.requireNonNull(webRequest.getHeader(AUTHORIZATION)).split(SPACE);
+            String type = authorizations[HEADER_KEY_INDEX];
+            String accessToken = authorizations[HEADER_VALUE_INDEX];
 
-        if (!type.equalsIgnoreCase(BEARER)) {
-            throw new IllegalArgumentException();
+            if (!type.equalsIgnoreCase(BEARER)) {
+                throw new IllegalArgumentException();
+            }
+
+            return jwtProvider.getAccessTokenPayload(accessToken);
+        } catch (Exception e) {
+            throw new IllegalTokenException("토큰이 없거나 타입이 잘못되었습니다.", ErrorInfo.ILEGAL_TOKEN_EXCEPTION);
         }
 
-        return jwtProvider.getAccessTokenPayload(accessToken);
     }
 }

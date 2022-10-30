@@ -40,6 +40,7 @@ public abstract class Post extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(insertable = false, updatable = false)
     private PostType postType;
+
     private Long registerId;
     private Long modifierId;
 

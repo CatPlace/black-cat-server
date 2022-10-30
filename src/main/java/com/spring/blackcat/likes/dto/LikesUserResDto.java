@@ -9,15 +9,14 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LikesUserResDto {
+
     private Long likesId;
-    private String userId;
-    //    private String userName;
+    private Long userId;
     private LocalDateTime createdDate;
 
-    public LikesUserResDto(Long likesId, String userId, LocalDateTime createdDate) {
+    public LikesUserResDto(Long likesId, Long userId, LocalDateTime createdDate) {
         this.likesId = likesId;
         this.userId = userId;
-//        this.userName = name;
         this.createdDate = createdDate;
     }
 }

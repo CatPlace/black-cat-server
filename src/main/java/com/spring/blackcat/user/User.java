@@ -20,6 +20,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseTimeEntity {
+    
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -43,11 +44,6 @@ public class User extends BaseTimeEntity {
         this.providerType = providerType;
     }
 
-    // TODO: 사용자 정의 ID 와 별개로 Auto Increment 식별자 ID 가지도록 변경 검토
-//    @Id
-//    @Column(name = "user_id")
-//    private String id;
-//
 //    private String password;
 //
 //    @Column(name = "user_name")
@@ -60,18 +56,15 @@ public class User extends BaseTimeEntity {
 //    @JoinColumn(name = "address_id")
 //    private Address address;
 //
-
-//
 //    private String registerId;
 //    private String modifierId;
-
-
+//
 //    public void changeAddress(Address address) {
 //        this.address.getUsers().remove(this);
 //        this.address = address;
 //        address.getUsers().add(this);
 //    }
-
+//
 //    public void changePassword(String password) {
 //        this.password = password;
 //    }

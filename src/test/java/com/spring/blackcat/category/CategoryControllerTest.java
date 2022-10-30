@@ -23,6 +23,6 @@ class CategoryControllerTest {
     @Test
     @DisplayName("전체 카테고리 조회")
     void getCategoriesTest() throws Exception {
-        mock.perform(get("/categories")).andExpect(status().isOk());
+        mock.perform(get("/api/v1/categories")).andExpect(status().isOk());
     }
 }

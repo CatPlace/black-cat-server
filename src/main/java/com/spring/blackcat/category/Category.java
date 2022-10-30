@@ -27,9 +27,6 @@ public class Category extends BaseTimeEntity {
     @Column(name = "category_name")
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = ALL)
-    private List<Tattoo> tattoos = new ArrayList<>();
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "parent_category_id")
     private Category parent;
@@ -37,10 +34,13 @@ public class Category extends BaseTimeEntity {
     @OneToMany(mappedBy = "parent")
     private List<Category> children = new ArrayList<>();
 
-    private String registerId;
-    private String modifierId;
+    @OneToMany(mappedBy = "category", cascade = ALL)
+    private List<Tattoo> tattoos = new ArrayList<>();
 
-    public Category(String name, String registerId, String modifierId) {
+    private Long registerId;
+    private Long modifierId;
+
+    public Category(String name, Long registerId, Long modifierId) {
         this.name = name;
         this.registerId = registerId;
         this.modifierId = modifierId;

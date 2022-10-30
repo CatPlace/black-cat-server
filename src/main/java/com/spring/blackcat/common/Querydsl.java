@@ -15,7 +15,10 @@ public class Querydsl {
         List<OrderSpecifier<?>> orders = new ArrayList<>();
         for (Sort.Order order : pageable.getSort()) {
             PathBuilder pathBuilder = new PathBuilder<>(target.getType(), target.getMetadata());
-            orders.add(new OrderSpecifier(order.isAscending() ? com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC, pathBuilder.get(order.getProperty())));
+            orders.add(new OrderSpecifier(
+                    order.isAscending() ? com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC,
+                    pathBuilder.get(order.getProperty())
+            ));
         }
         return orders.toArray(OrderSpecifier[]::new);
     }

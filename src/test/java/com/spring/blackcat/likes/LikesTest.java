@@ -4,7 +4,7 @@ import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
-import com.spring.blackcat.common.code.Role;
+import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
@@ -52,17 +52,17 @@ class LikesTest {
     @DisplayName("생성 시점 양방향 연관관계 매핑")
     void associationMapping() {
         // given
-        Category category = new Category("카테고리", "Test", "Test");
+        Category category = new Category("카테고리", 1L, 1L);
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, "Test", "Test");
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
-        Address address = new Address("서울", "Seoul", "Test", "Test");
+        Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("Test", "0000", "테스트", Role.BASIC, address, "Test", "Test");
+        User user = new User("TEST", ProviderType.KAKAO);
         userRepository.save(user);
 
         em.flush();

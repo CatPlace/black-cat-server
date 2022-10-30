@@ -11,6 +11,7 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 @Builder
 public class Response {
+    
     private String status;
 
     private Object data;

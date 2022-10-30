@@ -15,8 +15,8 @@ class CategoryTest {
     @DisplayName("하위 카테고리 등록")
     void addChildCategory() {
         // given
-        Category parentCategory = new Category("흑백", "Admin", "Admin");
-        Category childCategory = new Category("레터링", "Admin", "Admin");
+        Category parentCategory = new Category("흑백", 1L, 1L);
+        Category childCategory = new Category("레터링", 1L, 1L);
 
         // when
         parentCategory.addChildCategory(childCategory);
@@ -31,9 +31,9 @@ class CategoryTest {
     @DisplayName("상위 카테고리 등록")
     void changeParentCategory() {
         // given
-        Category firstParentCategory = new Category("흑백", "Admin", "Admin");
-        Category secondParentCategory = new Category("미니", "Admin", "Admin");
-        Category childCategory = new Category("레터링", "Admin", "Admin");
+        Category firstParentCategory = new Category("흑백", 1L, 1L);
+        Category secondParentCategory = new Category("미니", 1L, 1L);
+        Category childCategory = new Category("레터링", 1L, 1L);
 
         // when
         childCategory.changeParent(firstParentCategory);

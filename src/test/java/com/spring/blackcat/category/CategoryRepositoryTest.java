@@ -21,7 +21,7 @@ class CategoryRepositoryTest {
     @DisplayName("ID로 카테고리 조회")
     void findById() {
         // given
-        Category category = new Category("레터링", "Admin", "Admin");
+        Category category = new Category("레터링", 1L, 1L);
         categoryRepository.save(category);
 
         // when
@@ -35,7 +35,7 @@ class CategoryRepositoryTest {
     @DisplayName("이름으로 카테고리 조회")
     void findByName() {
         // given
-        Category category = new Category("레터링", "Admin", "Admin");
+        Category category = new Category("레터링", 1L, 1L);
         categoryRepository.save(category);
 
         // when
@@ -49,9 +49,9 @@ class CategoryRepositoryTest {
     @DisplayName("전체 카테고리 조회")
     void findAll() {
         // given
-        Category category1 = new Category("레터링", "Admin", "Admin");
-        Category category2 = new Category("이레즈미", "Admin", "Admin");
-        Category category3 = new Category("올드스쿨", "Admin", "Admin");
+        Category category1 = new Category("레터링", 1L, 1L);
+        Category category2 = new Category("이레즈미", 1L, 1L);
+        Category category3 = new Category("올드스쿨", 1L, 1L);
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);
@@ -70,7 +70,7 @@ class CategoryRepositoryTest {
     @DisplayName("ID로 카테고리 삭제")
     void deleteByID() {
         // given
-        Category category = new Category("레터링", "Admin", "Admin");
+        Category category = new Category("레터링", 1L, 1L);
         categoryRepository.save(category);
 
         // when
@@ -85,9 +85,9 @@ class CategoryRepositoryTest {
     @DisplayName("전체 카테고리 삭제")
     void deleteAll() {
         // given
-        Category category1 = new Category("레터링", "Admin", "Admin");
-        Category category2 = new Category("이레즈미", "Admin", "Admin");
-        Category category3 = new Category("올드스쿨", "Admin", "Admin");
+        Category category1 = new Category("레터링", 1L, 1L);
+        Category category2 = new Category("이레즈미", 1L, 1L);
+        Category category3 = new Category("올드스쿨", 1L, 1L);
 
         categoryRepository.save(category1);
         categoryRepository.save(category2);

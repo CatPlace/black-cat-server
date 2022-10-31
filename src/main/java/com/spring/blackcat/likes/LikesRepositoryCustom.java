@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface LikesRepositoryCustom {
+
     Page<LikesUserResDto> findLikesUsersByPostId(Pageable pageable, Long postId);
 
     Page<LikesPostResDto> findLikesPostsByUserIdAndPostType(Pageable pageable, Long userId, PostType postType);

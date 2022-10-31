@@ -52,17 +52,17 @@ public class Address extends BaseTimeEntity {
     @OneToMany(mappedBy = "address", cascade = ALL)
     private List<User> users;
 
-    private String registerId;
-    private String modifierId;
+    private Long registerId;
+    private Long modifierId;
 
-    public Address(String sido, String sidoEn, String registerId, String modifierId) {
+    public Address(String sido, String sidoEn, Long registerId, Long modifierId) {
         this.sido = sido;
         this.sidoEn = sidoEn;
         this.registerId = registerId;
         this.modifierId = modifierId;
     }
 
-    public Address(String zipCode, String sido, String sidoEn, String sigungu, String sigunguEn, String upmyen, String upmyenEn, String loadNmCd, String loadNm, String loadNmEn, String under_yn, String buildingNoBon, String buildingNoBu, String buildingManageNo, String manyDeliveryNm, String sigunguBuildingNm, String bupjeungdongCd, String bupjeungdongNm, String leeNm, String hangjeungdongNm, String mountainYn, String jibunbonbun, String upmyendongNo, String jibunbubun, String oldZipCode, String zipCodeNo, String registerId, String modifierId) {
+    public Address(String zipCode, String sido, String sidoEn, String sigungu, String sigunguEn, String upmyen, String upmyenEn, String loadNmCd, String loadNm, String loadNmEn, String under_yn, String buildingNoBon, String buildingNoBu, String buildingManageNo, String manyDeliveryNm, String sigunguBuildingNm, String bupjeungdongCd, String bupjeungdongNm, String leeNm, String hangjeungdongNm, String mountainYn, String jibunbonbun, String upmyendongNo, String jibunbubun, String oldZipCode, String zipCodeNo, Long registerId, Long modifierId) {
         this.zipCode = zipCode;
         this.sido = sido;
         this.sidoEn = sidoEn;

@@ -44,7 +44,7 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
             return jwtProvider.getAccessTokenPayload(accessToken);
         } catch (Exception e) {
-            throw new IllegalTokenException("토큰이 없거나 타입이 잘못되었습니다.", ErrorInfo.ILEGAL_TOKEN_EXCEPTION);
+            throw new IllegalTokenException("토큰이 없거나 타입이 잘못되었습니다.", ErrorInfo.ILLEGAL_TOKEN_EXCEPTION);
         }
 
     }

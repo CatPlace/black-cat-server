@@ -54,8 +54,8 @@ class InitService {
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
 
-        addressList.add(new Address("07281", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154433", "선유로13길", "Seonyu-ro 13-gil", "0", "5", "0", "1156012400100020002037439", "", "문래동 현대홈시티2", "1156012400", "문래동6가", "", "문래동", "0", "2", "01", "2", "", "", "Admin", "Admin"));
-        addressList.add(new Address("07282", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154461", "선유로9길", "Seonyu-ro 9-gil", "0", "30", "0", "1156012400100210000000005", "", "문래롯데캐슬", "1156012400", "문래동6가", "", "문래동", "0", "57", "02", "0", "", "", "Admin", "Admin"));
+        addressList.add(new Address("07281", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154433", "선유로13길", "Seonyu-ro 13-gil", "0", "5", "0", "1156012400100020002037439", "", "문래동 현대홈시티2", "1156012400", "문래동6가", "", "문래동", "0", "2", "01", "2", "", "", 1L, 1L));
+        addressList.add(new Address("07282", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154461", "선유로9길", "Seonyu-ro 9-gil", "0", "30", "0", "1156012400100210000000005", "", "문래롯데캐슬", "1156012400", "문래동6가", "", "문래동", "0", "57", "02", "0", "", "", 1L, 1L));
 
         addressList.add(createAddress("서울", "Seoul"));
         addressList.add(createAddress("경기", "Gyeonggi"));
@@ -191,11 +191,11 @@ class InitService {
     }
 
     private static Address createAddress(String sido, String sidoEn) {
-        return new Address(sido, sidoEn, "Admin", "Admin");
+        return new Address(sido, sidoEn, 1L, 1L);
     }
 
     private static Category createCategory(String name) {
-        return new Category(name, "Admin", "Admin");
+        return new Category(name, 1L, 1L);
     }
 
     private static Tattoo createTattoo(Category category, TattooType tattooType, String name, String description, Long price) {

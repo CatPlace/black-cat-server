@@ -63,4 +63,11 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(ilte.getErrorInfo().getStatusCode()));
     }
+
+    @ExceptionHandler(value = {PostTypeNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handlePostTypeNotFoundException(PostTypeNotFoundException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getErrorInfo());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorInfo().getStatusCode()));
+    }
 }

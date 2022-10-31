@@ -19,5 +19,4 @@ public class UserController {
     public UserLoginResDto login(@RequestBody UserLoginReqDto userJoinReqDto) {
         return userService.login(userJoinReqDto);
     }
-
 }

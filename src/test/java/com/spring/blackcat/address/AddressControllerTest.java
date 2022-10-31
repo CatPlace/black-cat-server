@@ -23,6 +23,6 @@ class AddressControllerTest {
     @Test
     @DisplayName("주소 검색")
     void getAddressSearchTest() throws Exception {
-        mock.perform(get("/address/search?query=서울")).andExpect(status().isOk());
+        mock.perform(get("/api/v1/addresses/search?query=서울")).andExpect(status().isOk());
     }
 }

@@ -1,5 +1,7 @@
 package com.spring.blackcat.common.init;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
@@ -23,9 +25,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Component
 @Transactional
@@ -50,6 +55,16 @@ class InitService {
     private final LikesRepository likesRepository;
 
     private final ImageRepository imageRepository;
+
+    @PostConstruct
+    public void initAdminUser() {
+        if (userRepository.findById(1L).orElse(null) == null) {
+            userRepository.save(createAdminUser());
+        }
+        em.clear();
+        createJwtToken();
+
+    }
 
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
@@ -186,8 +201,30 @@ class InitService {
         em.clear();
     }
 
+    private static void createJwtToken() {
+//        String token = Jwts.builder()
+//                .setSubject(String.valueOf(1L))
+//                .signWith(SignatureAlgorithm.HS256, "blackCatTattooApplicationJwtSecretKeySpringServer")
+//                .setExpiration(new Date(System.currentTimeMillis() + 6000000 * 60L))
+//                .claim("id", "ADMIN")
+//                .compact();
+        
+        String token = JWT.create()
+                .withSubject("ADMIN")
+                .withExpiresAt(new Date(System.currentTimeMillis() + (6000000 * 60L)))
+                .withClaim("id", 1L)
+                .sign(Algorithm.HMAC256("blackCatTattooApplicationJwtSecretKeySpringServer"));
+
+        System.out.println("ADMIN TOKEN : Bearer " + token);
+    }
+
+    private static User createAdminUser() {
+        return new User("ADMIN", null, "ADMIN", Role.ADMIN, "ADMIN", "ADMIN");
+    }
+
     private static User createUser(String providerId, ProviderType providerType) {
-        return new User(providerId, providerType);
+        String defaultNickname = providerType + "_" + UUID.randomUUID();
+        return new User(providerId, providerType, defaultNickname, Role.ADMIN, "SYSTEM", "SYSTEM");
     }
 
     private static Address createAddress(String sido, String sidoEn) {

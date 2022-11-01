@@ -32,6 +32,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
                 .select(Projections.constructor(LikesUserResDto.class,
                         likes.id,
                         likes.user.id,
+                        likes.user.nickname,
                         likes.createdDate))
                 .from(likes)
                 .join(likes.post, post)

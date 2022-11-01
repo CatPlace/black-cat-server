@@ -208,7 +208,8 @@ class InitService {
 //                .setExpiration(new Date(System.currentTimeMillis() + 6000000 * 60L))
 //                .claim("id", "ADMIN")
 //                .compact();
-        
+
+        // TODO: JWT 토큰 변경
         String token = JWT.create()
                 .withSubject("ADMIN")
                 .withExpiresAt(new Date(System.currentTimeMillis() + (6000000 * 60L)))

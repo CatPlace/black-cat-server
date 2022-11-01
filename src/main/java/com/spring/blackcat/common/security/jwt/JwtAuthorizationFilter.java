@@ -5,7 +5,6 @@ import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -47,6 +46,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String jwtToken = request.getHeader(HEADER_STRING).replace(PREFIX_BEARER, "");
 
+        // TODO: JWT 토큰 변경
         Long userId = JWT.require(HMAC256(jwtSecretKey))
                 .build()
                 .verify(jwtToken)
@@ -61,9 +61,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                     new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            for (GrantedAuthority authority : userPrincipal.getAuthorities()) {
-                String role = authority.getAuthority();
-            }
         }
         chain.doFilter(request, response);
     }

@@ -24,6 +24,7 @@ public class JwtProvider {
                 .setSubject(String.valueOf(payload))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .setExpiration(new Date(System.currentTimeMillis() + validTime))
+                .claim("id", payload)
                 .compact();
     }
 

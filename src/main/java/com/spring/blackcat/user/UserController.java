@@ -1,7 +1,7 @@
 package com.spring.blackcat.user;
 
-import com.spring.blackcat.user.dto.UserLoginReqDto;
-import com.spring.blackcat.user.dto.UserLoginResDto;
+import com.spring.blackcat.common.security.interceptor.UserId;
+import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,5 +18,20 @@ public class UserController {
     @PostMapping("/login")
     public UserLoginResDto login(@RequestBody UserLoginReqDto userJoinReqDto) {
         return userService.login(userJoinReqDto);
+    }
+
+    @PostMapping("/role")
+    public ChangeRoleResDto changeRole(ChangeRoleReqDto changeRoleReqDto, @UserId Long userId) {
+        return userService.changeRole(changeRoleReqDto, userId);
+    }
+
+    @PostMapping("/nickname")
+    public ChangeNicknameResDto changeNickname(ChangeNicknameReqDto changeNicknameReqDto, @UserId Long userId) {
+        return userService.changeNickname(changeNicknameReqDto, userId);
+    }
+
+    @PostMapping("/address")
+    public ChangeAddressResDto changeAddress(ChangeAddressReqDto changeAddressReqDto, @UserId Long userId) {
+        return userService.changeAddress(changeAddressReqDto, userId);
     }
 }

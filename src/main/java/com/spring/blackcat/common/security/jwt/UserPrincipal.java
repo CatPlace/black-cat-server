@@ -10,18 +10,13 @@ import java.util.Collection;
 
 public class UserPrincipal implements UserDetails {
 
-    //    private final Long userId;
-//    private final Collection<? extends GrantedAuthority> authorities;
     private final User user;
 
     public UserPrincipal(User user) {
         this.user = user;
-//        this.authorities = authorities;
     }
 
     public static UserPrincipal create(User user) {
-        // TODO: 권한 추가
-//        var authorities = Collections.singletonList(new SimpleGrantedAuthority(USER.name()));
         return new UserPrincipal(user);
     }
 

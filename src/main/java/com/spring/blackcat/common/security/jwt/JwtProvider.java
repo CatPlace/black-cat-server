@@ -1,8 +1,11 @@
 package com.spring.blackcat.common.security.jwt;
 
+import com.auth0.jwt.JWT;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.InvalidTokenException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,49 +13,49 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@RequiredArgsConstructor
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static com.spring.blackcat.common.security.jwt.JwtProperties.EXPIRATION_TIME;
+
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
-    //@TODO: Property 변경
+
     @Value("${jwt.secret.key}")
-    private String jwtSecretKey;
+    private String SECRET_KEY;
 
-    private final Long jwtValidTime = 6000000 * 30L;
-
-    private String createToken(final Long payload, final String secretKey, final Long validTime) {
-        return Jwts.builder()
-                .setSubject(String.valueOf(payload))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .setExpiration(new Date(System.currentTimeMillis() + validTime))
-                .claim("id", payload)
-                .compact();
+    private String createToken(final Long payload) {
+        return JWT.create()
+                .withSubject(payload.toString())
+                .withExpiresAt(new Date(System.currentTimeMillis() + (EXPIRATION_TIME)))
+                .withClaim("id", payload)
+                .sign(HMAC512(SECRET_KEY));
     }
 
-    public String createAccessToken(final long payload) {
-        return createToken(payload, jwtSecretKey, jwtValidTime);
+    public String createAccessToken(final Long payload) {
+        return createToken(payload);
     }
 
     public Long getAccessTokenPayload(String accessToken) {
         try {
-            var claims = Jwts.parser()
-                    .setSigningKey(jwtSecretKey)
-                    .parseClaimsJws(accessToken)
-                    .getBody();
+            return JWT.require(HMAC512(SECRET_KEY))
+                    .build()
+                    .verify(accessToken)
+                    .getClaim("id")
+                    .asLong();
 
-            return Long.parseLong(claims.getSubject());
-        } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException |
-                 SignatureException e) {
+        } catch (ExpiredJwtException | MalformedJwtException | UnsupportedJwtException |
+                 IllegalArgumentException | SignatureException e) {
             throw new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorInfo.INVALID_TOKEN_EXCEPTION);
         }
     }
 
     public boolean validateToken(String accessToken) {
         try {
-            var claims = Jwts.parser()
-                    .setSigningKey(jwtSecretKey)
-                    .parseClaimsJws(accessToken);
+            return JWT.require(HMAC512(SECRET_KEY))
+                    .build()
+                    .verify(accessToken)
+                    .getExpiresAt().after(new Date());
 
-            return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             return false;
         }

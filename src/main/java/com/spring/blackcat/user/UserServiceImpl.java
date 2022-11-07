@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow();
         Address address = addressRepository.findById(changeAddressReqDto.getAddressId()).orElseThrow();
         user.changeAddress(address);
-        
+
         return new ChangeAddressResDto(address.getId());
     }
 
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
                 .orElseGet(() -> {
                     ProviderType providerType = userJoinReqDto.getProviderType();
                     String defaultNickname = providerType + "_" + UUID.randomUUID();
-                    User createdUser = new User(providerId, providerType, defaultNickname, Role.BASIC, "SYSTEM", "SYSTEM");
+                    User createdUser = new User(providerId, providerType, defaultNickname, Role.BASIC, 1L, 1L);
                     this.userRepository.save(createdUser);
                     return createdUser;
                 });

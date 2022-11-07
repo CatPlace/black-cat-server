@@ -49,12 +49,22 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private String registerId;
-    private String modifierId;
+    private Long registerId;
+    private Long modifierId;
 
-    public User(String providerId, ProviderType providerType, String nickname, Role role, String registerId, String modifierId) {
+    public User(String providerId, ProviderType providerType, String nickname, Role role, Long registerId, Long modifierId) {
         this.providerId = providerId;
         this.providerType = providerType;
+        this.nickname = nickname;
+        this.role = role;
+        this.registerId = registerId;
+        this.modifierId = modifierId;
+    }
+
+    public User(String providerId, ProviderType providerType, Address address, String nickname, Role role, Long registerId, Long modifierId) {
+        this.providerId = providerId;
+        this.providerType = providerType;
+        this.address = address;
         this.nickname = nickname;
         this.role = role;
         this.registerId = registerId;

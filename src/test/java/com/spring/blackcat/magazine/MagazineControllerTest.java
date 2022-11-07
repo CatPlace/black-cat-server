@@ -126,7 +126,7 @@ class MagazineControllerTest {
     }
 
     private static Magazine createMagazine(String title) {
-        return new Magazine(title, "Admin", "Admin");
+        return new Magazine(title, 1L, 1L);
     }
 
     private static Cell createCell(

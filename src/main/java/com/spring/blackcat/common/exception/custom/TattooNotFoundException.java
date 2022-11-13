@@ -4,7 +4,7 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import lombok.Getter;
 
 @Getter
-public class TattooNotFoundException extends RuntimeException {
+public class TattooNotFoundException extends CustomException {
     private ErrorInfo errorInfo;
 
     public TattooNotFoundException(String message, ErrorInfo errorInfo) {

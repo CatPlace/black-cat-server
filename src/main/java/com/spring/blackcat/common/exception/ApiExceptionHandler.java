@@ -11,7 +11,7 @@ import static com.spring.blackcat.common.exception.ErrorInfo.UNKNOWN_EXCEPTION;
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
-    @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(UNKNOWN_EXCEPTION);
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatusCode()));

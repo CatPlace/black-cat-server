@@ -22,6 +22,7 @@ import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,17 +30,16 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
-import static com.spring.blackcat.common.security.jwt.JwtProperties.EXPIRATION_TIME;
 
 @Slf4j
 @Component
 @Transactional
 @RequiredArgsConstructor
+@Profile({"LOCAL", "DEV", "PRD"}) // 테스트 환경 실행 X (spring.profiles.active)
 class InitService {
 
     @Value("${jwt.secret.key}")
@@ -70,8 +70,12 @@ class InitService {
         if (userRepository.findById(1L).orElse(null) == null) {
             userRepository.save(createAdminUser());
         }
+        if (userRepository.findById(2L).orElse(null) == null) {
+            userRepository.save(createTestUser());
+        }
         em.clear();
         createAdminJwtToken();
+        createTestJwtToken();
     }
 
     public void initAddress() {
@@ -212,17 +216,31 @@ class InitService {
     private void createAdminJwtToken() {
         String token = JWT.create()
                 .withSubject("ADMIN")
-                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+//                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .withClaim("id", 1L)
                 .sign(HMAC512(SECRET_KEY));
 
         log.info("ADMIN TOKEN : Bearer " + token);
     }
 
+    private void createTestJwtToken() {
+        String token = JWT.create()
+                .withSubject("TEST")
+//                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withClaim("id", 2L)
+                .sign(HMAC512(SECRET_KEY));
+
+        log.info("TEST TOKEN : Bearer " + token);
+    }
+
     private User createAdminUser() {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
         return new User("ADMIN", null, address, "ADMIN", Role.ADMIN, 1L, 1L);
+    }
+
+    private User createTestUser() {
+        return new User("TEST", null, null, "TEST", Role.BASIC, 1L, 1L);
     }
 
     private User createUser(String providerId, ProviderType providerType) {

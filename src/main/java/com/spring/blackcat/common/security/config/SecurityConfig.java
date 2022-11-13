@@ -3,6 +3,7 @@ package com.spring.blackcat.common.security.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.InvalidTokenException;
+import com.spring.blackcat.common.security.handler.CustomAccessDeniedHandler;
 import com.spring.blackcat.common.security.jwt.JwtAuthenticationFilter;
 import com.spring.blackcat.common.security.jwt.JwtAuthorizationFilter;
 import com.spring.blackcat.user.UserRepository;
@@ -93,6 +94,7 @@ public class SecurityConfig {
 
                     objectMapper.writeValue(response.getWriter(), errDetail);
                 }))
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .build();
     }

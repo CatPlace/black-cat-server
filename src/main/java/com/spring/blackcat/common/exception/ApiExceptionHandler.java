@@ -70,4 +70,11 @@ public class ApiExceptionHandler {
 
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorInfo().getStatusCode()));
     }
+
+    @ExceptionHandler(value = {UnauthorizedUserException.class})
+    public ResponseEntity<ErrorResponse> unauthorizedUserException(UnauthorizedUserException e) {
+        ErrorResponse errorResponse = new ErrorResponse(e.getErrorInfo());
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(e.getErrorInfo().getStatusCode()));
+    }
 }

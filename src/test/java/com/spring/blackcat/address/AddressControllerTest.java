@@ -18,7 +18,7 @@ class AddressControllerTest {
     AddressController addressController;
 
     @Autowired
-    private MockMvc mock;
+    MockMvc mock;
 
     @Test
     @DisplayName("주소 검색")

@@ -18,7 +18,7 @@ class LikesControllerTest {
     LikesController likesController;
 
     @Autowired
-    private MockMvc mock;
+    MockMvc mock;
 
     @Test
     @DisplayName("특정 게시물 좋아요 조회")

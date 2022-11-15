@@ -18,7 +18,7 @@ class CategoryControllerTest {
     CategoryController categoryController;
 
     @Autowired
-    private MockMvc mock;
+    MockMvc mock;
 
     @Test
     @DisplayName("전체 카테고리 조회")

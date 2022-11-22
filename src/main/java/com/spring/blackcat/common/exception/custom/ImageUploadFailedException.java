@@ -4,7 +4,7 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import lombok.Getter;
 
 @Getter
-public class ImageUploadFailedException extends RuntimeException {
+public class ImageUploadFailedException extends CustomException {
     private ErrorInfo errorInfo;
 
     public ImageUploadFailedException(String message, ErrorInfo errorInfo) {

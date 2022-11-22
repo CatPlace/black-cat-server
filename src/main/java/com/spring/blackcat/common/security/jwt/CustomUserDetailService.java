@@ -12,6 +12,7 @@ import javax.persistence.EntityNotFoundException;
 @RequiredArgsConstructor
 @Service
 public class CustomUserDetailService implements UserDetailsService {
+    
     private final UserRepository userRepository;
 
     @Override

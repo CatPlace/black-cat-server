@@ -41,7 +41,7 @@ public class GetTattoosByCategoryIdTest {
     @DisplayName("쿼리 스트링 없을 때 특정 카테고리 타투 조회")
     void getTattoosByCategoryIdNoQueryString() {
         //given
-        String userName = "Admin1";
+        Long userId = 1L;
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 20, Sort.Direction.DESC, "id");
         this.Insert();
@@ -49,7 +49,7 @@ public class GetTattoosByCategoryIdTest {
 
 
         //when
-        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userId, categoryId);
 
         //then
         assertThat(allTattoos.getNumber()).isEqualTo(0);
@@ -60,7 +60,7 @@ public class GetTattoosByCategoryIdTest {
     @DisplayName("쿼리 스트링 페이지만 넣었을 때 특정 카테고리 타투 조회")
     void getTattoosByCategoryIdOnlyPageQueryString() {
         //given
-        String userName = "Admin1";
+        Long userId = 1L;
         //default pageable object
         PageRequest pageRequest = PageRequest.of(1, 20, Sort.Direction.DESC, "id");
         this.Insert();
@@ -68,7 +68,7 @@ public class GetTattoosByCategoryIdTest {
 
 
         //when
-        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userId, categoryId);
 
         //then
         assertThat(allTattoos.getNumber()).isEqualTo(1);
@@ -79,14 +79,14 @@ public class GetTattoosByCategoryIdTest {
     @DisplayName("쿼리 스트링 사이즈만 넣었을 때 특정 카테고리 타투 조회")
     void getTattoosByCategoryIdOnlySizeQueryString() {
         //given
-        String userName = "Admin1";
+        Long userId = 1L;
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 2, Sort.Direction.DESC, "id");
         this.Insert();
         Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
 
         //when
-        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userId, categoryId);
 
         //then
         assertThat(allTattoos.getNumber()).isEqualTo(0);
@@ -97,14 +97,14 @@ public class GetTattoosByCategoryIdTest {
     @DisplayName("쿼리 스트링 페이지, 사이즈만 넣었을 때 특정 카테고리 타투 조회")
     void getTattoosByCategoryIdOnlyPageAndSizeQueryString() {
         //given
-        String userName = "Admin1";
+        Long userId = 1L;
         //default pageable object
         PageRequest pageRequest = PageRequest.of(1, 2, Sort.Direction.DESC, "id");
         this.Insert();
         Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
 
         //when
-        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userId, categoryId);
 
         //then
         assertThat(allTattoos.getNumber()).isEqualTo(1);
@@ -115,16 +115,16 @@ public class GetTattoosByCategoryIdTest {
     @DisplayName("쿼리 스트링 모두 넣었을 때 특정 카테고리 타투 조회")
     void getTattoosByCategoryIdAllQueryString() {
         //given
-        String userName = "Admin1";
+        Long userId = 1L;
         //default pageable object
         PageRequest pageRequest = PageRequest.of(0, 3, Sort.Direction.ASC, "price");
         this.Insert();
         Long categoryId = this.categoryRepository.findByName("감성타투").get().getId();
-        Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, categoryRepository.findById(categoryId).orElse(null), TattooType.DESIGN, userName, userName);
+        Tattoo tattoo = new Tattoo("작품1", "설명근", 0L, categoryRepository.findById(categoryId).orElse(null), TattooType.DESIGN, userId, userId);
         tattooRepository.save(tattoo);
 
         //when
-        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userName, categoryId);
+        Page<GetTattoosResDto> allTattoos = tattooService.getTattoosByCategoryId(pageRequest, userId, categoryId);
 
         //then
         assertThat(allTattoos.getNumber()).isEqualTo(0);
@@ -133,19 +133,19 @@ public class GetTattoosByCategoryIdTest {
     }
 
     private void Insert() {
-        String userName = "Admin1";
-        String password = "0000";
+        Long userId = 1L;
+        String userName = "TEST";
 
-        Address address = new Address("서울", "Seoul", userName, userName);
-        User user = new User(userName, password, userName, Role.ADMIN, address, userName, userName);
-        Category category1 = new Category("감성타투", userName, userName);
-        Category category2 = new Category("안감성타투", userName, userName);
+        Address address = new Address("서울", "Seoul", userId, userId);
+        User user = new User(userName, null, address, userName, Role.ADMIN, userId, userId);
+        Category category1 = new Category("감성타투", userId, userId);
+        Category category2 = new Category("안감성타투", userId, userId);
 
         List<Tattoo> tattoos = new ArrayList<>();
-        tattoos.add(new Tattoo("타투1", "설명근", 10000L, category1, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투2", "설명근", 20000L, category1, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투3", "설명근", 30000L, category2, TattooType.DESIGN, userName, userName));
-        tattoos.add(new Tattoo("타투4", "설명근", 40000L, category2, TattooType.DESIGN, userName, userName));
+        tattoos.add(new Tattoo("타투1", "설명근", 10000L, category1, TattooType.DESIGN, userId, userId));
+        tattoos.add(new Tattoo("타투2", "설명근", 20000L, category1, TattooType.DESIGN, userId, userId));
+        tattoos.add(new Tattoo("타투3", "설명근", 30000L, category2, TattooType.DESIGN, userId, userId));
+        tattoos.add(new Tattoo("타투4", "설명근", 40000L, category2, TattooType.DESIGN, userId, userId));
 
         addressRepository.save(address);
         userRepository.save(user);

@@ -4,8 +4,9 @@ import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
-import com.spring.blackcat.common.code.ProviderType;
+import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.code.TattooType;
+import com.spring.blackcat.common.exception.custom.PostTypeNotFoundException;
 import com.spring.blackcat.likes.dto.LikesPostResDto;
 import com.spring.blackcat.likes.dto.LikesStatusResDto;
 import com.spring.blackcat.likes.dto.LikesUserResDto;
@@ -15,6 +16,7 @@ import com.spring.blackcat.tattoo.Tattoo;
 import com.spring.blackcat.tattoo.TattooRepository;
 import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,7 +73,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();
@@ -102,7 +104,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();
@@ -130,7 +132,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();
@@ -161,10 +163,10 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user1 = new User("TEST", ProviderType.KAKAO);
+        User user1 = new User("TEST1", null, "TEST1", Role.BASIC, 1L, 1L);
         userRepository.save(user1);
 
-        User user2 = new User("TEST", ProviderType.KAKAO);
+        User user2 = new User("TEST2", null, "TEST2", Role.BASIC, 1L, 1L);
         userRepository.save(user2);
 
         em.flush();
@@ -206,7 +208,7 @@ class LikesServiceTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();
@@ -223,26 +225,16 @@ class LikesServiceTest {
         PageRequest pageRequest = PageRequest.of(0, 50, Sort.Direction.DESC, "id");
 
         // when
-        Page<LikesPostResDto> findListWithPostTypeEmpty = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "");
-        Page<LikesPostResDto> findListWithPostTypeSpace = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), " ");
-        Page<LikesPostResDto> findListWithPostTypeInvalid = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "unknown");
+        Assertions.assertThatThrownBy(() -> likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "")).isInstanceOf(PostTypeNotFoundException.class);
+        Assertions.assertThatThrownBy(() -> likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), " ")).isInstanceOf(PostTypeNotFoundException.class);
+        Assertions.assertThatThrownBy(() -> likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "unknown")).isInstanceOf(PostTypeNotFoundException.class);
+
         Page<LikesPostResDto> findListWithPostTypeLower = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "tattoo");
         Page<LikesPostResDto> findListWithPostTypeUpper = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), "TATTOO");
+
         Page<LikesPostResDto> findPostTypeNullList = likesService.findLikesPostsByUserIdAndPostType(pageRequest, user.getId(), null);
 
         // then
-        assertThat(findListWithPostTypeEmpty.getNumber()).isEqualTo(0);
-        assertThat(findListWithPostTypeEmpty.getSize()).isEqualTo(50);
-        assertThat(findListWithPostTypeEmpty.getNumberOfElements()).isEqualTo(0);
-
-        assertThat(findListWithPostTypeSpace.getNumber()).isEqualTo(0);
-        assertThat(findListWithPostTypeSpace.getSize()).isEqualTo(50);
-        assertThat(findListWithPostTypeSpace.getNumberOfElements()).isEqualTo(0);
-
-        assertThat(findListWithPostTypeInvalid.getNumber()).isEqualTo(0);
-        assertThat(findListWithPostTypeInvalid.getSize()).isEqualTo(50);
-        assertThat(findListWithPostTypeInvalid.getNumberOfElements()).isEqualTo(0);
-
         assertThat(findListWithPostTypeLower.getNumber()).isEqualTo(0);
         assertThat(findListWithPostTypeLower.getSize()).isEqualTo(50);
         assertThat(findListWithPostTypeLower.getNumberOfElements()).isEqualTo(2);

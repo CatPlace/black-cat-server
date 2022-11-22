@@ -4,7 +4,7 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import lombok.Getter;
 
 @Getter
-public class CategoryNotFoundException extends RuntimeException {
+public class CategoryNotFoundException extends CustomException {
     private ErrorInfo errorInfo;
 
     public CategoryNotFoundException(String message, ErrorInfo errorInfo) {

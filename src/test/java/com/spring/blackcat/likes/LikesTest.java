@@ -4,7 +4,7 @@ import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
-import com.spring.blackcat.common.code.ProviderType;
+import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
@@ -62,7 +62,7 @@ class LikesTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();

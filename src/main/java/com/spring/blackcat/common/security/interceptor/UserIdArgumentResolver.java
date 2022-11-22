@@ -25,14 +25,14 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final JwtProvider jwtProvider;
 
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.hasParameterAnnotation(UserId.class);
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         try {
             String[] authorizations = Objects.requireNonNull(webRequest.getHeader(AUTHORIZATION)).split(SPACE);
             String type = authorizations[HEADER_KEY_INDEX];
@@ -43,9 +43,9 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
             }
 
             return jwtProvider.getAccessTokenPayload(accessToken);
+
         } catch (Exception e) {
             throw new IllegalTokenException("토큰이 없거나 타입이 잘못되었습니다.", ErrorInfo.ILLEGAL_TOKEN_EXCEPTION);
         }
-
     }
 }

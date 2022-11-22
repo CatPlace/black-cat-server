@@ -4,7 +4,7 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import lombok.Getter;
 
 @Getter
-public class IllegalTokenException extends RuntimeException {
+public class IllegalTokenException extends CustomException {
     private ErrorInfo errorInfo;
 
     public IllegalTokenException(String message, ErrorInfo errorInfo) {

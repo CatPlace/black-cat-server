@@ -5,7 +5,7 @@ import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.common.code.PostType;
-import com.spring.blackcat.common.code.ProviderType;
+import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.likes.dto.LikesPostResDto;
 import com.spring.blackcat.likes.dto.LikesUserResDto;
@@ -68,7 +68,7 @@ class LikesRepositoryTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();
@@ -99,10 +99,10 @@ class LikesRepositoryTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user1 = new User("TEST", ProviderType.KAKAO);
+        User user1 = new User("TEST1", null, "TEST1", Role.BASIC, 1L, 1L);
         userRepository.save(user1);
 
-        User user2 = new User("TEST", ProviderType.KAKAO);
+        User user2 = new User("TEST2", null, "TEST2", Role.BASIC, 1L, 1L);
         userRepository.save(user2);
 
         em.flush();
@@ -144,7 +144,7 @@ class LikesRepositoryTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();
@@ -187,7 +187,7 @@ class LikesRepositoryTest {
         Address address = new Address("서울", "Seoul", 1L, 1L);
         addressRepository.save(address);
 
-        User user = new User("TEST", ProviderType.KAKAO);
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
         userRepository.save(user);
 
         em.flush();

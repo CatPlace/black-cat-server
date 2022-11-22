@@ -11,14 +11,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class CategoryControllerTest {
 
     @Autowired
     CategoryController categoryController;
 
     @Autowired
-    private MockMvc mock;
+    MockMvc mock;
 
     @Test
     @DisplayName("전체 카테고리 조회")

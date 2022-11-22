@@ -4,7 +4,7 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import lombok.Getter;
 
 @Getter
-public class InvalidLoginInputException extends RuntimeException {
+public class InvalidLoginInputException extends CustomException {
     private ErrorInfo errorInfo;
 
     public InvalidLoginInputException(String message, ErrorInfo errorInfo) {

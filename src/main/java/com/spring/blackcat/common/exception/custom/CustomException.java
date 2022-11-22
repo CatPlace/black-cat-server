@@ -4,11 +4,11 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import lombok.Getter;
 
 @Getter
-public class MagazineNotFoundException extends CustomException {
+public class CustomException extends RuntimeException {
+
     private ErrorInfo errorInfo;
 
-    public MagazineNotFoundException(String message, ErrorInfo errorInfo) {
+    public CustomException(String message) {
         super(message);
-        this.errorInfo = errorInfo;
     }
 }

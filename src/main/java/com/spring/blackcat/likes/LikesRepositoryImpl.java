@@ -32,6 +32,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
                 .select(Projections.constructor(LikesUserResDto.class,
                         likes.id,
                         likes.user.id,
+                        likes.user.nickname,
                         likes.createdDate))
                 .from(likes)
                 .join(likes.post, post)
@@ -73,10 +74,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
     }
 
     private static BooleanExpression postTypeEqual(PostType postType) {
-        if (postType == null) {
-            return null;
-        }
-        return post.postType.eq(postType);
+        return postType != null ? post.postType.eq(postType) : null;
     }
 
     private static BooleanExpression mainImage() {

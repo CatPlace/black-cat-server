@@ -2,34 +2,33 @@ package com.spring.blackcat.common.security.jwt;
 
 import com.spring.blackcat.user.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserPrincipal implements UserDetails {
 
-    private final Long userId;
-//    private final Collection<? extends GrantedAuthority> authorities;
+    private final User user;
 
-    public UserPrincipal(Long userId) {
-        this.userId = userId;
-//        this.authorities = authorities;
+    public UserPrincipal(User user) {
+        this.user = user;
     }
 
     public static UserPrincipal create(User user) {
-        //@TODO: 권한 추가
-//        var authorities = Collections.singletonList(new SimpleGrantedAuthority(USER.name()));
-        return new UserPrincipal(user.getId());
+        return new UserPrincipal(user);
     }
 
     public Long getUserId() {
-        return userId;
+        return user.getId();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-//        return authorities;
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+        return authorities;
     }
 
     @Override
@@ -61,5 +60,4 @@ public class UserPrincipal implements UserDetails {
     public boolean isEnabled() {
         return false;
     }
-
 }

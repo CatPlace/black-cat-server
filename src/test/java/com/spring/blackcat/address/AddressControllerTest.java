@@ -11,14 +11,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@AutoConfigureMockMvc
+@AutoConfigureMockMvc(addFilters = false)
 class AddressControllerTest {
 
     @Autowired
     AddressController addressController;
 
     @Autowired
-    private MockMvc mock;
+    MockMvc mock;
 
     @Test
     @DisplayName("주소 검색")

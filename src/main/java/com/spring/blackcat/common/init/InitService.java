@@ -1,5 +1,6 @@
 package com.spring.blackcat.common.init;
 
+import com.auth0.jwt.JWT;
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
@@ -19,18 +20,31 @@ import com.spring.blackcat.tattoo.TattooRepository;
 import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+
+@Slf4j
 @Component
 @Transactional
 @RequiredArgsConstructor
+@Profile({"LOCAL", "DEV", "PRD"}) // 테스트 환경 실행 X (spring.profiles.active)
 class InitService {
+
+    @Value("${jwt.secret.key}")
+    private String SECRET_KEY;
+
     private final EntityManager em;
 
     private final PasswordEncoder bCryptPasswordEncoder;
@@ -51,13 +65,26 @@ class InitService {
 
     private final ImageRepository imageRepository;
 
+    @PostConstruct
+    public void initAdminUser() {
+        if (userRepository.findById(1L).orElse(null) == null) {
+            userRepository.save(createAdminUser());
+        }
+        if (userRepository.findById(2L).orElse(null) == null) {
+            userRepository.save(createTestUser());
+        }
+        em.clear();
+        createAdminJwtToken();
+        createTestJwtToken();
+    }
+
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
 
         addressList.add(new Address("07281", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154433", "선유로13길", "Seonyu-ro 13-gil", "0", "5", "0", "1156012400100020002037439", "", "문래동 현대홈시티2", "1156012400", "문래동6가", "", "문래동", "0", "2", "01", "2", "", "", 1L, 1L));
         addressList.add(new Address("07282", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154461", "선유로9길", "Seonyu-ro 9-gil", "0", "30", "0", "1156012400100210000000005", "", "문래롯데캐슬", "1156012400", "문래동6가", "", "문래동", "0", "57", "02", "0", "", "", 1L, 1L));
 
-        addressList.add(createAddress("서울", "Seoul"));
+//        addressList.add(createAddress("서울", "Seoul"));
         addressList.add(createAddress("경기", "Gyeonggi"));
         addressList.add(createAddress("인천", "Incheon"));
         addressList.add(createAddress("충청", "Chungcheong"));
@@ -186,31 +213,62 @@ class InitService {
         em.clear();
     }
 
-    private static User createUser(String providerId, ProviderType providerType) {
-        return new User(providerId, providerType);
+    private void createAdminJwtToken() {
+        String token = JWT.create()
+                .withSubject("ADMIN")
+//                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withClaim("id", 1L)
+                .sign(HMAC512(SECRET_KEY));
+
+        log.info("ADMIN TOKEN : Bearer " + token);
     }
 
-    private static Address createAddress(String sido, String sidoEn) {
+    private void createTestJwtToken() {
+        String token = JWT.create()
+                .withSubject("TEST")
+//                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withClaim("id", 2L)
+                .sign(HMAC512(SECRET_KEY));
+
+        log.info("TEST TOKEN : Bearer " + token);
+    }
+
+    private User createAdminUser() {
+        Address address = new Address("서울", "Seoul", 1L, 1L);
+        addressRepository.save(address);
+        return new User("ADMIN", null, address, "ADMIN", Role.ADMIN, 1L, 1L);
+    }
+
+    private User createTestUser() {
+        return new User("TEST", null, null, "TEST", Role.BASIC, 1L, 1L);
+    }
+
+    private User createUser(String providerId, ProviderType providerType) {
+        String defaultNickname = providerType + "_" + UUID.randomUUID();
+        return new User(providerId, providerType, defaultNickname, Role.ADMIN, 1L, 1L);
+    }
+
+    private Address createAddress(String sido, String sidoEn) {
         return new Address(sido, sidoEn, 1L, 1L);
     }
 
-    private static Category createCategory(String name) {
+    private Category createCategory(String name) {
         return new Category(name, 1L, 1L);
     }
 
-    private static Tattoo createTattoo(Category category, TattooType tattooType, String name, String description, Long price) {
+    private Tattoo createTattoo(Category category, TattooType tattooType, String name, String description, Long price) {
         return new Tattoo(name, description, price, category, tattooType, 1L, 1L);
     }
 
-    private static Magazine createMagazine(String title) {
+    private Magazine createMagazine(String title) {
         return new Magazine(title, 1L, 1L);
     }
 
-    private static Likes createLikes(Post post, User user, PostType postType) {
+    private Likes createLikes(Post post, User user, PostType postType) {
         return new Likes(post, user, postType);
     }
 
-    private static Cell createCell(
+    private Cell createCell(
             CellType cellType, String text, Long fontSize,
             TextColor textColor, TextAlignmentType textAlignment, FontWeightType fontWeight,
             String imageUrlString, Long imageCornerRadius,
@@ -235,7 +293,7 @@ class InitService {
                 .build();
     }
 
-    private static List<Cell> createCells(String text1, String text2, String text3) {
+    private List<Cell> createCells(String text1, String text2, String text3) {
         List<Cell> cellList = new ArrayList<>();
         cellList.add(createCell(CellType.EMPTYCELL, null, 12L,
                 TextColor.BLACK, TextAlignmentType.LEFT, FontWeightType.REGULAR,
@@ -266,7 +324,7 @@ class InitService {
         return cellList;
     }
 
-    private static Image createImage(String imageUrl, Post post) {
+    private Image createImage(String imageUrl, Post post) {
         return new Image(imageUrl, post);
     }
 }

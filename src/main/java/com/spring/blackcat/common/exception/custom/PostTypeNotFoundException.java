@@ -4,7 +4,7 @@ import com.spring.blackcat.common.exception.ErrorInfo;
 import lombok.Getter;
 
 @Getter
-public class PostTypeNotFoundException extends RuntimeException {
+public class PostTypeNotFoundException extends CustomException {
     private ErrorInfo errorInfo;
 
     public PostTypeNotFoundException(String message, ErrorInfo errorInfo) {

@@ -6,6 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ErrorInfo {
+
+    UNKNOWN_EXCEPTION(500, 9999, "알 수 없는 오류입니다."),
     MAGAZINE_NOT_FOUND_EXCEPTION(400, 1000, "존재하지 않는 매거진 입니다."),
     USER_NOT_FOUND_EXCEPTION(400, 1001, "존재하지 않는 사용자 입니다."),
     TATTOO_NOT_FOUND_EXCEPTION(400, 1002, "존재하지 않는 타투 입니다."),
@@ -14,8 +16,8 @@ public enum ErrorInfo {
     INVALID_LOGIN_INPUT_EXCEPTION(400, 1005, "입력 값이 유효하지 않은 로그인 요청입니다."),
     INVALID_TOKEN_EXCEPTION(401, 1006, "유효하지 않은 토큰입니다."),
     ILLEGAL_TOKEN_EXCEPTION(401, 1007, "토큰이 없거나 타입이 잘못되었습니다."),
-    POST_TYPE_NOT_FOUND_EXCEPTION(400, 1008, "존재하지 않는 게시물 유형입니다.");
-
+    POST_TYPE_NOT_FOUND_EXCEPTION(400, 1008, "존재하지 않는 게시물 유형입니다."),
+    UNAUTHORIZED_USER_EXCEPTION(403, 1009, "인가되지 않은 사용자입니다.");
 
     private int statusCode;
     private int errorCode;

@@ -1,11 +1,9 @@
 package com.spring.blackcat.likes;
 
+import com.spring.blackcat.common.response.ResponseDto;
+import com.spring.blackcat.common.response.ResponseUtil;
 import com.spring.blackcat.common.security.interceptor.UserId;
-import com.spring.blackcat.likes.dto.LikesPostResDto;
-import com.spring.blackcat.likes.dto.LikesStatusResDto;
-import com.spring.blackcat.likes.dto.LikesUserResDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -20,38 +18,38 @@ public class LikesController {
     private final LikesService likesService;
 
     @GetMapping("/posts/{postId}")
-    public LikesStatusResDto isLikedThisPost(
+    public ResponseDto isLikedThisPost(
             @PathVariable("postId") Long postId,
             @UserId Long userId) {
-        return likesService.isLikedThisPost(postId, userId);
+        return ResponseUtil.SUCCESS("게시물 좋아요 조회 성공", likesService.isLikedThisPost(postId, userId));
     }
 
     @PostMapping("/posts/{postId}")
-    public LikesStatusResDto likesOn(
+    public ResponseDto likesOn(
             @PathVariable("postId") Long postId,
             @UserId Long userId) {
-        return likesService.likesOn(postId, userId);
+        return ResponseUtil.SUCCESS("게시물 좋아요 설정 성공", likesService.likesOn(postId, userId));
     }
 
     @DeleteMapping("/posts/{postId}")
-    public LikesStatusResDto likesOff(
+    public ResponseDto likesOff(
             @PathVariable("postId") Long postId,
             @UserId Long userId) {
-        return likesService.likesOff(postId, userId);
+        return ResponseUtil.SUCCESS("게시물 좋아요 해제 성공", likesService.likesOff(postId, userId));
     }
 
     @GetMapping("posts/{postId}/users")
-    public Page<LikesUserResDto> likesUsers(
+    public ResponseDto likesUsers(
             @PageableDefault(size = 50) @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @PathVariable Long postId) {
-        return likesService.findLikesUsersByPostId(pageable, postId);
+        return ResponseUtil.SUCCESS("게시물 좋아요한 유저 정보 조회 성공", likesService.findLikesUsersByPostId(pageable, postId));
     }
 
     @GetMapping("/posts")
-    public Page<LikesPostResDto> likesPosts(
+    public ResponseDto likesPosts(
             @PageableDefault(size = 50) @SortDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @UserId Long userId,
             @RequestParam(required = false) String postType) {
-        return likesService.findLikesPostsByUserIdAndPostType(pageable, userId, postType);
+        return ResponseUtil.SUCCESS("좋아요를 설정한 게시물 정보 조회 성공", likesService.findLikesPostsByUserIdAndPostType(pageable, userId, postType));
     }
 }

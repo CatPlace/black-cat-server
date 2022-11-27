@@ -1,5 +1,7 @@
 package com.spring.blackcat.user;
 
+import com.spring.blackcat.common.response.ResponseDto;
+import com.spring.blackcat.common.response.ResponseUtil;
 import com.spring.blackcat.common.security.interceptor.UserId;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -13,32 +15,32 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public UserLoginResDto login(@RequestBody UserLoginReqDto userJoinReqDto) {
-        return userService.login(userJoinReqDto);
+    public ResponseDto login(@RequestBody UserLoginReqDto userJoinReqDto) {
+        return ResponseUtil.SUCCESS("로그인 성공", userService.login(userJoinReqDto));
     }
 
     @PatchMapping("/additional-info")
-    public AdditionalInfoResDto addAdditionalInfo(@RequestBody AdditionalInfoReqDto additionalInfoReqDto, @UserId Long userId) {
-        return userService.addAdditionalInfo(additionalInfoReqDto, userId);
+    public ResponseDto addAdditionalInfo(@RequestBody AdditionalInfoReqDto additionalInfoReqDto, @UserId Long userId) {
+        return ResponseUtil.SUCCESS("추가 정보 등록 성공", userService.addAdditionalInfo(additionalInfoReqDto, userId));
     }
 
     @PostMapping("/tattooist")
-    public CreateTattooistResDto createTattooist(@RequestBody CreateTattooistReqDto createTattooistReqDto, @UserId Long userId) {
-        return userService.createTattooist(createTattooistReqDto, userId);
+    public ResponseDto createTattooist(@RequestBody CreateTattooistReqDto createTattooistReqDto, @UserId Long userId) {
+        return ResponseUtil.SUCCESS("타투이스트 등록 성공", userService.createTattooist(createTattooistReqDto, userId));
     }
 
     @PostMapping("/role")
-    public ChangeRoleResDto changeRole(ChangeRoleReqDto changeRoleReqDto, @UserId Long userId) {
-        return userService.changeRole(changeRoleReqDto, userId);
+    public ResponseDto changeRole(ChangeRoleReqDto changeRoleReqDto, @UserId Long userId) {
+        return ResponseUtil.SUCCESS("권한 변경 성공", userService.changeRole(changeRoleReqDto, userId));
     }
 
     @PostMapping("/nickname")
-    public ChangeNicknameResDto changeNickname(ChangeNicknameReqDto changeNicknameReqDto, @UserId Long userId) {
-        return userService.changeNickname(changeNicknameReqDto, userId);
+    public ResponseDto changeNickname(ChangeNicknameReqDto changeNicknameReqDto, @UserId Long userId) {
+        return ResponseUtil.SUCCESS("닉네임 변경 성공", userService.changeNickname(changeNicknameReqDto, userId));
     }
 
     @PostMapping("/address")
-    public ChangeAddressResDto changeAddress(ChangeAddressReqDto changeAddressReqDto, @UserId Long userId) {
-        return userService.changeAddress(changeAddressReqDto, userId);
+    public ResponseDto changeAddress(ChangeAddressReqDto changeAddressReqDto, @UserId Long userId) {
+        return ResponseUtil.SUCCESS("주소 변경 성공", userService.changeAddress(changeAddressReqDto, userId));
     }
 }

@@ -1,8 +1,8 @@
 package com.spring.blackcat.address;
 
-import com.spring.blackcat.address.dto.AddressResDto;
+import com.spring.blackcat.common.response.ResponseDto;
+import com.spring.blackcat.common.response.ResponseUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.data.web.SortDefault;
@@ -19,9 +19,9 @@ public class AddressController {
     private final AddressService addressService;
 
     @GetMapping("/search")
-    public Page<AddressResDto> findAddress(
+    public ResponseDto findAddress(
             @PageableDefault(size = 20) @SortDefault(sort = "id") Pageable pageable,
             @RequestParam String query) {
-        return addressService.findAddress(pageable, query);
+        return ResponseUtil.SUCCESS("주소 조회 성공", addressService.findAddress(pageable, query));
     }
 }

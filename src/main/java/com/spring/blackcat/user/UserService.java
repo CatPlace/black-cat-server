@@ -8,6 +8,8 @@ public interface UserService {
 
     AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, Long userId);
 
+    CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId);
+
     ChangeRoleResDto changeRole(ChangeRoleReqDto changeRoleReqDto, Long userId);
 
     ChangeNicknameResDto changeNickname(ChangeNicknameReqDto changeNicknameReqDto, Long userId);

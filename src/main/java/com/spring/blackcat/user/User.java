@@ -55,6 +55,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
+    private String openChatLink;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

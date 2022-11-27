@@ -53,6 +53,23 @@ public class UserServiceImpl implements UserService {
         return additionalInfoResDto;
     }
 
+    @Override
+    public CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId) {
+        Address userAddress = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getAddress();
+        Address address = addressRepository.findById(createTattooistReqDto.getAddressId()).orElseThrow();
+
+        checkUserInfo(userAddress);
+
+        userRepository.updateTattooistInfo(address, createTattooistReqDto.getOpenChatLink(), Role.TATTOOIST, userId);
+
+        User updatedUser = userRepository.findById(userId).orElseThrow();
+
+        CreateTattooistResDto createTattooistResDto = new CreateTattooistResDto(updatedUser.getAddress().getId(), updatedUser.getOpenChatLink());
+
+        return createTattooistResDto;
+    }
+
     private static void checkUserInfo(Object userCheck) {
         if (userCheck != null) {
             throw new InvalidLoginInputException("이미 추가 정보를 입력한 사용자입니다.", ErrorInfo.ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION);

@@ -3,10 +3,7 @@ package com.spring.blackcat.user;
 import com.spring.blackcat.common.security.interceptor.UserId;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/api/v1/users")
 @RestController
@@ -20,9 +17,14 @@ public class UserController {
         return userService.login(userJoinReqDto);
     }
 
-    @PostMapping("/additional-info")
+    @PatchMapping("/additional-info")
     public AdditionalInfoResDto addAdditionalInfo(@RequestBody AdditionalInfoReqDto additionalInfoReqDto, @UserId Long userId) {
         return userService.addAdditionalInfo(additionalInfoReqDto, userId);
+    }
+
+    @PostMapping("/tattooist")
+    public CreateTattooistResDto createTattooist(@RequestBody CreateTattooistReqDto createTattooistReqDto, @UserId Long userId) {
+        return userService.createTattooist(createTattooistReqDto, userId);
     }
 
     @PostMapping("/role")

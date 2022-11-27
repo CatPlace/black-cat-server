@@ -17,7 +17,8 @@ public enum ErrorInfo {
     INVALID_TOKEN_EXCEPTION(401, 1006, "유효하지 않은 토큰입니다."),
     ILLEGAL_TOKEN_EXCEPTION(401, 1007, "토큰이 없거나 타입이 잘못되었습니다."),
     POST_TYPE_NOT_FOUND_EXCEPTION(400, 1008, "존재하지 않는 게시물 유형입니다."),
-    UNAUTHORIZED_USER_EXCEPTION(403, 1009, "인가되지 않은 사용자입니다.");
+    UNAUTHORIZED_USER_EXCEPTION(403, 1009, "인가되지 않은 사용자입니다."),
+    ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION(201, 1010, "이미 추가 정보를 입력한 사용자입니다.");
 
     private int statusCode;
     private int errorCode;

@@ -6,12 +6,14 @@ import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.InvalidLoginInputException;
+import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.common.security.auth.OAuthService;
 import com.spring.blackcat.common.security.jwt.JwtProvider;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.UUID;
 
 @Service
@@ -33,6 +35,28 @@ public class UserServiceImpl implements UserService {
         UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken);
 
         return userLoginResDto;
+    }
+
+    @Override
+    public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, Long userId) {
+        Date userDateOfBirth = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getDateOfBirth();
+
+        checkUserInfo(userDateOfBirth);
+
+        userRepository.updateAdditionalInfo(additionalInfoReqDto.getNickname(), additionalInfoReqDto.getDateOfBirth(), additionalInfoReqDto.getGender(), userId);
+
+        User updatedUser = userRepository.findById(userId).orElseThrow();
+
+        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(updatedUser.getNickname(), updatedUser.getDateOfBirth(), updatedUser.getGender());
+
+        return additionalInfoResDto;
+    }
+
+    private static void checkUserInfo(Object userCheck) {
+        if (userCheck != null) {
+            throw new InvalidLoginInputException("이미 추가 정보를 입력한 사용자입니다.", ErrorInfo.ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION);
+        }
     }
 
     @Override

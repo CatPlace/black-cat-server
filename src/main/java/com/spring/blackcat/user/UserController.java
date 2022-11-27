@@ -20,6 +20,11 @@ public class UserController {
         return userService.login(userJoinReqDto);
     }
 
+    @PostMapping("/additional-info")
+    public AdditionalInfoResDto addAdditionalInfo(@RequestBody AdditionalInfoReqDto additionalInfoReqDto, @UserId Long userId) {
+        return userService.addAdditionalInfo(additionalInfoReqDto, userId);
+    }
+
     @PostMapping("/role")
     public ChangeRoleResDto changeRole(ChangeRoleReqDto changeRoleReqDto, @UserId Long userId) {
         return userService.changeRole(changeRoleReqDto, userId);

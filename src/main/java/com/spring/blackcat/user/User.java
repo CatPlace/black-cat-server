@@ -9,6 +9,7 @@ import com.spring.blackcat.likes.Likes;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -48,6 +49,7 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String nickname;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
 
     @Enumerated(EnumType.STRING)

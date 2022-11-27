@@ -2,6 +2,7 @@ package com.spring.blackcat.user;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.common.BaseTimeEntity;
+import com.spring.blackcat.common.code.Gender;
 import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.likes.Likes;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,11 @@ public class User extends BaseTimeEntity {
 
     @Column(unique = true)
     private String nickname;
+
+    private Date dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Enumerated(EnumType.STRING)
     private Role role;

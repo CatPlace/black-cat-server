@@ -20,6 +20,7 @@ public enum ErrorInfo {
     UNAUTHORIZED_USER_EXCEPTION(403, 1009, "인가되지 않은 사용자입니다."),
     ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION(201, 1010, "이미 추가 정보를 입력한 사용자입니다.");
 
+    private final boolean success = false;
     private int statusCode;
     private int errorCode;
     private String message;

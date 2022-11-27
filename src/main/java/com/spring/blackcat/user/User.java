@@ -49,6 +49,7 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String nickname;
 
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
 

@@ -12,8 +12,8 @@ import com.spring.blackcat.common.security.jwt.JwtProvider;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Date;
 import java.util.UUID;
 
 @Service
@@ -38,34 +38,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, Long userId) {
-        Date userDateOfBirth = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getDateOfBirth();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
 
-        checkUserInfo(userDateOfBirth);
+        checkUserInfo(user.getDateOfBirth());
 
-        userRepository.updateAdditionalInfo(additionalInfoReqDto.getNickname(), additionalInfoReqDto.getDateOfBirth(), additionalInfoReqDto.getGender(), userId);
+        user.updateAdditionalInfo(additionalInfoReqDto.getNickname(), additionalInfoReqDto.getDateOfBirth(), additionalInfoReqDto.getGender());
 
-        User updatedUser = userRepository.findById(userId).orElseThrow();
-
-        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(updatedUser.getNickname(), updatedUser.getDateOfBirth(), updatedUser.getGender());
+        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getNickname(), user.getDateOfBirth(), user.getGender());
 
         return additionalInfoResDto;
     }
 
     @Override
+    @Transactional
     public CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId) {
-        Address userAddress = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getAddress();
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+
+        checkUserInfo(user.getAddress());
+
         Address address = addressRepository.findById(createTattooistReqDto.getAddressId()).orElseThrow();
 
-        checkUserInfo(userAddress);
+        user.updateTattooistInfo(address, createTattooistReqDto.getOpenChatLink(), Role.TATTOOIST);
 
-        userRepository.updateTattooistInfo(address, createTattooistReqDto.getOpenChatLink(), Role.TATTOOIST, userId);
-
-        User updatedUser = userRepository.findById(userId).orElseThrow();
-
-        CreateTattooistResDto createTattooistResDto = new CreateTattooistResDto(updatedUser.getAddress().getId(), updatedUser.getOpenChatLink());
+        CreateTattooistResDto createTattooistResDto = new CreateTattooistResDto(user.getAddress().getId(), user.getOpenChatLink());
 
         return createTattooistResDto;
     }

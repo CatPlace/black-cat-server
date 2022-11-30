@@ -82,9 +82,20 @@ public class User extends BaseTimeEntity {
         this.modifierId = modifierId;
     }
 
-//    public void changePassword(String password) {
+    //    public void changePassword(String password) {
 //        this.password = password;
 //    }
+    public void updateAdditionalInfo(String nickname, Date dateOfBirth, Gender gender) {
+        this.nickname = nickname;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+    }
+
+    public void updateTattooistInfo(Address address, String openChatLink, Role role) {
+        this.address = address;
+        this.openChatLink = openChatLink;
+        this.role = role;
+    }
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;

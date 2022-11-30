@@ -7,6 +7,8 @@ import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequestMapping("/api/v1/users")
 @RestController
 @RequiredArgsConstructor
@@ -15,17 +17,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseDto login(@RequestBody UserLoginReqDto userJoinReqDto) {
+    public ResponseDto login(@RequestBody @Valid UserLoginReqDto userJoinReqDto) {
         return ResponseUtil.SUCCESS("로그인 성공", userService.login(userJoinReqDto));
     }
 
     @PatchMapping("/additional-info")
-    public ResponseDto addAdditionalInfo(@RequestBody AdditionalInfoReqDto additionalInfoReqDto, @UserId Long userId) {
+    public ResponseDto addAdditionalInfo(@RequestBody @Valid AdditionalInfoReqDto additionalInfoReqDto, @UserId Long userId) {
         return ResponseUtil.SUCCESS("추가 정보 등록 성공", userService.addAdditionalInfo(additionalInfoReqDto, userId));
     }
 
     @PostMapping("/tattooist")
-    public ResponseDto createTattooist(@RequestBody CreateTattooistReqDto createTattooistReqDto, @UserId Long userId) {
+    public ResponseDto createTattooist(@RequestBody @Valid CreateTattooistReqDto createTattooistReqDto, @UserId Long userId) {
         return ResponseUtil.SUCCESS("타투이스트 등록 성공", userService.createTattooist(createTattooistReqDto, userId));
     }
 

@@ -11,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/api/v1/tattoos")
@@ -39,7 +40,7 @@ public class TattooController {
     }
 
     @PostMapping()
-    public ResponseDto createTattoo(@RequestPart("tattooInfo") CreateTattooDto createTattooDto,
+    public ResponseDto createTattoo(@RequestPart("tattooInfo") @Valid CreateTattooDto createTattooDto,
                                     @RequestPart("images") List<MultipartFile> images,
                                     @UserId Long userId) {
         return ResponseUtil.SUCCESS("타투 생성 성공", this.tattooService.createTattoo(userId, createTattooDto, images));

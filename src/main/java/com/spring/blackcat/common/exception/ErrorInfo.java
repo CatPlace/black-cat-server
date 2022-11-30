@@ -18,7 +18,8 @@ public enum ErrorInfo {
     ILLEGAL_TOKEN_EXCEPTION(401, 1007, "토큰이 없거나 타입이 잘못되었습니다."),
     POST_TYPE_NOT_FOUND_EXCEPTION(400, 1008, "존재하지 않는 게시물 유형입니다."),
     UNAUTHORIZED_USER_EXCEPTION(403, 1009, "인가되지 않은 사용자입니다."),
-    ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION(201, 1010, "이미 추가 정보를 입력한 사용자입니다.");
+    ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION(201, 1010, "이미 추가 정보를 입력한 사용자입니다."),
+    NULL_INPUT_EXCEPTION(400, 1011, "필수값이 누락되었습니다.");
 
     private final boolean success = false;
     private int statusCode;

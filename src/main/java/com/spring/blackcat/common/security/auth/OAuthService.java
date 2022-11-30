@@ -1,5 +1,7 @@
 package com.spring.blackcat.common.security.auth;
 
+import com.spring.blackcat.common.exception.ErrorInfo;
+import com.spring.blackcat.common.exception.custom.InvalidTokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
@@ -26,23 +28,31 @@ public class OAuthService {
     private static final String APPLE_ID_KEY = "sub";
 
     public String verifyKakao(String accessToken) {
-        Map<String, List<String>> headers = new HashMap<>();
-        headers.put(HEADER, List.of(TOKEN_TYPE + accessToken));
-        MultiValueMap<String, String> header = CollectionUtils.toMultiValueMap(headers);
-        ResponseEntity<KakaoResponse> response = restTemplateService.get(
-                KAKAO_OAUTH_URL,
-                new HttpHeaders(header),
-                KakaoResponse.class
-        );
-        System.out.println(response);
+        try {
+            Map<String, List<String>> headers = new HashMap<>();
+            headers.put(HEADER, List.of(TOKEN_TYPE + accessToken));
+            MultiValueMap<String, String> header = CollectionUtils.toMultiValueMap(headers);
+            ResponseEntity<KakaoResponse> response = restTemplateService.get(
+                    KAKAO_OAUTH_URL,
+                    new HttpHeaders(header),
+                    KakaoResponse.class
+            );
 
-        return response.getBody().getId();
+            return response.getBody().getId();
+        } catch (Exception e) {
+            throw new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorInfo.INVALID_TOKEN_EXCEPTION);
+        }
     }
 
     public String verifyApple(String idToken) {
-        JsonParser parser = JsonParserFactory.getJsonParser();
-        String payload = new String(Base64Utils.decodeFromString(idToken.split("\\.")[1]));
+        try {
+            JsonParser parser = JsonParserFactory.getJsonParser();
+            String payload = new String(Base64Utils.decodeFromString(idToken.split("\\.")[1]));
 
-        return (String) parser.parseMap(payload).get(APPLE_ID_KEY);
+            return (String) parser.parseMap(payload).get(APPLE_ID_KEY);
+        } catch (Exception e) {
+            throw new InvalidTokenException("유효하지 않은 토큰입니다.", ErrorInfo.INVALID_TOKEN_EXCEPTION);
+        }
+
     }
 }

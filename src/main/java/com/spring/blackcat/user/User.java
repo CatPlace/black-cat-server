@@ -2,14 +2,17 @@ package com.spring.blackcat.user;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.common.BaseTimeEntity;
+import com.spring.blackcat.common.code.Gender;
 import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.likes.Likes;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +49,14 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String nickname;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date dateOfBirth;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    private String openChatLink;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -71,9 +82,20 @@ public class User extends BaseTimeEntity {
         this.modifierId = modifierId;
     }
 
-//    public void changePassword(String password) {
+    //    public void changePassword(String password) {
 //        this.password = password;
 //    }
+    public void updateAdditionalInfo(String nickname, Date dateOfBirth, Gender gender) {
+        this.nickname = nickname;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+    }
+
+    public void updateTattooistInfo(Address address, String openChatLink, Role role) {
+        this.address = address;
+        this.openChatLink = openChatLink;
+        this.role = role;
+    }
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;

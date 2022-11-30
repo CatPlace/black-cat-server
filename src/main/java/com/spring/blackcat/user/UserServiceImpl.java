@@ -6,11 +6,13 @@ import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.InvalidLoginInputException;
+import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.common.security.auth.OAuthService;
 import com.spring.blackcat.common.security.jwt.JwtProvider;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -33,6 +35,44 @@ public class UserServiceImpl implements UserService {
         UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken);
 
         return userLoginResDto;
+    }
+
+    @Override
+    @Transactional
+    public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+
+        checkUserInfo(user.getDateOfBirth());
+
+        user.updateAdditionalInfo(additionalInfoReqDto.getNickname(), additionalInfoReqDto.getDateOfBirth(), additionalInfoReqDto.getGender());
+
+        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getNickname(), user.getDateOfBirth(), user.getGender());
+
+        return additionalInfoResDto;
+    }
+
+    @Override
+    @Transactional
+    public CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+
+        checkUserInfo(user.getAddress());
+
+        Address address = addressRepository.findById(createTattooistReqDto.getAddressId()).orElseThrow();
+
+        user.updateTattooistInfo(address, createTattooistReqDto.getOpenChatLink(), Role.TATTOOIST);
+
+        CreateTattooistResDto createTattooistResDto = new CreateTattooistResDto(user.getAddress().getId(), user.getOpenChatLink());
+
+        return createTattooistResDto;
+    }
+
+    private static void checkUserInfo(Object userCheck) {
+        if (userCheck != null) {
+            throw new InvalidLoginInputException("이미 추가 정보를 입력한 사용자입니다.", ErrorInfo.ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION);
+        }
     }
 
     @Override

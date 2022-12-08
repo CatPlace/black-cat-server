@@ -9,6 +9,7 @@ import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.image.Image;
 import com.spring.blackcat.image.ImageRepository;
+import com.spring.blackcat.image.ImageUtils;
 import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
@@ -25,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -125,6 +128,13 @@ public class TattooServiceImpl implements TattooService {
             String extension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
             String fileName = UUID.randomUUID().toString() + extension;
             File convertFile = new File(imageSavePath + "/tattoo/" + fileName);
+
+            BufferedImage resizedImage = ImageUtils.resize(convertFile, 600, 600);
+            try {
+                ImageIO.write(resizedImage, extension, convertFile);
+            } catch (IOException e) {
+                throw new ImageUploadFailedException("이미지 업로드 실패", ErrorInfo.IMAGE_UPLOAD_FAILED);
+            }
 
             try {
                 image.transferTo(convertFile);

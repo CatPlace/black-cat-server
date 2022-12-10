@@ -19,7 +19,9 @@ public enum ErrorInfo {
     POST_TYPE_NOT_FOUND_EXCEPTION(400, 1008, "존재하지 않는 게시물 유형입니다."),
     UNAUTHORIZED_USER_EXCEPTION(403, 1009, "인가되지 않은 사용자입니다."),
     ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION(201, 1010, "이미 추가 정보를 입력한 사용자입니다."),
-    NULL_INPUT_EXCEPTION(400, 1011, "필수값이 누락되었습니다.");
+    NULL_INPUT_EXCEPTION(400, 1011, "필수값이 누락되었습니다."),
+    INCORRECTLY_FORMATTED_FILE_EXCEPTION(400, 1012, "올바르지 않은 형식의 파일입니다."),
+    FILE_RESIZING_FAILED_EXCEPTION(500, 1013, "파일 리사이징에 실패했습니다.");
 
     private final boolean success = false;
     private int statusCode;

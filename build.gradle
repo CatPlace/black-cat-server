@@ -27,9 +27,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-    // S3
+    // Amazon S3
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.351'
-
     // Conversion between Dto and Entity
     implementation 'org.modelmapper:modelmapper:3.1.0'
     // External library for show query parameter
@@ -44,6 +43,9 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     //ImageProcessing
     implementation 'org.imgscalr:imgscalr-lib:4.2'
+    implementation 'com.github.downgoon:marvin:1.5.5'
+    implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+    implementation 'org.springframework:spring-test:5.3.23'
 
     annotationProcessor 'org.projectlombok:lombok'
 

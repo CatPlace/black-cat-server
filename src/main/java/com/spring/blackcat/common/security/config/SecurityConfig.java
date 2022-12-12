@@ -63,9 +63,9 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .mvcMatchers(OPTIONS, "/**").permitAll() // Preflight Request 허용해주기
                 .antMatchers(POST, "/init").access("hasRole('ADMIN')")
-                .antMatchers("/api/v1/**").authenticated()
                 .antMatchers(POST, "/api/v1/magazines").access("hasRole('ADMIN')")
                 .antMatchers(POST, "/api/v1/tattoos").access("hasRole('TATTOOIST') or hasRole('ADMIN')")
+                .antMatchers("/api/v1/**").authenticated()
                 .and()
                 .httpBasic().disable()
                 .formLogin().disable()

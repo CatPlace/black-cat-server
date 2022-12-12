@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 public class CreateTattooDto {
-
     @NotNull(message = "타투 종류를 입력해주세요")
     TattooType tattooType;
 

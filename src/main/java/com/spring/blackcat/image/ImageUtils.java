@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+@Deprecated
 public class ImageUtils {
 
     public static BufferedImage resize(File file, int width, int height) {

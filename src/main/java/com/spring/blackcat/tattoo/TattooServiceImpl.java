@@ -116,7 +116,7 @@ public class TattooServiceImpl implements TattooService {
                 .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
 
         imageUrls.forEach(imageUrl -> {
-            Image createdImage = new Image(imageUrl, post);
+            Image createdImage = new Image(post, imageUrl);
             this.imageRepository.save(createdImage);
         });
     }

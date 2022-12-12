@@ -205,9 +205,9 @@ class InitService {
     public void initImage() {
         List<Image> imageList = new ArrayList<>();
 
-        imageList.add(createImage("/image/url/1", postRepository.findById(1L).orElse(null)));
-        imageList.add(createImage("/image/url/2", postRepository.findById(3L).orElse(null)));
-        imageList.add(createImage("/image/url/3", postRepository.findById(11L).orElse(null)));
+        imageList.add(createImage(postRepository.findById(1L).orElse(null), "/image/url/1"));
+        imageList.add(createImage(postRepository.findById(3L).orElse(null), "/image/url/2"));
+        imageList.add(createImage(postRepository.findById(11L).orElse(null), "/image/url/3"));
 
         imageRepository.saveAllAndFlush(imageList);
         em.clear();
@@ -324,7 +324,7 @@ class InitService {
         return cellList;
     }
 
-    private Image createImage(String imageUrl, Post post) {
-        return new Image(imageUrl, post);
+    private Image createImage(Post post, String imageUrl) {
+        return new Image(post, imageUrl);
     }
 }

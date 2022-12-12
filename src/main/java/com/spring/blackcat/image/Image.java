@@ -27,8 +27,9 @@ public class Image extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Image(String imageUrl, Post post) {
-        this.imageUrl = imageUrl;
+    public Image(Post post, String imageUrl) {
         this.post = post;
+        this.imageUrl = imageUrl;
+        this.isMain = post.getImages().size() == 0;
     }
 }

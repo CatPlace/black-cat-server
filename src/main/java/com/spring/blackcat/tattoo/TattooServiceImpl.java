@@ -4,14 +4,10 @@ import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
-import com.spring.blackcat.common.exception.custom.ImageUploadFailedException;
 import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
-import com.spring.blackcat.image.Image;
-import com.spring.blackcat.image.ImageRepository;
-import com.spring.blackcat.image.ImageUtils;
+import com.spring.blackcat.image.ImageService;
 import com.spring.blackcat.likes.Likes;
-import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.dto.CreateTattooDto;
 import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
@@ -26,13 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,7 +34,8 @@ public class TattooServiceImpl implements TattooService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final ImageRepository imageRepository;
+
+    private final ImageService imageService;
 
     @Override
     public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, Long userId) {
@@ -78,9 +69,7 @@ public class TattooServiceImpl implements TattooService {
 
         Tattoo createdTattoo = this.tattooRepository.save(tattoo);
 
-        List<String> imageUrls = this.uploadImages(images);
-
-        this.saveImages(createdTattoo.getId(), imageUrls);
+        List<String> imageUrls = this.imageService.saveImage(tattoo, images);
 
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(createdTattoo.getId(), imageUrls);
 
@@ -92,7 +81,7 @@ public class TattooServiceImpl implements TattooService {
         //@TODO: 타투이스트 이름 추가
 //        String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
-        List<String> imageUrls = this.getImageUrls(tattoo.getId());
+        List<String> imageUrls = this.imageService.getImageUrls(tattoo.getId());
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
                 tattoo.getPrice(), tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
@@ -109,53 +98,6 @@ public class TattooServiceImpl implements TattooService {
                 getTattoosResDto.isLiked(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), likeCount);
 
         return getTattooResDto;
-    }
-
-    private void saveImages(Long postId, List<String> imageUrls) {
-        Post post = this.postRepository.findById(postId)
-                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
-
-        imageUrls.forEach(imageUrl -> {
-            Image createdImage = new Image(post, imageUrl);
-            this.imageRepository.save(createdImage);
-        });
-    }
-
-    private List<String> uploadImages(List<MultipartFile> images) {
-        List<String> imageUrls = new ArrayList<>();
-
-        images.forEach(image -> {
-            String extension = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
-            String fileName = UUID.randomUUID().toString() + extension;
-            File convertFile = new File(imageSavePath + "/tattoo/" + fileName);
-
-            BufferedImage resizedImage = ImageUtils.resize(convertFile, 600, 600);
-            try {
-                ImageIO.write(resizedImage, extension, convertFile);
-            } catch (IOException e) {
-                throw new ImageUploadFailedException("이미지 업로드 실패", ErrorInfo.IMAGE_UPLOAD_FAILED);
-            }
-
-            try {
-                image.transferTo(convertFile);
-                imageUrls.add(convertFile.getPath());
-            } catch (IOException e) {
-                throw new ImageUploadFailedException("이미지 업로드 실패", ErrorInfo.IMAGE_UPLOAD_FAILED);
-            }
-        });
-
-        return imageUrls;
-    }
-
-    private List<String> getImageUrls(Long tattooId) {
-        List<String> imageUrls = new ArrayList<>();
-        List<Image> images = this.imageRepository.findByPostId(tattooId);
-
-        images.forEach(image -> {
-            imageUrls.add(image.getImageUrl());
-        });
-
-        return imageUrls;
     }
 
     private boolean isUserLikedTattoo(Long postId, Long userId) {

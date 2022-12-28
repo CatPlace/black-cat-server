@@ -47,9 +47,16 @@ public class TattooServiceImpl implements TattooService {
 
     @Override
     public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long userId, Long categoryId) {
+        isExistCategory(categoryId);
+
         return this.tattooRepository.findByCategoryId(pageable, categoryId).map(tattoo -> {
             return this.convertToGetTattoosRes(tattoo, userId);
         });
+    }
+
+    private void isExistCategory(Long categoryId) {
+        this.categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
     }
 
     @Override

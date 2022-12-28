@@ -2,6 +2,7 @@ package com.spring.blackcat.tattoo;
 
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
 import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
@@ -78,13 +79,14 @@ public class TattooServiceImpl implements TattooService {
 
     private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, Long userId) {
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
-        //@TODO: 타투이스트 이름 추가
-//        String tattooistName = this.getPostingTattooistName(tattoo);
+
+        String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
         List<String> imageUrls = this.imageService.getImageUrls(tattoo.getId());
+        TattooType tattooType = tattoo.getTattooType();
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                tattoo.getPrice(), tattoo.getDescription(), isLiked, tattooistAddress, imageUrls);
+                tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType);
 
         return getTattoosResDto;
     }
@@ -94,8 +96,8 @@ public class TattooServiceImpl implements TattooService {
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
-                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getDescription(),
-                getTattoosResDto.isLiked(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), likeCount);
+                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(),
+                getTattoosResDto.isLiked(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(), likeCount);
 
         return getTattooResDto;
     }
@@ -114,12 +116,13 @@ public class TattooServiceImpl implements TattooService {
         return likes.size();
     }
 
-    //수정필요
-    //@TODO: 타투이스트 이름 추가
-//    private String getPostingTattooistName(Tattoo tattoo) {
-//        return this.tattooRepository.findById(tattoo.getId())
-//                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getRegisterId();
-//    }
+    private String getPostingTattooistName(Tattoo tattoo) {
+        Long userId = this.tattooRepository.findById(tattoo.getId())
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getRegisterId();
+
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getName();
+    }
 
     private String getTattooistAddress(Tattoo tattoo) {
         return this.userRepository.findById(tattoo.getRegisterId())

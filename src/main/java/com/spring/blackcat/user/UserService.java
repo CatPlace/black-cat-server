@@ -10,6 +10,8 @@ public interface UserService {
 
     CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId);
 
+    DeleteUserResDto deleteUser(Long userId);
+
     ChangeRoleResDto changeRole(ChangeRoleReqDto changeRoleReqDto, Long userId);
 
     ChangeNicknameResDto changeNickname(ChangeNicknameReqDto changeNicknameReqDto, Long userId);

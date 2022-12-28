@@ -69,6 +69,19 @@ public class UserServiceImpl implements UserService {
         return createTattooistResDto;
     }
 
+    @Override
+    @Transactional
+    public DeleteUserResDto deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+
+        userRepository.delete(user);
+
+        DeleteUserResDto deleteUserResDto = new DeleteUserResDto(user.getId());
+
+        return deleteUserResDto;
+    }
+
     private static void checkUserInfo(Object userCheck) {
         if (userCheck != null) {
             throw new InvalidLoginInputException("이미 추가 정보를 입력한 사용자입니다.", ErrorInfo.ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION);

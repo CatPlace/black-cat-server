@@ -5,6 +5,7 @@ import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.exception.ErrorInfo;
+import com.spring.blackcat.common.exception.custom.AddressNotFoundException;
 import com.spring.blackcat.common.exception.custom.InvalidLoginInputException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.common.security.auth.OAuthService;
@@ -42,14 +43,22 @@ public class UserServiceImpl implements UserService {
     public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+        Address address = findUserAddress(additionalInfoReqDto.getAddressId());
 
         checkUserInfo(user.getDateOfBirth());
 
-        user.updateAdditionalInfo(additionalInfoReqDto.getNickname(), additionalInfoReqDto.getDateOfBirth(), additionalInfoReqDto.getGender());
+        user.updateAdditionalInfo(additionalInfoReqDto.getName(), additionalInfoReqDto.getEmail(),
+                additionalInfoReqDto.getPhoneNumber(), additionalInfoReqDto.getGender(), address);
 
-        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getNickname(), user.getDateOfBirth(), user.getGender());
+        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getName(),
+                user.getEmail(), user.getPhoneNumber(), user.getGender(), address.getId());
 
         return additionalInfoResDto;
+    }
+
+    private Address findUserAddress(Long addressId) {
+        return addressRepository.findById(addressId)
+                .orElseThrow(() -> new AddressNotFoundException("존재하지 않는 주소입니다.", ErrorInfo.ADDRESS_NOT_FOUND_EXCEPTION));
     }
 
     @Override

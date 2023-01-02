@@ -49,6 +49,9 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String nickname;
 
+    private String email;
+
+    private String phoneNumber;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
@@ -86,10 +89,12 @@ public class User extends BaseTimeEntity {
     //    public void changePassword(String password) {
 //        this.password = password;
 //    }
-    public void updateAdditionalInfo(String nickname, Date dateOfBirth, Gender gender) {
-        this.nickname = nickname;
-        this.dateOfBirth = dateOfBirth;
+    public void updateAdditionalInfo(String name, String email, String phoneNumber, Gender gender, Address address) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.gender = gender;
+        this.address = address;
     }
 
     public void updateTattooistInfo(Address address, String openChatLink, Role role) {

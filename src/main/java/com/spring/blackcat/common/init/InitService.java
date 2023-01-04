@@ -81,23 +81,18 @@ class InitService {
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
 
-        addressList.add(new Address("07281", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154433", "선유로13길", "Seonyu-ro 13-gil", "0", "5", "0", "1156012400100020002037439", "", "문래동 현대홈시티2", "1156012400", "문래동6가", "", "문래동", "0", "2", "01", "2", "", "", 1L, 1L));
-        addressList.add(new Address("07282", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154461", "선유로9길", "Seonyu-ro 9-gil", "0", "30", "0", "1156012400100210000000005", "", "문래롯데캐슬", "1156012400", "문래동6가", "", "문래동", "0", "57", "02", "0", "", "", 1L, 1L));
+//        addressList.add(new Address("07281", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154433", "선유로13길", "Seonyu-ro 13-gil", "0", "5", "0", "1156012400100020002037439", "", "문래동 현대홈시티2", "1156012400", "문래동6가", "", "문래동", "0", "2", "01", "2", "", "", 1L, 1L));
+//        addressList.add(new Address("07282", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154461", "선유로9길", "Seonyu-ro 9-gil", "0", "30", "0", "1156012400100210000000005", "", "문래롯데캐슬", "1156012400", "문래동6가", "", "문래동", "0", "57", "02", "0", "", "", 1L, 1L));
 
-//        addressList.add(createAddress("서울", "Seoul"));
-        addressList.add(createAddress("경기", "Gyeonggi"));
-        addressList.add(createAddress("인천", "Incheon"));
-        addressList.add(createAddress("충청", "Chungcheong"));
-        addressList.add(createAddress("대전", "Daejeon"));
-        addressList.add(createAddress("전라", "Jeolla"));
-        addressList.add(createAddress("광주", "Gwangju"));
-        addressList.add(createAddress("경북", "Gyeongbuk"));
-        addressList.add(createAddress("대구", "Daegu"));
-        addressList.add(createAddress("경남", "Gyeongnam"));
-        addressList.add(createAddress("부산", "Busan"));
-        addressList.add(createAddress("울산", "Ulsan"));
-        addressList.add(createAddress("강원", "Gangwon"));
-        addressList.add(createAddress("제주", "Jeju"));
+//        addressList.add(createAddress("서울"));
+        addressList.add(createAddress("경기"));
+        addressList.add(createAddress("인천"));
+        addressList.add(createAddress("충청/대전"));
+        addressList.add(createAddress("전라/광주"));
+        addressList.add(createAddress("경북/대구"));
+        addressList.add(createAddress("경남/부산/울산"));
+        addressList.add(createAddress("강원"));
+        addressList.add(createAddress("제주"));
 
         addressRepository.saveAllAndFlush(addressList);
         em.clear();
@@ -234,7 +229,7 @@ class InitService {
     }
 
     private User createAdminUser() {
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = createAddress("서울");
         addressRepository.save(address);
         return new User("ADMIN", null, address, "ADMIN", Role.ADMIN, 1L, 1L);
     }
@@ -248,8 +243,8 @@ class InitService {
         return new User(providerId, providerType, defaultNickname, Role.ADMIN, 1L, 1L);
     }
 
-    private Address createAddress(String sido, String sidoEn) {
-        return new Address(sido, sidoEn, 1L, 1L);
+    private Address createAddress(String sido) {
+        return new Address(sido, 1L, 1L);
     }
 
     private Category createCategory(String name) {
@@ -257,14 +252,14 @@ class InitService {
     }
 
     private Tattoo createTattoo(Category category, TattooType tattooType, String name, String description, Long price) {
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = addressRepository.findById(1L).get();
         User user = this.userRepository.findById(1L).get();
 
         return new Tattoo(name, description, price, category, tattooType, user);
     }
 
     private Magazine createMagazine(String title) {
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = addressRepository.findById(1L).get();
         User user = this.userRepository.findById(1L).get();
 
         return new Magazine(title, user);

@@ -10,12 +10,13 @@ import lombok.NoArgsConstructor;
 public class AddressResDto {
 
     private Long id;
-    private String zipCode;
-    private String address;
+    //    private String zipCode;
+    private String sido;
 
     public AddressResDto(Address address) {
         this.id = address.getId();
-        this.zipCode = address.getZipCode();
-        this.address = (address.getSido() + " " + address.getSigungu() + " " + address.getUpmyen() + " " + address.getLoadNm() + " " + address.getBuildingNoBon() + " " + address.getSigunguBuildingNm()).replaceAll("\\s+", " ");
+        this.sido = address.getSido();
+//        this.zipCode = address.getZipCode();
+//        this.address = (address.getSido() + " " + address.getSigungu() + " " + address.getUpmyen() + " " + address.getLoadNm() + " " + address.getBuildingNoBon() + " " + address.getSigunguBuildingNm()).replaceAll("\\s+", " ");
     }
 }

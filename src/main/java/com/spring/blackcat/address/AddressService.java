@@ -1,10 +1,12 @@
 package com.spring.blackcat.address;
 
 import com.spring.blackcat.address.dto.AddressResDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface AddressService {
 
-    Page<AddressResDto> findAddress(Pageable pageable, String findString);
+    List<AddressResDto> findAll();
+
+//    Page<AddressResDto> findAddress(Pageable pageable, String findString);
 }

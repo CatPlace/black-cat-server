@@ -1,5 +1,6 @@
 package com.spring.blackcat.tattoo;
 
+import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.common.code.TattooType;
@@ -14,6 +15,7 @@ import com.spring.blackcat.tattoo.dto.CreateTattooDto;
 import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
 import com.spring.blackcat.tattoo.dto.GetTattooResDto;
 import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
+import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,20 +38,22 @@ public class TattooServiceImpl implements TattooService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
+    private final AddressRepository addressRepository;
+
     private final ImageService imageService;
 
     @Override
-    public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, Long userId) {
-        return this.tattooRepository.findAll(pageable).map(tattoo -> {
+    public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, Long userId, String tattooType, Long addressId) {
+        return this.tattooRepository.findTattoos(pageable, tattooType, addressId).map(tattoo -> {
             return this.convertToGetTattoosRes(tattoo, userId);
         });
     }
 
     @Override
-    public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long userId, Long categoryId) {
+    public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long userId, Long categoryId, String tattooType, Long addressId) {
         isExistCategory(categoryId);
 
-        return this.tattooRepository.findByCategoryId(pageable, categoryId).map(tattoo -> {
+        return this.tattooRepository.findTattoosByCategoryId(pageable, categoryId, tattooType, addressId).map(tattoo -> {
             return this.convertToGetTattoosRes(tattoo, userId);
         });
     }
@@ -72,8 +76,11 @@ public class TattooServiceImpl implements TattooService {
     public CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images) {
         Category category = this.categoryRepository.findById(createTattooDto.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
+
+        User user = findUserById(userId);
+
         Tattoo tattoo = new Tattoo(
-                createTattooDto.getTitle(), createTattooDto.getDescription(), createTattooDto.getPrice(), category, createTattooDto.getTattooType(), userId, userId);
+                createTattooDto.getTitle(), createTattooDto.getDescription(), createTattooDto.getPrice(), category, createTattooDto.getTattooType(), user);
 
         Tattoo createdTattoo = this.tattooRepository.save(tattoo);
 
@@ -84,7 +91,13 @@ public class TattooServiceImpl implements TattooService {
         return createTattooResDto;
     }
 
+    private User findUserById(Long userId) {
+        return this.userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+    }
+
     private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, Long userId) {
+        System.out.println(tattoo);
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
 
         String tattooistName = this.getPostingTattooistName(tattoo);
@@ -125,14 +138,14 @@ public class TattooServiceImpl implements TattooService {
 
     private String getPostingTattooistName(Tattoo tattoo) {
         Long userId = this.tattooRepository.findById(tattoo.getId())
-                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getRegisterId();
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getRegister().getId();
 
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getName();
     }
 
     private String getTattooistAddress(Tattoo tattoo) {
-        return this.userRepository.findById(tattoo.getRegisterId())
+        return this.userRepository.findById(tattoo.getRegister().getId())
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getAddress().getSido();
     }
 }

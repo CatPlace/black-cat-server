@@ -11,9 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface TattooService {
-    Page<GetTattoosResDto> getAllTattoos(Pageable pageable, Long userId);
+    Page<GetTattoosResDto> getAllTattoos(Pageable pageable, Long userId, String tattooType, Long addressId);
 
-    Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long userId, Long categoryId);
+    Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long userId, Long categoryId, String tattooType, Long addressId);
 
     CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images);
 

@@ -4,6 +4,7 @@ import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.image.Image;
 import com.spring.blackcat.likes.Likes;
+import com.spring.blackcat.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -41,12 +43,12 @@ public abstract class Post extends BaseTimeEntity {
     @Column(insertable = false, updatable = false)
     private PostType postType;
 
-    private Long registerId;
-    private Long modifierId;
+    @OneToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
+    private User register;
 
-    public Post(String title, Long registerId, Long modifierId) {
+    public Post(String title, User register) {
         this.title = title;
-        this.registerId = registerId;
-        this.modifierId = modifierId;
+        this.register = register;
     }
 }

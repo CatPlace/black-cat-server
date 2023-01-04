@@ -7,6 +7,7 @@ import com.spring.blackcat.tattoo.dto.CreateTattooDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,15 +23,19 @@ public class TattooController {
 
     @GetMapping()
     public ResponseDto getAllTattoos(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                                     @UserId Long userId) {
-        return ResponseUtil.SUCCESS("모든 타투 조회 성공", this.tattooService.getAllTattoos(pageable, userId));
+                                     @UserId Long userId,
+                                     @Param("tattooType") String tattooType,
+                                     @Param("addressId") Long addressId) {
+        return ResponseUtil.SUCCESS("모든 타투 조회 성공", this.tattooService.getAllTattoos(pageable, userId, tattooType, addressId));
     }
 
     @GetMapping("/categories/{categoryId}")
     public ResponseDto getTattoosByCategoryId(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                                               @UserId Long userId,
-                                              @PathVariable("categoryId") Long categoryId) {
-        return ResponseUtil.SUCCESS("카테고리별 타투 조회 성공", this.tattooService.getTattoosByCategoryId(pageable, userId, categoryId));
+                                              @PathVariable("categoryId") Long categoryId,
+                                              @Param("tattooType") String tattooType,
+                                              @Param("addressId") Long addressId) {
+        return ResponseUtil.SUCCESS("카테고리별 타투 조회 성공", this.tattooService.getTattoosByCategoryId(pageable, userId, categoryId, tattooType, addressId));
     }
 
     @GetMapping("/{tattooId}")

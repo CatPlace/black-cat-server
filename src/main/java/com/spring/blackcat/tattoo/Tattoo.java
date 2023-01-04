@@ -4,6 +4,7 @@ import com.spring.blackcat.category.Category;
 import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.post.Post;
+import com.spring.blackcat.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,12 +28,16 @@ public class Tattoo extends Post {
     @JoinColumn(name = "category_id")
     private Category category;
 
+//    @OneToOne(fetch = LAZY)
+//    @JoinColumn(name = "post_id")
+//    private Post post;
+
     @Enumerated(EnumType.STRING)
     private TattooType tattooType;
 
     public Tattoo(String title, String description, Long price,
-                  Category category, TattooType tattooType, Long registerId, Long modifierId) {
-        super(title, registerId, modifierId);
+                  Category category, TattooType tattooType, User register) {
+        super(title, register);
         this.description = description;
         this.price = price;
         this.category = category;

@@ -2,6 +2,7 @@ package com.spring.blackcat.magazine;
 
 import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.post.Post;
+import com.spring.blackcat.user.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -29,8 +30,8 @@ public class Magazine extends Post {
     @OneToMany(mappedBy = "magazine", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Cell> cellList = new ArrayList<>();
 
-    public Magazine(String title, Long registerId, Long modifierId) {
-        super(title, registerId, modifierId);
+    public Magazine(String title, User register) {
+        super(title, register);
         this.isMain = false;
         this.cellList = new ArrayList<>();
     }

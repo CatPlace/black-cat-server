@@ -257,11 +257,17 @@ class InitService {
     }
 
     private Tattoo createTattoo(Category category, TattooType tattooType, String name, String description, Long price) {
-        return new Tattoo(name, description, price, category, tattooType, 1L, 1L);
+        Address address = new Address("서울", "Seoul", 1L, 1L);
+        User user = this.userRepository.findById(1L).get();
+
+        return new Tattoo(name, description, price, category, tattooType, user);
     }
 
     private Magazine createMagazine(String title) {
-        return new Magazine(title, 1L, 1L);
+        Address address = new Address("서울", "Seoul", 1L, 1L);
+        User user = this.userRepository.findById(1L).get();
+
+        return new Magazine(title, user);
     }
 
     private Likes createLikes(Post post, User user, PostType postType) {

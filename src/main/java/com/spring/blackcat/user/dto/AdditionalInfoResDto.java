@@ -4,14 +4,16 @@ import com.spring.blackcat.common.code.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.sql.Date;
-
 @Data
 @AllArgsConstructor
 public class AdditionalInfoResDto {
-    private String nickname;
+    private String name;
 
-    private Date dateOfBirth;
+    private String email;
+
+    private String phoneNumber;
 
     private Gender gender;
+
+    private Long addressId;
 }

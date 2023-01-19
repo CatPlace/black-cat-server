@@ -138,14 +138,14 @@ public class TattooServiceImpl implements TattooService {
 
     private String getPostingTattooistName(Tattoo tattoo) {
         Long userId = this.tattooRepository.findById(tattoo.getId())
-                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getRegister().getId();
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION)).getUser().getId();
 
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getName();
     }
 
     private String getTattooistAddress(Tattoo tattoo) {
-        return this.userRepository.findById(tattoo.getRegister().getId())
+        return this.userRepository.findById(tattoo.getUser().getId())
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION)).getAddress().getSido();
     }
 }

@@ -71,6 +71,6 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
             return null;
         }
 
-        return tattoo.register.address.id.eq(addressId);
+        return tattoo.user.address.id.eq(addressId);
     }
 }

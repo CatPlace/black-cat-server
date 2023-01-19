@@ -1,6 +1,7 @@
 package com.spring.blackcat.estimate;
 
 import com.spring.blackcat.common.code.PostType;
+import com.spring.blackcat.post.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +11,8 @@ import javax.persistence.Entity;
 
 @Entity
 @Getter
-@DiscriminatorValue(PostType.Values.PROFILE)
+@DiscriminatorValue(PostType.Values.ESTIMATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Estimate {
+public class Estimate extends Post {
     private String description;
 }

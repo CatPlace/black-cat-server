@@ -45,10 +45,10 @@ public abstract class Post extends BaseTimeEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
-    private User register;
+    private User user;
 
-    public Post(String title, User register) {
+    public Post(String title, User user) {
         this.title = title;
-        this.register = register;
+        this.user = user;
     }
 }

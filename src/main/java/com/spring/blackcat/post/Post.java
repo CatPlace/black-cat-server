@@ -43,7 +43,7 @@ public abstract class Post extends BaseTimeEntity {
     @Column(insertable = false, updatable = false)
     private PostType postType;
 
-    @OneToOne(fetch = LAZY)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User register;
 

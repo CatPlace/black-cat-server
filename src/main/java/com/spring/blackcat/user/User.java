@@ -64,6 +64,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    private String introduce;
+
     private Long registerId;
     private Long modifierId;
 

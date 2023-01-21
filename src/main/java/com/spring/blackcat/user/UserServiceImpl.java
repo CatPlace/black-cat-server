@@ -10,6 +10,10 @@ import com.spring.blackcat.common.exception.custom.InvalidLoginInputException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.common.security.auth.OAuthService;
 import com.spring.blackcat.common.security.jwt.JwtProvider;
+import com.spring.blackcat.estimate.Estimate;
+import com.spring.blackcat.estimate.EstimateRepository;
+import com.spring.blackcat.profile.Profile;
+import com.spring.blackcat.profile.ProfileRepository;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,10 @@ public class UserServiceImpl implements UserService {
     private final AddressRepository addressRepository;
     private final OAuthService oAuthService;
     private final JwtProvider jwtProvider;
+
+    private final ProfileRepository profileRepository;
+
+    private final EstimateRepository estimateRepository;
 
     /**
      * 로그인
@@ -136,7 +144,21 @@ public class UserServiceImpl implements UserService {
                     String defaultNickname = providerType + "_" + UUID.randomUUID();
                     User createdUser = new User(providerId, providerType, defaultNickname, Role.BASIC, 1L, 1L);
                     this.userRepository.save(createdUser);
+                    createProfile(createdUser);
+                    createEstimate(createdUser);
                     return createdUser;
                 });
+    }
+
+    private void createEstimate(User user) {
+        Estimate estimate = new Estimate(user);
+
+        this.estimateRepository.save(estimate);
+    }
+
+    private void createProfile(User user) {
+        Profile profile = new Profile(user);
+
+        this.profileRepository.save(profile);
     }
 }

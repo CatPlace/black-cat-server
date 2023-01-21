@@ -20,7 +20,7 @@ public class ProfileController {
     private final ProfileService profileService;
 
     @PostMapping("/tattooists/profile")
-    public ResponseDto upsertTattooistProfile(@RequestPart("tattooInfo") UpsertProfileReqDto upsertProfileReqDto,
+    public ResponseDto upsertTattooistProfile(@RequestPart("profileInfo") UpsertProfileReqDto upsertProfileReqDto,
                                               @RequestPart("images") List<MultipartFile> images,
                                               @UserId Long userId) {
         return ResponseUtil.SUCCESS("타투이스트 프로필 등록 성공", this.profileService.upsertTattooistProfile(userId, upsertProfileReqDto, images));

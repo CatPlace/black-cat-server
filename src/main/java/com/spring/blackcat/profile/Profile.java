@@ -21,4 +21,12 @@ public class Profile extends Post {
         super(user);
         this.introduce = introduce;
     }
+
+    public Profile(User user) {
+        super(user);
+    }
+
+    public void updateProfile(String introduce) {
+        this.introduce = introduce;
+    }
 }

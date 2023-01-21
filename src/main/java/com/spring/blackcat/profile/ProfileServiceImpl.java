@@ -26,7 +26,8 @@ public class ProfileServiceImpl implements ProfileService {
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
 
         Profile profile = this.profileRepository.findByUserId(userId).get();
-
+        profile.updateProfile(upsertProfileReqDto.getIntroduce());
+        
         List<String> imageUrls = this.imageService.saveImage(profile, images);
 
         UpsertProfileResDto upsertProfileResDto = new UpsertProfileResDto(profile.getIntroduce(), imageUrls);

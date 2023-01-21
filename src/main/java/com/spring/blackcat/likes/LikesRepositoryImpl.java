@@ -51,13 +51,11 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
                         likes.id,
                         post.id,
                         post.title,
-                        image.imageUrl,
                         post.postType,
                         likes.createdDate))
                 .from(likes)
                 .join(likes.post, post)
-                .leftJoin(post.images, image)
-                .where(userIdEqual(userId), postTypeEqual(postType), mainImage())
+                .where(userIdEqual(userId), postTypeEqual(postType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getOrder(pageable, likes))

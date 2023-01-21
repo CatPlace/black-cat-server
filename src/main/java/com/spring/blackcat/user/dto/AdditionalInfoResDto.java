@@ -4,6 +4,8 @@ import com.spring.blackcat.common.code.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class AdditionalInfoResDto {
@@ -16,4 +18,6 @@ public class AdditionalInfoResDto {
     private Gender gender;
 
     private Long addressId;
+
+    List<String> imageUrls;
 }

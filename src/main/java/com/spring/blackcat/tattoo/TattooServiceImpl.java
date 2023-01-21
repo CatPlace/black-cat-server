@@ -3,6 +3,7 @@ package com.spring.blackcat.tattoo;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.common.code.ImageType;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
@@ -84,7 +85,7 @@ public class TattooServiceImpl implements TattooService {
 
         Tattoo createdTattoo = this.tattooRepository.save(tattoo);
 
-        List<String> imageUrls = this.imageService.saveImage(tattoo, images);
+        List<String> imageUrls = this.imageService.saveImage(ImageType.POST, tattoo.getId(), images);
 
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(createdTattoo.getId(), imageUrls);
 
@@ -102,7 +103,7 @@ public class TattooServiceImpl implements TattooService {
 
         String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
-        List<String> imageUrls = this.imageService.getImageUrls(tattoo.getId());
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattoo.getId());
         TattooType tattooType = tattoo.getTattooType();
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),

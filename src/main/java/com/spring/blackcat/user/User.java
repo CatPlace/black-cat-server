@@ -6,6 +6,7 @@ import com.spring.blackcat.common.code.Gender;
 import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.likes.Likes;
+import com.spring.blackcat.post.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -63,6 +64,10 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     private Long registerId;
     private Long modifierId;

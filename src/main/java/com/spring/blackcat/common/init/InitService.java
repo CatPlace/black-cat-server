@@ -326,6 +326,6 @@ class InitService {
     }
 
     private Image createImage(Post post, String imageUrl) {
-        return new Image(post, imageUrl);
+        return new Image(imageUrl, ImageType.POST, post.getId());
     }
 }

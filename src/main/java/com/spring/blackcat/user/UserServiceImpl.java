@@ -45,8 +45,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
         Address address = findUserAddress(additionalInfoReqDto.getAddressId());
 
-        checkUserInfo(user.getDateOfBirth());
-
         user.updateAdditionalInfo(additionalInfoReqDto.getName(), additionalInfoReqDto.getEmail(),
                 additionalInfoReqDto.getPhoneNumber(), additionalInfoReqDto.getGender(), address);
 
@@ -66,8 +64,6 @@ public class UserServiceImpl implements UserService {
     public CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
-
-        checkUserInfo(user.getAddress());
 
         Address address = addressRepository.findById(createTattooistReqDto.getAddressId()).orElseThrow();
 
@@ -89,12 +85,6 @@ public class UserServiceImpl implements UserService {
         DeleteUserResDto deleteUserResDto = new DeleteUserResDto(user.getId());
 
         return deleteUserResDto;
-    }
-
-    private static void checkUserInfo(Object userCheck) {
-        if (userCheck != null) {
-            throw new InvalidLoginInputException("이미 추가 정보를 입력한 사용자입니다.", ErrorInfo.ALREADY_EXIST_ADDITIONAL_INFO_EXCEPTION);
-        }
     }
 
     @Override

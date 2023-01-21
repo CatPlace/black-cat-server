@@ -3,6 +3,7 @@ package com.spring.blackcat.likes;
 import com.spring.blackcat.common.response.ResponseDto;
 import com.spring.blackcat.common.response.ResponseUtil;
 import com.spring.blackcat.common.security.interceptor.UserId;
+import com.spring.blackcat.likes.dto.LikesMultiReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -36,6 +37,25 @@ public class LikesController {
             @PathVariable("postId") Long postId,
             @UserId Long userId) {
         return ResponseUtil.SUCCESS("게시물 좋아요 해제 성공", likesService.likesOff(postId, userId));
+    }
+
+    @PostMapping("/posts")
+    public ResponseDto multipleLikesOn(
+            @RequestBody LikesMultiReqDto multiReqDto,
+            @UserId Long userId) {
+        return ResponseUtil.SUCCESS("게시물들 좋아요 설정 성공", likesService.multipleLikesOn(multiReqDto.getPostIds(), userId));
+    }
+
+    @DeleteMapping("/posts")
+    public ResponseDto multipleLikesOff(
+            @RequestBody LikesMultiReqDto multiReqDto,
+            @UserId Long userId) {
+        return ResponseUtil.SUCCESS("게시물들 좋아요 해제 성공", likesService.multipleLikesOff(multiReqDto.getPostIds(), userId));
+    }
+
+    @GetMapping("posts/{postId}/count")
+    public ResponseDto likesCount(@PathVariable Long postId) {
+        return ResponseUtil.SUCCESS("게시물 좋아요 수 조회 성공", likesService.countByPostId(postId));
     }
 
     @GetMapping("posts/{postId}/users")

@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static com.spring.blackcat.common.exception.ErrorInfo.POST_TYPE_NOT_FOUND_EXCEPTION;
@@ -63,6 +65,42 @@ public class LikesServiceImpl implements LikesService {
     public LikesStatusResDto likesOff(Long postId, Long userId) {
         likesRepository.findByPostIdAndUserId(postId, userId).ifPresent(likesRepository::delete);
         return new LikesStatusResDto(false);
+    }
+
+    /**
+     * 여러 게시물들 좋아요 활성화
+     */
+    @Override
+    @Transactional
+    public LikesStatusResDto multipleLikesOn(List<Long> postIds, Long userId) {
+        List<Post> posts = postRepository.findByIdIn(postIds);
+        User user = userRepository.findById(userId).orElse(null);
+        List<Likes> likesList = new ArrayList<>();
+        if (user != null) {
+            posts.forEach(post -> likesList.add(new Likes(post, user, post.getPostType())));
+        }
+        System.out.println("likesList = " + likesList);
+        likesRepository.saveAllAndFlush(likesList);
+        return new LikesStatusResDto(true);
+    }
+
+    /**
+     * 여러 게시물들 좋아요 비활성화
+     */
+    @Override
+    @Transactional
+    public LikesStatusResDto multipleLikesOff(List<Long> postIds, Long userId) {
+        likesRepository.deleteAll(likesRepository.findByPostIdInAndUserId(postIds, userId));
+        return new LikesStatusResDto(false);
+    }
+
+    /**
+     * 특정 게시물의 좋아요 수 조회
+     */
+    @Override
+    @Transactional
+    public Long countByPostId(Long postId) {
+        return likesRepository.countByPostId(postId);
     }
 
     /**

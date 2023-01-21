@@ -22,8 +22,7 @@ import org.springframework.web.filter.CorsFilter;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.springframework.http.HttpMethod.OPTIONS;
-import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.*;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -62,6 +61,9 @@ public class SecurityConfig {
         return http.antMatcher("/**")
                 .authorizeRequests()
                 .mvcMatchers(OPTIONS, "/**").permitAll() // Preflight Request 허용해주기
+                .antMatchers(GET, "/api/v1/categories").permitAll()
+                .antMatchers(GET, "/api/v1/tattoos").permitAll()
+                .antMatchers(GET, "/api/v1/tattoos/categories/**").permitAll()
                 .antMatchers(POST, "/init").access("hasRole('ADMIN')")
                 .antMatchers(POST, "/api/v1/magazines").access("hasRole('ADMIN')")
                 .antMatchers(POST, "/api/v1/tattoos").access("hasRole('TATTOOIST') or hasRole('ADMIN')")

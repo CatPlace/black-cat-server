@@ -54,7 +54,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, Long userId) {
-        System.out.println(additionalInfoReqDto);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
         Address address = findUserAddress(additionalInfoReqDto.getAddressId());

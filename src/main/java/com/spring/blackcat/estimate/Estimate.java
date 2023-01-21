@@ -20,4 +20,8 @@ public class Estimate extends Post {
     public Estimate(User user) {
         super(user);
     }
+
+    public void updateEstimate(String description) {
+        this.description = description;
+    }
 }

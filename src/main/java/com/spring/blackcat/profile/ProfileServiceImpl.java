@@ -27,8 +27,28 @@ public class ProfileServiceImpl implements ProfileService {
 
         Profile profile = this.profileRepository.findByUserId(userId).get();
         profile.updateProfile(upsertProfileReqDto.getIntroduce());
-        
-        List<String> imageUrls = this.imageService.saveImage(profile, images);
+
+        List<String> imageUrls = this.imageService.getImageUrls(profile.getId());
+        imageUrls = images == null ? imageUrls :
+                imageUrls.isEmpty() ? this.imageService.saveImage(profile, images) : updateImage(imageUrls.get(0), profile, images);
+
+        UpsertProfileResDto upsertProfileResDto = new UpsertProfileResDto(profile.getIntroduce(), imageUrls);
+
+        return upsertProfileResDto;
+    }
+
+    private List<String> updateImage(String imageUrls, Profile profile, List<MultipartFile> images) {
+        String deletedImageUrl = this.imageService.deleteImage(imageUrls);
+
+        return this.imageService.saveImage(profile, images);
+    }
+
+    @Override
+    public UpsertProfileResDto getTattooistProfile(Long userId) {
+        Profile profile = this.profileRepository.findByUserId(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+
+        List<String> imageUrls = this.imageService.getImageUrls(profile.getId());
 
         UpsertProfileResDto upsertProfileResDto = new UpsertProfileResDto(profile.getIntroduce(), imageUrls);
 

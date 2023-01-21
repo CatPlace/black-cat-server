@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ProfileService {
     UpsertProfileResDto upsertTattooistProfile(Long userId, UpsertProfileReqDto upsertProfileReqDto, List<MultipartFile> images);
+
+    UpsertProfileResDto getTattooistProfile(Long userId);
 }

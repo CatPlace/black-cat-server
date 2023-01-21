@@ -59,9 +59,10 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     public String deleteImage(String imageUrl) {
+        System.out.println("삭제 시작");
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, imageUrl));
         imageRepository.deleteByImageUrl(imageUrl);
-
+        System.out.println("삭제 끝");
         return imageUrl;
     }
 

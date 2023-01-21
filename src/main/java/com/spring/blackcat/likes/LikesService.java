@@ -6,6 +6,8 @@ import com.spring.blackcat.likes.dto.LikesUserResDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 public interface LikesService {
 
     LikesStatusResDto isLikedThisPost(Long postId, Long userId);
@@ -13,6 +15,12 @@ public interface LikesService {
     LikesStatusResDto likesOn(Long postId, Long userId);
 
     LikesStatusResDto likesOff(Long postId, Long userId);
+
+    LikesStatusResDto multipleLikesOn(List<Long> postIds, Long userId);
+
+    LikesStatusResDto multipleLikesOff(List<Long> postIds, Long userId);
+
+    Long countByPostId(Long postId);
 
     Page<LikesUserResDto> findLikesUsersByPostId(Pageable pageable, Long postId);
 

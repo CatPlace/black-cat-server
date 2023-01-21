@@ -1,12 +1,15 @@
 package com.spring.blackcat.user;
 
 import com.spring.blackcat.user.dto.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 public interface UserService {
 
     UserLoginResDto login(UserLoginReqDto userJoinReqDto);
 
-    AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, Long userId);
+    AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, Long userId);
 
     CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId);
 

@@ -1,12 +1,14 @@
 package com.spring.blackcat.image;
 
 import com.spring.blackcat.common.BaseTimeEntity;
-import com.spring.blackcat.post.Post;
+import com.spring.blackcat.common.code.ImageType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -23,13 +25,13 @@ public class Image extends BaseTimeEntity {
 
     private boolean isMain;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    private ImageType imageType;
 
-    public Image(Post post, String imageUrl) {
-        this.post = post;
+    private Long mappedId;
+
+    public Image(String imageUrl, ImageType imageType, Long mappedId) {
         this.imageUrl = imageUrl;
-        this.isMain = post.getImages().size() == 0;
+        this.imageType = imageType;
+        this.mappedId = mappedId;
     }
 }

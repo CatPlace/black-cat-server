@@ -5,10 +5,10 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.spring.blackcat.common.code.ImageType;
 import com.spring.blackcat.common.exception.custom.FileResizingFailedException;
 import com.spring.blackcat.common.exception.custom.ImageUploadFailedException;
 import com.spring.blackcat.common.exception.custom.IncorrectlyFormattedFileException;
-import com.spring.blackcat.post.Post;
 import lombok.RequiredArgsConstructor;
 import marvin.image.MarvinImage;
 import org.marvinproject.image.transform.scale.Scale;
@@ -42,27 +42,27 @@ public class ImageServiceImpl implements ImageService {
     private String bucket;
 
     @Override
-    public List<String> getImageUrls(Long postId) {
+    public List<String> getImageUrls(ImageType imageType, Long mappedId) {
         List<String> imageUrls = new ArrayList<>();
-        List<Image> images = imageRepository.findByPostId(postId);
+        List<Image> images = imageRepository.findByImageTypeAndMappedId(imageType, mappedId);
         images.forEach(image -> imageUrls.add(image.getImageUrl()));
+
         return imageUrls;
     }
 
     @Override
-    public List<String> saveImage(Post post, List<MultipartFile> multipartFiles) {
+    public List<String> saveImage(ImageType imageType, Long mappedId, List<MultipartFile> multipartFiles) {
         List<String> imageUrls = uploadImage(multipartFiles);
-        imageUrls.forEach(imageUrl -> imageRepository.save(new Image(post, imageUrl)));
+        imageUrls.forEach(imageUrl -> imageRepository.save(new Image(imageUrl, imageType, mappedId)));
 
         return imageUrls;
     }
 
     @Override
     public String deleteImage(String imageUrl) {
-        System.out.println("삭제 시작");
         amazonS3.deleteObject(new DeleteObjectRequest(bucket, imageUrl));
         imageRepository.deleteByImageUrl(imageUrl);
-        System.out.println("삭제 끝");
+
         return imageUrl;
     }
 

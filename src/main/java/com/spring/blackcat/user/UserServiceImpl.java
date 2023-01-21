@@ -2,6 +2,7 @@ package com.spring.blackcat.user;
 
 import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
+import com.spring.blackcat.common.code.ImageType;
 import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.exception.ErrorInfo;
@@ -12,13 +13,16 @@ import com.spring.blackcat.common.security.auth.OAuthService;
 import com.spring.blackcat.common.security.jwt.JwtProvider;
 import com.spring.blackcat.estimate.Estimate;
 import com.spring.blackcat.estimate.EstimateRepository;
+import com.spring.blackcat.image.ImageService;
 import com.spring.blackcat.profile.Profile;
 import com.spring.blackcat.profile.ProfileRepository;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final ProfileRepository profileRepository;
 
     private final EstimateRepository estimateRepository;
+    private final ImageService imageService;
 
     /**
      * 로그인
@@ -48,7 +53,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, Long userId) {
+    public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, Long userId) {
+        System.out.println(additionalInfoReqDto);
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
         Address address = findUserAddress(additionalInfoReqDto.getAddressId());
@@ -56,10 +62,20 @@ public class UserServiceImpl implements UserService {
         user.updateAdditionalInfo(additionalInfoReqDto.getName(), additionalInfoReqDto.getEmail(),
                 additionalInfoReqDto.getPhoneNumber(), additionalInfoReqDto.getGender(), address);
 
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.USER, user.getId());
+        imageUrls = images == null ? imageUrls :
+                imageUrls.isEmpty() ? this.imageService.saveImage(ImageType.USER, user.getId(), images) : updateImage(imageUrls.get(0), user, images);
+
         AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getName(),
-                user.getEmail(), user.getPhoneNumber(), user.getGender(), address.getId());
+                user.getEmail(), user.getPhoneNumber(), user.getGender(), address.getId(), imageUrls);
 
         return additionalInfoResDto;
+    }
+
+    private List<String> updateImage(String imageUrls, User user, List<MultipartFile> images) {
+        String deletedImageUrl = this.imageService.deleteImage(imageUrls);
+
+        return this.imageService.saveImage(ImageType.POST, user.getId(), images);
     }
 
     private Address findUserAddress(Long addressId) {

@@ -1,5 +1,6 @@
 package com.spring.blackcat.profile;
 
+import com.spring.blackcat.common.code.ImageType;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.image.ImageService;
@@ -28,9 +29,9 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = this.profileRepository.findByUserId(userId).get();
         profile.updateProfile(upsertProfileReqDto.getIntroduce());
 
-        List<String> imageUrls = this.imageService.getImageUrls(profile.getId());
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, profile.getId());
         imageUrls = images == null ? imageUrls :
-                imageUrls.isEmpty() ? this.imageService.saveImage(profile, images) : updateImage(imageUrls.get(0), profile, images);
+                imageUrls.isEmpty() ? this.imageService.saveImage(ImageType.POST, profile.getId(), images) : updateImage(imageUrls.get(0), profile, images);
 
         UpsertProfileResDto upsertProfileResDto = new UpsertProfileResDto(profile.getIntroduce(), imageUrls);
 
@@ -40,7 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
     private List<String> updateImage(String imageUrls, Profile profile, List<MultipartFile> images) {
         String deletedImageUrl = this.imageService.deleteImage(imageUrls);
 
-        return this.imageService.saveImage(profile, images);
+        return this.imageService.saveImage(ImageType.POST, profile.getId(), images);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = this.profileRepository.findByUserId(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
 
-        List<String> imageUrls = this.imageService.getImageUrls(profile.getId());
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, profile.getId());
 
         UpsertProfileResDto upsertProfileResDto = new UpsertProfileResDto(profile.getIntroduce(), imageUrls);
 

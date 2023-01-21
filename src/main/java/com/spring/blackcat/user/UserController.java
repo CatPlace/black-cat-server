@@ -6,8 +6,10 @@ import com.spring.blackcat.common.security.interceptor.UserId;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequestMapping("/api/v1/users")
 @RestController
@@ -22,8 +24,11 @@ public class UserController {
     }
 
     @PatchMapping("/additional-info")
-    public ResponseDto addAdditionalInfo(@RequestBody @Valid AdditionalInfoReqDto additionalInfoReqDto, @UserId Long userId) {
-        return ResponseUtil.SUCCESS("추가 정보 등록 성공", userService.addAdditionalInfo(additionalInfoReqDto, userId));
+    public ResponseDto addAdditionalInfo(@RequestPart("userInfo") @Valid AdditionalInfoReqDto additionalInfoReqDto,
+                                         @UserId Long userId,
+                                         @RequestPart(value = "images", required = false) List<MultipartFile> images
+    ) {
+        return ResponseUtil.SUCCESS("추가 정보 등록 성공", userService.addAdditionalInfo(additionalInfoReqDto, images, userId));
     }
 
     @PostMapping("/tattooist")

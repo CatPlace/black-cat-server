@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         String providerId = this.getProviderId(userJoinReqDto);
         User user = this.getUser(userJoinReqDto, providerId);
         String accessToken = this.jwtProvider.createAccessToken(user.getId());
-        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken);
+        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken, user.getRole());
 
         return userLoginResDto;
     }

@@ -6,9 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -23,8 +21,7 @@ public class Image extends BaseTimeEntity {
 
     private String imageUrl;
 
-    private boolean isMain;
-
+    @Enumerated(EnumType.STRING)
     private ImageType imageType;
 
     private Long mappedId;

@@ -4,6 +4,7 @@ import com.spring.blackcat.common.response.ResponseDto;
 import com.spring.blackcat.common.response.ResponseUtil;
 import com.spring.blackcat.common.security.interceptor.UserId;
 import com.spring.blackcat.tattoo.dto.CreateTattooDto;
+import com.spring.blackcat.tattoo.dto.DeleteTattoosReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -51,4 +52,8 @@ public class TattooController {
         return ResponseUtil.SUCCESS("타투 생성 성공", this.tattooService.createTattoo(userId, createTattooDto, images));
     }
 
+    @DeleteMapping()
+    public ResponseDto deleteTattoos(@RequestBody DeleteTattoosReqDto deleteTattoosReqDto) {
+        return ResponseUtil.SUCCESS("타투 삭제 성공", this.tattooService.deleteTattoos(deleteTattoosReqDto));
+    }
 }

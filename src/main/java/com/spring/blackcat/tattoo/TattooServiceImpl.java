@@ -12,10 +12,7 @@ import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.image.ImageService;
 import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.post.PostRepository;
-import com.spring.blackcat.tattoo.dto.CreateTattooDto;
-import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
-import com.spring.blackcat.tattoo.dto.GetTattooResDto;
-import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
+import com.spring.blackcat.tattoo.dto.*;
 import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +67,15 @@ public class TattooServiceImpl implements TattooService {
                 .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
 
         return this.convertToGetTattooRes(tattoo, userId);
+    }
+
+    @Override
+    public DeleteTattoosResDto deleteTattoos(DeleteTattoosReqDto deleteTattoosReqDto) {
+        for (Long tattooId : deleteTattoosReqDto.getTattooIds()) this.tattooRepository.deleteById(tattooId);
+
+        DeleteTattoosResDto deleteTattoosResDto = new DeleteTattoosResDto(deleteTattoosReqDto.getTattooIds());
+
+        return deleteTattoosResDto;
     }
 
     @Override

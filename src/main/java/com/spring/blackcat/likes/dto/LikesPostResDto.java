@@ -18,12 +18,12 @@ public class LikesPostResDto {
     private String imageUrl;
     private LocalDateTime createdDate;
 
-    public LikesPostResDto(Long likesId, Long postId, String title, String imageUrl, PostType postType, LocalDateTime createdDate) {
+    public LikesPostResDto(Long likesId, Long postId, PostType postType, String title, String imageUrl, LocalDateTime createdDate) {
         this.likesId = likesId;
         this.postId = postId;
+        this.postType = postType;
         this.title = title;
         this.imageUrl = imageUrl;
-        this.postType = postType;
         this.createdDate = createdDate;
     }
 }

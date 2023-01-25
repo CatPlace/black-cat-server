@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static com.spring.blackcat.common.code.ImageType.POST;
+import static com.spring.blackcat.common.code.ImageType.USER;
 
 @Slf4j
 @Component
@@ -200,9 +202,13 @@ class InitService {
     public void initImage() {
         List<Image> imageList = new ArrayList<>();
 
-        imageList.add(createImage(postRepository.findById(1L).orElse(null), "/image/url/1"));
-        imageList.add(createImage(postRepository.findById(3L).orElse(null), "/image/url/2"));
-        imageList.add(createImage(postRepository.findById(11L).orElse(null), "/image/url/3"));
+        imageList.add(createImage("/image/url/1-1", USER, userRepository.findById(1L).orElse(null).getId()));
+
+        imageList.add(createImage("/image/url/1-1", POST, postRepository.findById(1L).orElse(null).getId()));
+        imageList.add(createImage("/image/url/1-2", POST, postRepository.findById(1L).orElse(null).getId()));
+        imageList.add(createImage("/image/url/3-1", POST, postRepository.findById(3L).orElse(null).getId()));
+        imageList.add(createImage("/image/url/11-1", POST, postRepository.findById(11L).orElse(null).getId()));
+        imageList.add(createImage("/image/url/11-2", POST, postRepository.findById(11L).orElse(null).getId()));
 
         imageRepository.saveAllAndFlush(imageList);
         em.clear();
@@ -325,7 +331,7 @@ class InitService {
         return cellList;
     }
 
-    private Image createImage(Post post, String imageUrl) {
-        return new Image(imageUrl, ImageType.POST, post.getId());
+    private Image createImage(String imageUrl, ImageType imageType, Long mappedId) {
+        return new Image(imageUrl, imageType, mappedId);
     }
 }

@@ -17,4 +17,5 @@ public class GetTattoosResDto {
     private String address;
     private List<String> imageUrls;
     private TattooType tattooType;
+    private Long categoryId;
 }

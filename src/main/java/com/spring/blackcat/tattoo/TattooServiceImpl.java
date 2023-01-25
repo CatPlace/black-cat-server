@@ -116,16 +116,16 @@ public class TattooServiceImpl implements TattooService {
     }
 
     private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, Long userId) {
-        System.out.println(tattoo);
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
 
         String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattoo.getId());
         TattooType tattooType = tattoo.getTattooType();
+        Long categoryId = tattoo.getCategory().getId();
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType);
+                tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType, categoryId);
 
         return getTattoosResDto;
     }
@@ -135,8 +135,9 @@ public class TattooServiceImpl implements TattooService {
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
-                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(),
-                getTattoosResDto.isLiked(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(), likeCount);
+                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistName(),
+                getTattoosResDto.getDescription(), getTattoosResDto.isLiked(), getTattoosResDto.getAddress(),
+                getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(), getTattoosResDto.getCategoryId(), likeCount);
 
         return getTattooResDto;
     }

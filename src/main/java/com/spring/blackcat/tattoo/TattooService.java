@@ -17,4 +17,6 @@ public interface TattooService {
     GetTattooResDto getTattooById(Long tattooId, Long userId);
 
     DeleteTattoosResDto deleteTattoos(DeleteTattoosReqDto deleteTattoosReqDto);
+
+    Page<GetTattoosByUserIdResDto> getTattoosByUserId(Pageable pageable, Long userId);
 }

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 public interface TattooRepository extends JpaRepository<Tattoo, Long>, TattooRepositoryCustom {
     Page<Tattoo> findAll(Pageable pageable);
 
+    Page<Tattoo> findByUserId(Pageable pageable, Long userId);
+
     @Transactional
     void deleteById(Long tattooId);
 }

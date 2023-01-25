@@ -45,6 +45,13 @@ public class TattooController {
         return ResponseUtil.SUCCESS("타투 상세 조회 성공", this.tattooService.getTattooById(tattooId, userId));
     }
 
+    @GetMapping("/users")
+    public ResponseDto getTattooByUserId(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                         @UserId Long userId) {
+        return ResponseUtil.SUCCESS("타투이스트 작품 조회 성공", this.tattooService.getTattoosByUserId(pageable, userId));
+    }
+
+
     @PostMapping()
     public ResponseDto createTattoo(@RequestPart("tattooInfo") @Valid CreateTattooDto createTattooDto,
                                     @RequestPart("images") List<MultipartFile> images,

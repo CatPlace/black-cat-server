@@ -79,6 +79,18 @@ public class TattooServiceImpl implements TattooService {
     }
 
     @Override
+    public Page<GetTattoosByUserIdResDto> getTattoosByUserId(Pageable pageable, Long userId) {
+        return this.tattooRepository.findByUserId(pageable, userId)
+                .map(tattoo -> {
+                    Long tattooId = tattoo.getId();
+                    List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
+                    String imageUrl = imageUrls.isEmpty() ? "" : imageUrls.get(0);
+
+                    return new GetTattoosByUserIdResDto(tattooId, imageUrl);
+                });
+    }
+
+    @Override
     @Transactional
     public CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images) {
         Category category = this.categoryRepository.findById(createTattooDto.getCategoryId())

@@ -110,6 +110,32 @@ public class TattooServiceImpl implements TattooService {
         return createTattooResDto;
     }
 
+    @Override
+    @Transactional
+    public CreateTattooResDto updateTattoo(Long userId, Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images) {
+        Tattoo tattoo = this.tattooRepository.findById(tattooId)
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
+        Category category = this.categoryRepository.findById(updateTattooReqDto.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
+        User user = findUserById(userId);
+
+        tattoo.updateTattoo(updateTattooReqDto.getTitle(), updateTattooReqDto.getDescription(),
+                updateTattooReqDto.getPrice(), category, updateTattooReqDto.getTattooType());
+
+        updateImage(updateTattooReqDto.getDeleteImageUrls(), user, images);
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
+
+        CreateTattooResDto createTattooResDto = new CreateTattooResDto(tattooId, imageUrls);
+
+        return createTattooResDto;
+    }
+
+    private List<String> updateImage(List<String> imageUrls, User user, List<MultipartFile> images) {
+        imageUrls.forEach(imageUrl -> this.imageService.deleteImage(imageUrl));
+
+        return this.imageService.saveImage(ImageType.POST, user.getId(), images);
+    }
+
     private User findUserById(Long userId) {
         return this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));

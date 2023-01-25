@@ -19,4 +19,6 @@ public interface TattooService {
     DeleteTattoosResDto deleteTattoos(DeleteTattoosReqDto deleteTattoosReqDto);
 
     Page<GetTattoosByUserIdResDto> getTattoosByUserId(Pageable pageable, Long userId);
+
+    CreateTattooResDto updateTattoo(Long userId, Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images);
 }

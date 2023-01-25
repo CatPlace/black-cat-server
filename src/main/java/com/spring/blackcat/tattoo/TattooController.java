@@ -5,6 +5,7 @@ import com.spring.blackcat.common.response.ResponseUtil;
 import com.spring.blackcat.common.security.interceptor.UserId;
 import com.spring.blackcat.tattoo.dto.CreateTattooDto;
 import com.spring.blackcat.tattoo.dto.DeleteTattoosReqDto;
+import com.spring.blackcat.tattoo.dto.UpdateTattooReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -57,6 +58,14 @@ public class TattooController {
                                     @RequestPart("images") List<MultipartFile> images,
                                     @UserId Long userId) {
         return ResponseUtil.SUCCESS("타투 생성 성공", this.tattooService.createTattoo(userId, createTattooDto, images));
+    }
+
+    @PatchMapping("/{tattooId}")
+    public ResponseDto updateTattoo(@PathVariable("tattooId") Long tattooId,
+                                    @RequestPart("tattooInfo") @Valid UpdateTattooReqDto updateTattooReqDto,
+                                    @RequestPart("images") List<MultipartFile> images,
+                                    @UserId Long userId) {
+        return ResponseUtil.SUCCESS("타투 생성 성공", this.tattooService.updateTattoo(userId, tattooId, updateTattooReqDto, images));
     }
 
     @DeleteMapping()

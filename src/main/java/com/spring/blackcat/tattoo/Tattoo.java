@@ -36,11 +36,19 @@ public class Tattoo extends Post {
     private TattooType tattooType;
 
     public Tattoo(String title, String description, Long price,
-                  Category category, TattooType tattooType, User register) {
-        super(title, register);
+                  Category category, TattooType tattooType, User user) {
+        super(title, user);
         this.description = description;
         this.price = price;
         this.category = category;
+        this.tattooType = tattooType;
+    }
+
+    public void updateTattoo(String title, String description, Long price, Category category, TattooType tattooType) {
+        this.setTitle(title);
+        this.description = description;
+        this.price = price;
+        this.changeCategory(category);
         this.tattooType = tattooType;
     }
 

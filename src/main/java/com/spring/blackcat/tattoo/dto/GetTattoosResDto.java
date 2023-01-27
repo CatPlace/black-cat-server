@@ -11,6 +11,7 @@ import java.util.List;
 public class GetTattoosResDto {
     private Long id;
     private Long price;
+    private Long tattooistId;
     private String tattooistName;
     private String description;
     private boolean isLiked;

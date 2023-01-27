@@ -144,6 +144,7 @@ public class TattooServiceImpl implements TattooService {
     private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, Long userId) {
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
 
+        Long tattooistId = tattoo.getUser().getId();
         String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattoo.getId());
@@ -151,7 +152,7 @@ public class TattooServiceImpl implements TattooService {
         Long categoryId = tattoo.getCategory().getId();
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType, categoryId);
+                tattoo.getPrice(), tattooistId, tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType, categoryId);
 
         return getTattoosResDto;
     }
@@ -161,9 +162,10 @@ public class TattooServiceImpl implements TattooService {
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
-                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistName(),
-                getTattoosResDto.getDescription(), getTattoosResDto.isLiked(), getTattoosResDto.getAddress(),
-                getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(), getTattoosResDto.getCategoryId(), likeCount);
+                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
+                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), getTattoosResDto.isLiked(),
+                getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(),
+                getTattoosResDto.getCategoryId(), likeCount);
 
         return getTattooResDto;
     }

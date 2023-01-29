@@ -1,9 +1,6 @@
 package com.spring.blackcat.tattoo;
 
-import com.spring.blackcat.tattoo.dto.CreateTattooDto;
-import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
-import com.spring.blackcat.tattoo.dto.GetTattooResDto;
-import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
+import com.spring.blackcat.tattoo.dto.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,4 +15,10 @@ public interface TattooService {
     CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images);
 
     GetTattooResDto getTattooById(Long tattooId, Long userId);
+
+    DeleteTattoosResDto deleteTattoos(DeleteTattoosReqDto deleteTattoosReqDto);
+
+    Page<GetTattoosByUserIdResDto> getTattoosByUserId(Pageable pageable, Long userId);
+
+    CreateTattooResDto updateTattoo(Long userId, Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images);
 }

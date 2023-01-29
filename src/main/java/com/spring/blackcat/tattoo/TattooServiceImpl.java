@@ -12,10 +12,7 @@ import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.image.ImageService;
 import com.spring.blackcat.likes.Likes;
 import com.spring.blackcat.post.PostRepository;
-import com.spring.blackcat.tattoo.dto.CreateTattooDto;
-import com.spring.blackcat.tattoo.dto.CreateTattooResDto;
-import com.spring.blackcat.tattoo.dto.GetTattooResDto;
-import com.spring.blackcat.tattoo.dto.GetTattoosResDto;
+import com.spring.blackcat.tattoo.dto.*;
 import com.spring.blackcat.user.User;
 import com.spring.blackcat.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +70,27 @@ public class TattooServiceImpl implements TattooService {
     }
 
     @Override
+    public DeleteTattoosResDto deleteTattoos(DeleteTattoosReqDto deleteTattoosReqDto) {
+        for (Long tattooId : deleteTattoosReqDto.getTattooIds()) this.tattooRepository.deleteById(tattooId);
+
+        DeleteTattoosResDto deleteTattoosResDto = new DeleteTattoosResDto(deleteTattoosReqDto.getTattooIds());
+
+        return deleteTattoosResDto;
+    }
+
+    @Override
+    public Page<GetTattoosByUserIdResDto> getTattoosByUserId(Pageable pageable, Long userId) {
+        return this.tattooRepository.findByUserId(pageable, userId)
+                .map(tattoo -> {
+                    Long tattooId = tattoo.getId();
+                    List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
+                    String imageUrl = imageUrls.isEmpty() ? "" : imageUrls.get(0);
+
+                    return new GetTattoosByUserIdResDto(tattooId, imageUrl);
+                });
+    }
+
+    @Override
     @Transactional
     public CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images) {
         Category category = this.categoryRepository.findById(createTattooDto.getCategoryId())
@@ -92,22 +110,49 @@ public class TattooServiceImpl implements TattooService {
         return createTattooResDto;
     }
 
+    @Override
+    @Transactional
+    public CreateTattooResDto updateTattoo(Long userId, Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images) {
+        Tattoo tattoo = this.tattooRepository.findById(tattooId)
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
+        Category category = this.categoryRepository.findById(updateTattooReqDto.getCategoryId())
+                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
+        User user = findUserById(userId);
+
+        tattoo.updateTattoo(updateTattooReqDto.getTitle(), updateTattooReqDto.getDescription(),
+                updateTattooReqDto.getPrice(), category, updateTattooReqDto.getTattooType());
+
+        updateImage(updateTattooReqDto.getDeleteImageUrls(), user, images);
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
+
+        CreateTattooResDto createTattooResDto = new CreateTattooResDto(tattooId, imageUrls);
+
+        return createTattooResDto;
+    }
+
+    private List<String> updateImage(List<String> imageUrls, User user, List<MultipartFile> images) {
+        imageUrls.forEach(imageUrl -> this.imageService.deleteImage(imageUrl));
+
+        return this.imageService.saveImage(ImageType.POST, user.getId(), images);
+    }
+
     private User findUserById(Long userId) {
         return this.userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
     }
 
     private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, Long userId) {
-        System.out.println(tattoo);
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
 
+        Long tattooistId = tattoo.getUser().getId();
         String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattoo.getId());
         TattooType tattooType = tattoo.getTattooType();
+        Long categoryId = tattoo.getCategory().getId();
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                tattoo.getPrice(), tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType);
+                tattoo.getPrice(), tattooistId, tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType, categoryId);
 
         return getTattoosResDto;
     }
@@ -117,8 +162,10 @@ public class TattooServiceImpl implements TattooService {
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
-                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(),
-                getTattoosResDto.isLiked(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(), likeCount);
+                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
+                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), getTattoosResDto.isLiked(),
+                getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(),
+                getTattoosResDto.getCategoryId(), likeCount);
 
         return getTattooResDto;
     }

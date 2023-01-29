@@ -51,4 +51,14 @@ public abstract class Post extends BaseTimeEntity {
     public Post(User user) {
         this.user = user;
     }
+
+    public Post(Long id, String title, User user) {
+        this.id = id;
+        this.title = title;
+        this.user = user;
+    }
+
+    protected void setTitle(String title) {
+        this.title = title;
+    }
 }

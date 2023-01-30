@@ -63,18 +63,18 @@ class LikesServiceTest {
     @DisplayName("특정 게시물 좋아요 조회")
     void isLikedThisPost() {
         // given
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
+        userRepository.save(user);
+
         Category category = new Category("카테고리", 1L, 1L);
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, user);
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = new Address("서울", 1L, 1L);
         addressRepository.save(address);
-
-        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
-        userRepository.save(user);
 
         em.flush();
 
@@ -94,18 +94,18 @@ class LikesServiceTest {
     @DisplayName("특정 게시물 좋아요 활성화")
     void likesOff() {
         // given
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
+        userRepository.save(user);
+
         Category category = new Category("카테고리", 1L, 1L);
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, user);
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = new Address("서울", 1L, 1L);
         addressRepository.save(address);
-
-        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
-        userRepository.save(user);
 
         em.flush();
 
@@ -122,18 +122,18 @@ class LikesServiceTest {
     @DisplayName("특정 게시물 좋아요 비활성화")
     void likesOn() {
         // given
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
+        userRepository.save(user);
+
         Category category = new Category("카테고리", 1L, 1L);
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, user);
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = new Address("서울", 1L, 1L);
         addressRepository.save(address);
-
-        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
-        userRepository.save(user);
 
         em.flush();
 
@@ -153,21 +153,21 @@ class LikesServiceTest {
     @DisplayName("특정 게시물을 좋아요한 유저 리스트 조회")
     void findUsersByPostId() {
         // given
-        Category category = new Category("카테고리", 1L, 1L);
-        categoryRepository.save(category);
-
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
-        tattooRepository.save(tattoo);
-        Long tattooId = tattoo.getId();
-
-        Address address = new Address("서울", "Seoul", 1L, 1L);
-        addressRepository.save(address);
-
         User user1 = new User("TEST1", null, "TEST1", Role.BASIC, 1L, 1L);
         userRepository.save(user1);
 
         User user2 = new User("TEST2", null, "TEST2", Role.BASIC, 1L, 1L);
         userRepository.save(user2);
+
+        Category category = new Category("카테고리", 1L, 1L);
+        categoryRepository.save(category);
+
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, user1);
+        tattooRepository.save(tattoo);
+        Long tattooId = tattoo.getId();
+
+        Address address = new Address("서울", 1L, 1L);
+        addressRepository.save(address);
 
         em.flush();
 
@@ -194,22 +194,22 @@ class LikesServiceTest {
     @DisplayName("특정 유저의 좋아요한 게시물 리스트 조회")
     void findPostsByUserId() {
         // given
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
+        userRepository.save(user);
+
         Category category = new Category("카테고리", 1L, 1L);
         categoryRepository.save(category);
 
-        Tattoo tattoo1 = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
+        Tattoo tattoo1 = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, user);
         tattooRepository.save(tattoo1);
         Long tattooId1 = tattoo1.getId();
 
-        Tattoo tattoo2 = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
+        Tattoo tattoo2 = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, user);
         tattooRepository.save(tattoo2);
         Long tattooId2 = tattoo2.getId();
 
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = new Address("서울", 1L, 1L);
         addressRepository.save(address);
-
-        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
-        userRepository.save(user);
 
         em.flush();
 

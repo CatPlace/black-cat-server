@@ -1,10 +1,10 @@
 package com.spring.blackcat.likes;
 
 import com.spring.blackcat.common.code.PostType;
+import com.spring.blackcat.common.exception.custom.PostNotFoundException;
 import com.spring.blackcat.common.exception.custom.PostTypeNotFoundException;
-import com.spring.blackcat.likes.dto.LikesPostResDto;
-import com.spring.blackcat.likes.dto.LikesStatusResDto;
-import com.spring.blackcat.likes.dto.LikesUserResDto;
+import com.spring.blackcat.common.exception.custom.UserNotFoundException;
+import com.spring.blackcat.likes.dto.*;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.user.User;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.spring.blackcat.common.exception.ErrorInfo.POST_TYPE_NOT_FOUND_EXCEPTION;
+import static com.spring.blackcat.common.exception.ErrorInfo.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,12 +45,11 @@ public class LikesServiceImpl implements LikesService {
     @Transactional
     public LikesStatusResDto likesOn(Long postId, Long userId) {
         boolean isExists = likesRepository.findByPostIdAndUserId(postId, userId).isPresent();
-        if (isExists) {
-            return new LikesStatusResDto(true);
-        }
-        Post post = postRepository.findById(postId).orElse(null);
-        User user = userRepository.findById(userId).orElse(null);
-        if (post != null && user != null) {
+        if (!isExists) {
+            User user = userRepository.findById(userId).orElseThrow(() ->
+                    new UserNotFoundException("존재하지 않는 사용자입니다.", USER_NOT_FOUND_EXCEPTION));
+            Post post = postRepository.findById(postId).orElseThrow(() ->
+                    new PostNotFoundException("존재하지 않는 게시물입니다.", POST_NOT_FOUND_EXCEPTION));
             Likes likes = new Likes(post, user, post.getPostType());
             likesRepository.save(likes);
         }
@@ -72,16 +71,19 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public LikesStatusResDto multipleLikesOn(List<Long> postIds, Long userId) {
+    public LikesResDto multipleLikesOn(List<Long> postIds, Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new UserNotFoundException("존재하지 않는 사용자입니다.", USER_NOT_FOUND_EXCEPTION));
         List<Post> posts = postRepository.findByIdIn(postIds);
-        User user = userRepository.findById(userId).orElse(null);
+        List<Long> existsList = likesRepository.findPostIdsByUserId(userId);
         List<Likes> likesList = new ArrayList<>();
-        if (user != null) {
-            posts.forEach(post -> likesList.add(new Likes(post, user, post.getPostType())));
-        }
-        System.out.println("likesList = " + likesList);
-        likesRepository.saveAllAndFlush(likesList);
-        return new LikesStatusResDto(true);
+        posts.forEach(post -> {
+            if (!existsList.contains(post.getId())) {
+                likesList.add(new Likes(post, user, post.getPostType()));
+            }
+        });
+        likesRepository.saveAll(likesList);
+        return new LikesResDto(postIds);
     }
 
     /**
@@ -89,9 +91,9 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public LikesStatusResDto multipleLikesOff(List<Long> postIds, Long userId) {
+    public LikesResDto multipleLikesOff(List<Long> postIds, Long userId) {
         likesRepository.deleteAll(likesRepository.findByPostIdInAndUserId(postIds, userId));
-        return new LikesStatusResDto(false);
+        return new LikesResDto(postIds);
     }
 
     /**
@@ -99,8 +101,8 @@ public class LikesServiceImpl implements LikesService {
      */
     @Override
     @Transactional
-    public Long countByPostId(Long postId) {
-        return likesRepository.countByPostId(postId);
+    public LikesCountResDto countByPostId(Long postId) {
+        return new LikesCountResDto(likesRepository.countByPostId(postId));
     }
 
     /**
@@ -123,7 +125,6 @@ public class LikesServiceImpl implements LikesService {
             try {
                 postTypeEnum = PostType.valueOf(postType.toUpperCase());
             } catch (IllegalArgumentException e) {
-                // 결과없음 : return new PageImpl<>(new ArrayList<>(), pageable, 0);
                 throw new PostTypeNotFoundException("존재하지 않는 게시물 유형입니다.", POST_TYPE_NOT_FOUND_EXCEPTION);
             }
         }

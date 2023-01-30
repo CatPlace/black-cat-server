@@ -10,26 +10,28 @@ import org.springframework.data.domain.Sort;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.querydsl.core.types.Order.ASC;
+import static com.querydsl.core.types.Order.DESC;
+import static com.spring.blackcat.likes.QLikes.likes;
+
 public class Querydsl {
 
-    public static OrderSpecifier getOrder(Sort.Order order, EntityPathBase<?> target) {
-        PathBuilder pathBuilder = new PathBuilder<>(target.getType(), target.getMetadata());
-        OrderSpecifier orderSpecifier = new OrderSpecifier(
-                order.isAscending() ? Order.ASC : Order.DESC,
-                pathBuilder.get(order.getProperty())
-        );
-        return orderSpecifier;
-    }
-
-    public static OrderSpecifier[] getOrders(Pageable pageable, EntityPathBase<?> target) {
+    public static OrderSpecifier<?>[] getOrders(Pageable pageable, EntityPathBase<?> target) {
         List<OrderSpecifier<?>> orders = new ArrayList<>();
         for (Sort.Order order : pageable.getSort()) {
-            PathBuilder pathBuilder = new PathBuilder<>(target.getType(), target.getMetadata());
-            orders.add(new OrderSpecifier(
-                    order.isAscending() ? com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC,
-                    pathBuilder.get(order.getProperty())
-            ));
+            orders.add(getOrder(order, target));
         }
-        return orders.toArray(OrderSpecifier[]::new);
+        return orders.toArray(OrderSpecifier<?>[]::new);
+    }
+
+    public static OrderSpecifier<?> getOrder(Sort.Order order, EntityPathBase<?> target) {
+        Order sortBy = order.isAscending() ? ASC : DESC;
+        PathBuilder<?> pathBuilder = new PathBuilder<>(target.getType(), target.getMetadata());
+        switch (order.getProperty()) {
+            case "likesCount":
+                return new OrderSpecifier<>(sortBy, likes.count());
+            default:
+                return new OrderSpecifier(sortBy, pathBuilder.get(order.getProperty()));
+        }
     }
 }

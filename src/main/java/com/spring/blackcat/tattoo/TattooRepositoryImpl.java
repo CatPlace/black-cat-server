@@ -1,7 +1,6 @@
 package com.spring.blackcat.tattoo;
 
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.blackcat.common.code.PostType;
@@ -9,7 +8,6 @@ import com.spring.blackcat.common.code.TattooType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.spring.blackcat.common.Querydsl.getOrder;
 import static com.spring.blackcat.common.Querydsl.getOrders;
 import static com.spring.blackcat.likes.QLikes.likes;
 import static com.spring.blackcat.tattoo.QTattoo.tattoo;
@@ -48,7 +45,7 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .groupBy(tattoo.id)
-                .orderBy(getTattooOrders(pageable))
+                .orderBy(getOrders(pageable, tattoo))
                 .fetch();
 
         List<Tattoo> tattooResults = new ArrayList<>();
@@ -58,22 +55,6 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
         );
 
         return new PageImpl<>(tattooResults, pageable, results.size());
-    }
-
-    private OrderSpecifier[] getTattooOrders(Pageable pageable) {
-        List<OrderSpecifier<?>> orders = new ArrayList<>();
-        for (Sort.Order order : pageable.getSort()) {
-            if (order.getProperty().equals("likes")) {
-                if (order.isAscending()) {
-                    orders.add(likes.count().asc());
-                } else {
-                    orders.add(likes.count().desc());
-                }
-            } else {
-                orders.add(getOrder(order, tattoo));
-            }
-        }
-        return orders.toArray(OrderSpecifier[]::new);
     }
 
     @Override

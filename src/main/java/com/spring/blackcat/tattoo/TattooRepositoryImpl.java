@@ -1,6 +1,7 @@
 package com.spring.blackcat.tattoo;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.spring.blackcat.common.code.PostType;
@@ -8,6 +9,7 @@ import com.spring.blackcat.common.code.TattooType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.spring.blackcat.common.Querydsl.getOrder;
+import static com.spring.blackcat.common.Querydsl.getOrders;
 import static com.spring.blackcat.likes.QLikes.likes;
 import static com.spring.blackcat.tattoo.QTattoo.tattoo;
 
@@ -45,16 +48,32 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .groupBy(tattoo.id)
-                .orderBy(getOrder(pageable, tattoo))
+                .orderBy(getTattooOrders(pageable))
                 .fetch();
 
         List<Tattoo> tattooResults = new ArrayList<>();
-        results.forEach(tuple -> {
-            tattooResults.add(new Tattoo(tuple.get(tattoo.id), tuple.get(tattoo.title), tuple.get(tattoo.description),
-                    tuple.get(tattoo.price), tuple.get(tattoo.category), tuple.get(tattoo.tattooType), tuple.get(tattoo.user)));
-        });
+        results.forEach(tuple ->
+                tattooResults.add(new Tattoo(tuple.get(tattoo.id), tuple.get(tattoo.title), tuple.get(tattoo.description),
+                        tuple.get(tattoo.price), tuple.get(tattoo.category), tuple.get(tattoo.tattooType), tuple.get(tattoo.user)))
+        );
 
         return new PageImpl<>(tattooResults, pageable, results.size());
+    }
+
+    private OrderSpecifier[] getTattooOrders(Pageable pageable) {
+        List<OrderSpecifier<?>> orders = new ArrayList<>();
+        for (Sort.Order order : pageable.getSort()) {
+            if (order.getProperty().equals("likes")) {
+                if (order.isAscending()) {
+                    orders.add(likes.count().asc());
+                } else {
+                    orders.add(likes.count().desc());
+                }
+            } else {
+                orders.add(getOrder(order, tattoo));
+            }
+        }
+        return orders.toArray(OrderSpecifier[]::new);
     }
 
     @Override
@@ -66,7 +85,7 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                         eqAddressId(addressId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(getOrder(pageable, tattoo))
+                .orderBy(getOrders(pageable, tattoo))
                 .fetch();
 
         return new PageImpl<>(results, pageable, results.size());
@@ -90,7 +109,6 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
         if (Objects.isNull(addressId)) {
             return null;
         }
-
         return tattoo.user.address.id.eq(addressId);
     }
 }

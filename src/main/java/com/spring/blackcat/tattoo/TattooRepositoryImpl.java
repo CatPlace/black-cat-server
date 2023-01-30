@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.spring.blackcat.common.Querydsl.getOrder;
+import static com.spring.blackcat.common.QuerydslOrder.getOrders;
 import static com.spring.blackcat.likes.QLikes.likes;
 import static com.spring.blackcat.tattoo.QTattoo.tattoo;
 
@@ -45,14 +45,14 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .groupBy(tattoo.id)
-                .orderBy(getOrder(pageable, tattoo))
+                .orderBy(getOrders(pageable, tattoo))
                 .fetch();
 
         List<Tattoo> tattooResults = new ArrayList<>();
-        results.forEach(tuple -> {
-            tattooResults.add(new Tattoo(tuple.get(tattoo.id), tuple.get(tattoo.title), tuple.get(tattoo.description),
-                    tuple.get(tattoo.price), tuple.get(tattoo.category), tuple.get(tattoo.tattooType), tuple.get(tattoo.user)));
-        });
+        results.forEach(tuple ->
+                tattooResults.add(new Tattoo(tuple.get(tattoo.id), tuple.get(tattoo.title), tuple.get(tattoo.description),
+                        tuple.get(tattoo.price), tuple.get(tattoo.category), tuple.get(tattoo.tattooType), tuple.get(tattoo.user)))
+        );
 
         return new PageImpl<>(tattooResults, pageable, results.size());
     }
@@ -66,7 +66,7 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                         eqAddressId(addressId))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(getOrder(pageable, tattoo))
+                .orderBy(getOrders(pageable, tattoo))
                 .fetch();
 
         return new PageImpl<>(results, pageable, results.size());
@@ -90,7 +90,6 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
         if (Objects.isNull(addressId)) {
             return null;
         }
-
         return tattoo.user.address.id.eq(addressId);
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 import static com.querydsl.core.types.Projections.constructor;
 import static com.querydsl.sql.SQLExpressions.min;
 import static com.querydsl.sql.SQLExpressions.select;
-import static com.spring.blackcat.common.Querydsl.getOrder;
+import static com.spring.blackcat.common.QuerydslOrder.getOrders;
 import static com.spring.blackcat.common.code.ImageType.POST;
 import static com.spring.blackcat.common.code.ImageType.USER;
 import static com.spring.blackcat.image.QImage.image;
@@ -48,7 +48,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
                 .where(postEqual(postId), isMainImage(USER, user.id))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(getOrder(pageable, likes))
+                .orderBy(getOrders(pageable, likes))
                 .fetch();
         return new PageImpl<>(results, pageable, results.size());
     }
@@ -69,7 +69,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
                 .where(userIdEqual(userId), postTypeEqual(postType), isMainImage(POST, post.id))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(getOrder(pageable, likes))
+                .orderBy(getOrders(pageable, likes))
                 .fetch();
         return new PageImpl<>(results, pageable, results.size());
     }

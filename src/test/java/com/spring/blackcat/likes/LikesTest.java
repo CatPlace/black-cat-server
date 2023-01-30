@@ -52,18 +52,18 @@ class LikesTest {
     @DisplayName("생성 시점 양방향 연관관계 매핑")
     void associationMapping() {
         // given
+        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
+        userRepository.save(user);
+
         Category category = new Category("카테고리", 1L, 1L);
         categoryRepository.save(category);
 
-        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, 1L, 1L);
+        Tattoo tattoo = new Tattoo("타투", "테스트타투", 0L, category, TattooType.DESIGN, user);
         tattooRepository.save(tattoo);
         Long tattooId = tattoo.getId();
 
-        Address address = new Address("서울", "Seoul", 1L, 1L);
+        Address address = new Address("서울", 1L, 1L);
         addressRepository.save(address);
-
-        User user = new User("TEST", null, "TEST", Role.BASIC, 1L, 1L);
-        userRepository.save(user);
 
         em.flush();
 

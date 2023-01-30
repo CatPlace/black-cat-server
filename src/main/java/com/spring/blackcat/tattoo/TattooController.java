@@ -24,7 +24,7 @@ public class TattooController {
     private final TattooService tattooService;
 
     @GetMapping()
-    public ResponseDto getAllTattoos(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+    public ResponseDto getAllTattoos(@PageableDefault(page = 0, size = 20, sort = "likesCount", direction = Sort.Direction.DESC) Pageable pageable,
                                      @UserId Long userId,
                                      @Param("tattooType") String tattooType,
                                      @Param("addressId") Long addressId) {

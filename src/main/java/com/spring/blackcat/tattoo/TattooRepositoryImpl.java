@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.spring.blackcat.common.Querydsl.getOrders;
+import static com.spring.blackcat.common.QuerydslOrder.getOrders;
 import static com.spring.blackcat.likes.QLikes.likes;
 import static com.spring.blackcat.tattoo.QTattoo.tattoo;
 

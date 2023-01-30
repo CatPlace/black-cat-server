@@ -14,7 +14,7 @@ import static com.querydsl.core.types.Order.ASC;
 import static com.querydsl.core.types.Order.DESC;
 import static com.spring.blackcat.likes.QLikes.likes;
 
-public class Querydsl {
+public class QuerydslOrder {
 
     public static OrderSpecifier<?>[] getOrders(Pageable pageable, EntityPathBase<?> target) {
         List<OrderSpecifier<?>> orders = new ArrayList<>();

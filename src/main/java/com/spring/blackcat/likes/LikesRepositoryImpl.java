@@ -17,7 +17,7 @@ import java.util.List;
 import static com.querydsl.core.types.Projections.constructor;
 import static com.querydsl.sql.SQLExpressions.min;
 import static com.querydsl.sql.SQLExpressions.select;
-import static com.spring.blackcat.common.Querydsl.getOrders;
+import static com.spring.blackcat.common.QuerydslOrder.getOrders;
 import static com.spring.blackcat.common.code.ImageType.POST;
 import static com.spring.blackcat.common.code.ImageType.USER;
 import static com.spring.blackcat.image.QImage.image;

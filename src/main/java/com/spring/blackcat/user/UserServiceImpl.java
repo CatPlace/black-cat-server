@@ -111,12 +111,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ChangeRoleResDto changeRole(ChangeRoleReqDto changeRoleReqDto, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        String roleName = changeRoleReqDto.getRole();
-        user.changeRole(Role.valueOf(roleName));
+    @Transactional
+    public ChangeRoleResDto changeRoleToTattooist(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
 
-        return new ChangeRoleResDto(roleName);
+        user.changeRole(Role.TATTOOIST);
+
+        return new ChangeRoleResDto(userId, Role.TATTOOIST);
     }
 
     @Override

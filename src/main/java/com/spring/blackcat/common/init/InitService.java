@@ -41,7 +41,7 @@ import static com.spring.blackcat.common.code.ImageType.USER;
 @Component
 @Transactional
 @RequiredArgsConstructor
-@Profile({"LOCAL", "DEV", "PRD"}) // 테스트 환경 실행 X (spring.profiles.active)
+@Profile({"LOCAL", "DEV", "PRD"})
 class InitService {
 
     @Value("${jwt.secret.key}")
@@ -73,18 +73,19 @@ class InitService {
             userRepository.save(createAdminUser());
         }
         if (userRepository.findById(2L).orElse(null) == null) {
-            userRepository.save(createTestUser());
+            userRepository.save(createBasicUser());
+        }
+        if (userRepository.findById(3L).orElse(null) == null) {
+            userRepository.save(createTattooist());
         }
         em.clear();
         createAdminJwtToken();
-        createTestJwtToken();
+        createBasicJwtToken();
+        createTattooistJwtToken();
     }
 
     public void initAddress() {
         List<Address> addressList = new ArrayList<>();
-
-//        addressList.add(new Address("07281", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154433", "선유로13길", "Seonyu-ro 13-gil", "0", "5", "0", "1156012400100020002037439", "", "문래동 현대홈시티2", "1156012400", "문래동6가", "", "문래동", "0", "2", "01", "2", "", "", 1L, 1L));
-//        addressList.add(new Address("07282", "서울특별시", "Seoul", "영등포구", "Yeongdeungpo-gu", "", "", "115604154461", "선유로9길", "Seonyu-ro 9-gil", "0", "30", "0", "1156012400100210000000005", "", "문래롯데캐슬", "1156012400", "문래동6가", "", "문래동", "0", "57", "02", "0", "", "", 1L, 1L));
 
 //        addressList.add(createAddress("서울"));
         addressList.add(createAddress("경기"));
@@ -220,18 +221,25 @@ class InitService {
 //                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .withClaim("id", 1L)
                 .sign(HMAC512(SECRET_KEY));
-
         log.info("ADMIN TOKEN : Bearer " + token);
     }
 
-    private void createTestJwtToken() {
+    private void createBasicJwtToken() {
         String token = JWT.create()
-                .withSubject("TEST")
+                .withSubject("BASIC")
 //                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .withClaim("id", 2L)
                 .sign(HMAC512(SECRET_KEY));
+        log.info("BASIC TOKEN : Bearer " + token);
+    }
 
-        log.info("TEST TOKEN : Bearer " + token);
+    private void createTattooistJwtToken() {
+        String token = JWT.create()
+                .withSubject("TATTOOIST")
+//                .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .withClaim("id", 3L)
+                .sign(HMAC512(SECRET_KEY));
+        log.info("TATTOOIST TOKEN : Bearer " + token);
     }
 
     private User createAdminUser() {
@@ -240,8 +248,14 @@ class InitService {
         return new User("ADMIN", null, address, "ADMIN", Role.ADMIN, 1L, 1L);
     }
 
-    private User createTestUser() {
-        return new User("TEST", null, null, "TEST", Role.BASIC, 1L, 1L);
+    private User createBasicUser() {
+        Address address = addressRepository.findBySido("서울").orElse(null);
+        return new User("BASIC", null, address, "BASIC", Role.BASIC, 1L, 1L);
+    }
+
+    private User createTattooist() {
+        Address address = addressRepository.findBySido("서울").orElse(null);
+        return new User("TATTOOIST", null, address, "TATTOOIST", Role.TATTOOIST, 1L, 1L);
     }
 
     private User createUser(String providerId, ProviderType providerType) {

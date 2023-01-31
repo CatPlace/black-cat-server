@@ -41,9 +41,9 @@ public class UserController {
         return ResponseUtil.SUCCESS("회원탈퇴 성공", userService.deleteUser(userId));
     }
 
-    @PostMapping("/role")
-    public ResponseDto changeRole(ChangeRoleReqDto changeRoleReqDto, @UserId Long userId) {
-        return ResponseUtil.SUCCESS("권한 변경 성공", userService.changeRole(changeRoleReqDto, userId));
+    @PatchMapping("/tattooist-role")
+    public ResponseDto changeRole(@UserId Long userId) {
+        return ResponseUtil.SUCCESS("타투이스트로 승급 성공", userService.changeRoleToTattooist(userId));
     }
 
     @PostMapping("/nickname")

@@ -15,7 +15,7 @@ public interface UserService {
 
     DeleteUserResDto deleteUser(Long userId);
 
-    ChangeRoleResDto changeRole(ChangeRoleReqDto changeRoleReqDto, Long userId);
+    ChangeRoleResDto changeRoleToTattooist(Long userId);
 
     ChangeNicknameResDto changeNickname(ChangeNicknameReqDto changeNicknameReqDto, Long userId);
 

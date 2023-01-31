@@ -39,7 +39,6 @@ import static com.spring.blackcat.common.code.ImageType.USER;
 
 @Slf4j
 @Component
-@Transactional
 @RequiredArgsConstructor
 @Profile({"LOCAL", "DEV", "PRD"})
 class InitService {
@@ -66,6 +65,25 @@ class InitService {
     private final LikesRepository likesRepository;
 
     private final ImageRepository imageRepository;
+
+    private boolean isFirstRequest = true;
+
+    @Transactional
+    public boolean init() {
+        if (isFirstRequest) {
+            initAddress();
+            initUser();
+            initCategory();
+            initTattoo();
+            initMagazine();
+            initLikes();
+            initImage();
+            isFirstRequest = false;
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     @PostConstruct
     public void initAdminUser() {

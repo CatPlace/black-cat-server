@@ -65,7 +65,7 @@ public class TattooController {
                                     @RequestPart("tattooInfo") @Valid UpdateTattooReqDto updateTattooReqDto,
                                     @RequestPart("images") List<MultipartFile> images,
                                     @UserId Long userId) {
-        return ResponseUtil.SUCCESS("타투 생성 성공", this.tattooService.updateTattoo(userId, tattooId, updateTattooReqDto, images));
+        return ResponseUtil.SUCCESS("타투 수정 성공", this.tattooService.updateTattoo(userId, tattooId, updateTattooReqDto, images));
     }
 
     @DeleteMapping()

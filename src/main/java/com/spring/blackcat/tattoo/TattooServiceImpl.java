@@ -122,8 +122,10 @@ public class TattooServiceImpl implements TattooService {
         tattoo.updateTattoo(updateTattooReqDto.getTitle(), updateTattooReqDto.getDescription(),
                 updateTattooReqDto.getPrice(), category, updateTattooReqDto.getTattooType());
 
+
+        deleteImages(updateTattooReqDto.getDeleteImageUrls());
         if (images != null) {
-            updateImage(updateTattooReqDto.getDeleteImageUrls(), user, images);
+            this.imageService.saveImage(ImageType.POST, user.getId(), images);
         }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
 
@@ -132,10 +134,8 @@ public class TattooServiceImpl implements TattooService {
         return createTattooResDto;
     }
 
-    private List<String> updateImage(List<String> imageUrls, User user, List<MultipartFile> images) {
+    private void deleteImages(List<String> imageUrls) {
         imageUrls.forEach(imageUrl -> this.imageService.deleteImage(imageUrl));
-
-        return this.imageService.saveImage(ImageType.POST, user.getId(), images);
     }
 
     private User findUserById(Long userId) {

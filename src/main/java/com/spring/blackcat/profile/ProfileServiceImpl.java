@@ -31,8 +31,9 @@ public class ProfileServiceImpl implements ProfileService {
         Profile profile = this.profileRepository.findByUserId(userId).get();
         profile.updateProfile(upsertProfileReqDto.getIntroduce());
 
+        deleteImages(upsertProfileReqDto.getDeleteImageUrls());
         if (images != null) {
-            updateImage(upsertProfileReqDto.getDeleteImageUrls(), user, images);
+            this.imageService.saveImage(ImageType.POST, user.getId(), images);
         }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, user.getId());
 
@@ -41,10 +42,8 @@ public class ProfileServiceImpl implements ProfileService {
         return upsertProfileResDto;
     }
 
-    private List<String> updateImage(List<String> imageUrls, User user, List<MultipartFile> images) {
+    private void deleteImages(List<String> imageUrls) {
         imageUrls.forEach(imageUrl -> this.imageService.deleteImage(imageUrl));
-
-        return this.imageService.saveImage(ImageType.POST, user.getId(), images);
     }
 
     @Override

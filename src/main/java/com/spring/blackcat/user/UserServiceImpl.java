@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     private List<String> updateImage(List<String> imageUrls, User user, List<MultipartFile> images) {
         imageUrls.forEach(imageUrl -> this.imageService.deleteImage(imageUrl));
 
-        return this.imageService.saveImage(ImageType.POST, user.getId(), images);
+        return this.imageService.saveImage(ImageType.USER, user.getId(), images);
     }
 
     private Address findUserAddress(Long addressId) {

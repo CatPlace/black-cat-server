@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -17,6 +18,8 @@ public class AdditionalInfoReqDto {
     private String phoneNumber;
 
     private Gender gender;
-    
+
     private Long addressId;
+
+    List<String> deleteImageUrls;
 }

@@ -122,7 +122,9 @@ public class TattooServiceImpl implements TattooService {
         tattoo.updateTattoo(updateTattooReqDto.getTitle(), updateTattooReqDto.getDescription(),
                 updateTattooReqDto.getPrice(), category, updateTattooReqDto.getTattooType());
 
-        updateImage(updateTattooReqDto.getDeleteImageUrls(), user, images);
+        if (images != null) {
+            updateImage(updateTattooReqDto.getDeleteImageUrls(), user, images);
+        }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
 
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(tattooId, imageUrls);

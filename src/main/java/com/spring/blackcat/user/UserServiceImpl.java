@@ -61,9 +61,10 @@ public class UserServiceImpl implements UserService {
         user.updateAdditionalInfo(additionalInfoReqDto.getName(), additionalInfoReqDto.getEmail(),
                 additionalInfoReqDto.getPhoneNumber(), additionalInfoReqDto.getGender(), address);
 
+        if (images != null) {
+            updateImage(additionalInfoReqDto.getDeleteImageUrls(), user, images);
+        }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.USER, user.getId());
-        imageUrls = images == null ? imageUrls :
-                imageUrls.isEmpty() ? this.imageService.saveImage(ImageType.USER, user.getId(), images) : updateImage(imageUrls.get(0), user, images);
 
         AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getName(),
                 user.getEmail(), user.getPhoneNumber(), user.getGender(), address.getId(), imageUrls);
@@ -71,8 +72,8 @@ public class UserServiceImpl implements UserService {
         return additionalInfoResDto;
     }
 
-    private List<String> updateImage(String imageUrls, User user, List<MultipartFile> images) {
-        String deletedImageUrl = this.imageService.deleteImage(imageUrls);
+    private List<String> updateImage(List<String> imageUrls, User user, List<MultipartFile> images) {
+        imageUrls.forEach(imageUrl -> this.imageService.deleteImage(imageUrl));
 
         return this.imageService.saveImage(ImageType.POST, user.getId(), images);
     }

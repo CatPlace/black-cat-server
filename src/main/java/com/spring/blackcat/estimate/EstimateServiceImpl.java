@@ -32,8 +32,8 @@ public class EstimateServiceImpl implements EstimateService {
     }
 
     @Override
-    public GetUserEstimateResDto getUserEstimate(Long userId) {
-        Estimate estimate = this.estimateRepository.findByUserId(userId);
+    public GetUserEstimateResDto getUserEstimate(Long tattooistId) {
+        Estimate estimate = this.estimateRepository.findByUserId(tattooistId);
 
         GetUserEstimateResDto getUserEstimateResDto = new GetUserEstimateResDto(estimate.getDescription());
 

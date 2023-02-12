@@ -46,7 +46,10 @@ public class UserServiceImpl implements UserService {
         String providerId = this.getProviderId(userJoinReqDto);
         User user = this.getUser(userJoinReqDto, providerId);
         String accessToken = this.jwtProvider.createAccessToken(user.getId());
-        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken, user.getRole());
+        Long userAddressId = user.getAddress() == null ? null : user.getAddress().getId();
+
+        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken, user.getRole(),
+                user.getDateOfBirth(), user.getEmail(), user.getGender(), user.getName(), userAddressId);
 
         return userLoginResDto;
     }
@@ -56,21 +59,27 @@ public class UserServiceImpl implements UserService {
     public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
-        Address address = findUserAddress(additionalInfoReqDto.getAddressId());
+        Long userAddressId = additionalInfoReqDto.getAddressId() == null ? null : additionalInfoReqDto.getAddressId();
+        Address address = userAddressId == null ? null : findUserAddress(userAddressId);
 
         user.updateAdditionalInfo(additionalInfoReqDto.getName(), additionalInfoReqDto.getEmail(),
                 additionalInfoReqDto.getPhoneNumber(), additionalInfoReqDto.getGender(), address);
 
+        List<String> imageUrls = updateImages(additionalInfoReqDto, images, user);
+
+        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getName(),
+                user.getEmail(), user.getPhoneNumber(), user.getGender(), userAddressId, imageUrls);
+
+        return additionalInfoResDto;
+    }
+
+    private List<String> updateImages(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, User user) {
         deleteImages(additionalInfoReqDto.getDeleteImageUrls());
         if (images != null) {
             this.imageService.saveImage(ImageType.USER, user.getId(), images);
         }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.USER, user.getId());
-
-        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getName(),
-                user.getEmail(), user.getPhoneNumber(), user.getGender(), address.getId(), imageUrls);
-
-        return additionalInfoResDto;
+        return imageUrls;
     }
 
     private void deleteImages(List<String> imageUrls) {
@@ -80,21 +89,6 @@ public class UserServiceImpl implements UserService {
     private Address findUserAddress(Long addressId) {
         return addressRepository.findById(addressId)
                 .orElseThrow(() -> new AddressNotFoundException("존재하지 않는 주소입니다.", ErrorInfo.ADDRESS_NOT_FOUND_EXCEPTION));
-    }
-
-    @Override
-    @Transactional
-    public CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
-
-        Address address = addressRepository.findById(createTattooistReqDto.getAddressId()).orElseThrow();
-
-        user.updateTattooistInfo(address, createTattooistReqDto.getOpenChatLink(), Role.TATTOOIST);
-
-        CreateTattooistResDto createTattooistResDto = new CreateTattooistResDto(user.getAddress().getId(), user.getOpenChatLink());
-
-        return createTattooistResDto;
     }
 
     @Override
@@ -117,6 +111,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
 
         user.changeRole(Role.TATTOOIST);
+        createProfile(user);
+        createEstimate(user);
 
         return new ChangeRoleResDto(userId, Role.TATTOOIST);
     }
@@ -161,8 +157,6 @@ public class UserServiceImpl implements UserService {
                     String defaultNickname = providerType + "_" + UUID.randomUUID();
                     User createdUser = new User(providerId, providerType, defaultNickname, Role.BASIC, 1L, 1L);
                     this.userRepository.save(createdUser);
-                    createProfile(createdUser);
-                    createEstimate(createdUser);
                     return createdUser;
                 });
     }

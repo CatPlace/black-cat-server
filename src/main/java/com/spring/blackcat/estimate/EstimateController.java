@@ -18,8 +18,8 @@ public class EstimateController {
         return ResponseUtil.SUCCESS("견적서 등록 성공", this.estimateService.createUserEstimate(createUserEstimateReqDto, userId));
     }
 
-    @GetMapping()
-    public ResponseDto getUserEstimate(@UserId Long userId) {
-        return ResponseUtil.SUCCESS("견적서 등록 성공", this.estimateService.getUserEstimate(userId));
+    @GetMapping("tattooists/{tattooistId}")
+    public ResponseDto getUserEstimate(@UserId Long tattooistId) {
+        return ResponseUtil.SUCCESS("견적서 조회 성공", this.estimateService.getUserEstimate(tattooistId));
     }
 }

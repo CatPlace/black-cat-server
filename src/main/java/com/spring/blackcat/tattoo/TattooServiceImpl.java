@@ -79,8 +79,8 @@ public class TattooServiceImpl implements TattooService {
     }
 
     @Override
-    public Page<GetTattoosByUserIdResDto> getTattoosByUserId(Pageable pageable, Long userId) {
-        return this.tattooRepository.findByUserId(pageable, userId)
+    public Page<GetTattoosByUserIdResDto> getTattoosByUserId(Pageable pageable, Long tattooistId) {
+        return this.tattooRepository.findByUserId(pageable, tattooistId)
                 .map(tattoo -> {
                     Long tattooId = tattoo.getId();
                     List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
@@ -122,16 +122,20 @@ public class TattooServiceImpl implements TattooService {
         tattoo.updateTattoo(updateTattooReqDto.getTitle(), updateTattooReqDto.getDescription(),
                 updateTattooReqDto.getPrice(), category, updateTattooReqDto.getTattooType());
 
+        List<String> imageUrls = updateImages(tattooId, updateTattooReqDto, images, user);
 
+        CreateTattooResDto createTattooResDto = new CreateTattooResDto(tattooId, imageUrls);
+
+        return createTattooResDto;
+    }
+
+    private List<String> updateImages(Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images, User user) {
         deleteImages(updateTattooReqDto.getDeleteImageUrls());
         if (images != null) {
             this.imageService.saveImage(ImageType.POST, user.getId(), images);
         }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
-
-        CreateTattooResDto createTattooResDto = new CreateTattooResDto(tattooId, imageUrls);
-
-        return createTattooResDto;
+        return imageUrls;
     }
 
     private void deleteImages(List<String> imageUrls) {

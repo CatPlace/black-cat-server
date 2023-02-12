@@ -11,8 +11,6 @@ public interface UserService {
 
     AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, Long userId);
 
-    CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId);
-
     DeleteUserResDto deleteUser(Long userId);
 
     ChangeRoleResDto changeRoleToTattooist(Long userId);

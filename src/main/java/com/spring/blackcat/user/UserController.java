@@ -3,7 +3,10 @@ package com.spring.blackcat.user;
 import com.spring.blackcat.common.response.ResponseDto;
 import com.spring.blackcat.common.response.ResponseUtil;
 import com.spring.blackcat.common.security.interceptor.UserId;
-import com.spring.blackcat.user.dto.*;
+import com.spring.blackcat.user.dto.AdditionalInfoReqDto;
+import com.spring.blackcat.user.dto.ChangeAddressReqDto;
+import com.spring.blackcat.user.dto.ChangeNicknameReqDto;
+import com.spring.blackcat.user.dto.UserLoginReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,11 +32,6 @@ public class UserController {
                                          @RequestPart(value = "images", required = false) List<MultipartFile> images
     ) {
         return ResponseUtil.SUCCESS("추가 정보 등록 성공", userService.addAdditionalInfo(additionalInfoReqDto, images, userId));
-    }
-
-    @PostMapping("/tattooist")
-    public ResponseDto createTattooist(@RequestBody @Valid CreateTattooistReqDto createTattooistReqDto, @UserId Long userId) {
-        return ResponseUtil.SUCCESS("타투이스트 등록 성공", userService.createTattooist(createTattooistReqDto, userId));
     }
 
     @DeleteMapping()

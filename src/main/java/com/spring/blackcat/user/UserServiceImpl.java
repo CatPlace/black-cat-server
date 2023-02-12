@@ -93,21 +93,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public CreateTattooistResDto createTattooist(CreateTattooistReqDto createTattooistReqDto, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
-
-        Address address = addressRepository.findById(createTattooistReqDto.getAddressId()).orElseThrow();
-
-        user.updateTattooistInfo(address, createTattooistReqDto.getOpenChatLink(), Role.TATTOOIST);
-
-        CreateTattooistResDto createTattooistResDto = new CreateTattooistResDto(user.getAddress().getId(), user.getOpenChatLink());
-
-        return createTattooistResDto;
-    }
-
-    @Override
-    @Transactional
     public DeleteUserResDto deleteUser(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
@@ -126,6 +111,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
 
         user.changeRole(Role.TATTOOIST);
+        createProfile(user);
+        createEstimate(user);
 
         return new ChangeRoleResDto(userId, Role.TATTOOIST);
     }
@@ -170,8 +157,6 @@ public class UserServiceImpl implements UserService {
                     String defaultNickname = providerType + "_" + UUID.randomUUID();
                     User createdUser = new User(providerId, providerType, defaultNickname, Role.BASIC, 1L, 1L);
                     this.userRepository.save(createdUser);
-                    createProfile(createdUser);
-                    createEstimate(createdUser);
                     return createdUser;
                 });
     }

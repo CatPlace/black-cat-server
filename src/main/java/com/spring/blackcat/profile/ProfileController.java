@@ -10,21 +10,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/profile")
 @RequiredArgsConstructor
 @RestController
 public class ProfileController {
     private final ProfileService profileService;
 
-    @PostMapping("/tattooists/profile")
+    @PostMapping("/tattooists")
     public ResponseDto upsertTattooistProfile(@RequestPart(value = "profileInfo") UpsertProfileReqDto upsertProfileReqDto,
                                               @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                               @UserId Long userId) {
         return ResponseUtil.SUCCESS("타투이스트 프로필 등록 성공", this.profileService.upsertTattooistProfile(userId, upsertProfileReqDto, images));
     }
 
-    @GetMapping("/tattooists/profile")
-    public ResponseDto getTattooistProfile(@UserId Long userId) {
-        return ResponseUtil.SUCCESS("타투이스트 프로필 조회 성공", this.profileService.getTattooistProfile(userId));
+    @GetMapping("/tattooists/{tattooistId}")
+    public ResponseDto getTattooistProfile(@PathVariable Long tattooistId) {
+        return ResponseUtil.SUCCESS("타투이스트 프로필 조회 성공", this.profileService.getTattooistProfile(tattooistId));
     }
 }

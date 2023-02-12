@@ -46,7 +46,10 @@ public class UserServiceImpl implements UserService {
         String providerId = this.getProviderId(userJoinReqDto);
         User user = this.getUser(userJoinReqDto, providerId);
         String accessToken = this.jwtProvider.createAccessToken(user.getId());
-        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken, user.getRole());
+        Long userAddressId = user.getAddress() == null ? null : user.getAddress().getId();
+
+        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken, user.getRole(),
+                user.getDateOfBirth(), user.getEmail(), user.getGender(), user.getName(), userAddressId);
 
         return userLoginResDto;
     }

@@ -59,21 +59,27 @@ public class UserServiceImpl implements UserService {
     public AdditionalInfoResDto addAdditionalInfo(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
-        Address address = findUserAddress(additionalInfoReqDto.getAddressId());
+        Long userAddressId = additionalInfoReqDto.getAddressId() == null ? null : additionalInfoReqDto.getAddressId();
+        Address address = userAddressId == null ? null : findUserAddress(userAddressId);
 
         user.updateAdditionalInfo(additionalInfoReqDto.getName(), additionalInfoReqDto.getEmail(),
                 additionalInfoReqDto.getPhoneNumber(), additionalInfoReqDto.getGender(), address);
 
+        List<String> imageUrls = updateImages(additionalInfoReqDto, images, user);
+
+        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getName(),
+                user.getEmail(), user.getPhoneNumber(), user.getGender(), userAddressId, imageUrls);
+
+        return additionalInfoResDto;
+    }
+
+    private List<String> updateImages(AdditionalInfoReqDto additionalInfoReqDto, List<MultipartFile> images, User user) {
         deleteImages(additionalInfoReqDto.getDeleteImageUrls());
         if (images != null) {
             this.imageService.saveImage(ImageType.USER, user.getId(), images);
         }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.USER, user.getId());
-
-        AdditionalInfoResDto additionalInfoResDto = new AdditionalInfoResDto(user.getName(),
-                user.getEmail(), user.getPhoneNumber(), user.getGender(), address.getId(), imageUrls);
-
-        return additionalInfoResDto;
+        return imageUrls;
     }
 
     private void deleteImages(List<String> imageUrls) {

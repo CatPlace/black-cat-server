@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Data
@@ -19,4 +20,6 @@ public class UserLoginResDto {
     private Gender gender;
     private String userName;
     private Long addressId;
+    private String phoneNumber;
+    private List<String> imageUrls;
 }

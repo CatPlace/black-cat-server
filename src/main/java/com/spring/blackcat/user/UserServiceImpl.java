@@ -48,8 +48,11 @@ public class UserServiceImpl implements UserService {
         String accessToken = this.jwtProvider.createAccessToken(user.getId());
         Long userAddressId = user.getAddress() == null ? null : user.getAddress().getId();
 
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.USER, user.getId());
+
         UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken, user.getRole(),
-                user.getDateOfBirth(), user.getEmail(), user.getGender(), user.getName(), userAddressId);
+                user.getDateOfBirth(), user.getEmail(), user.getGender(), user.getName(), userAddressId,
+                user.getPhoneNumber(), imageUrls);
 
         return userLoginResDto;
     }

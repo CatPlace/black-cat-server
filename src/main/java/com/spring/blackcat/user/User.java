@@ -65,9 +65,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @OneToMany(mappedBy = "user", cascade = ALL)
+    private List<Post> posts;
 
     private Long registerId;
     private Long modifierId;

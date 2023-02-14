@@ -7,6 +7,7 @@ import com.spring.blackcat.common.code.ProviderType;
 import com.spring.blackcat.common.code.Role;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.AddressNotFoundException;
+import com.spring.blackcat.common.exception.custom.AlreadyTattooistException;
 import com.spring.blackcat.common.exception.custom.InvalidLoginInputException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.common.security.auth.OAuthService;
@@ -112,8 +113,12 @@ public class UserServiceImpl implements UserService {
     public ChangeRoleResDto changeRoleToTattooist(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
+        if (user.getRole().equals(Role.TATTOOIST)) {
+            throw new AlreadyTattooistException("이미 타투이스트로 승급한 사용자입니다.", ErrorInfo.ALREADY_TATTOOIST_EXCEPTION);
+        }
 
         user.changeRole(Role.TATTOOIST);
+
         createProfile(user);
         createEstimate(user);
 

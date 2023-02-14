@@ -24,7 +24,9 @@ public enum ErrorInfo {
     FILE_RESIZING_FAILED_EXCEPTION(500, 1013, "파일 리사이징에 실패했습니다."),
     INVALID_INPUT_EXCEPTION(400, 1014, "올바르지 않은 입력값 형식입니다."),
     ADDRESS_NOT_FOUND_EXCEPTION(400, 1015, "존재하지 않은 주소입니다."),
-    POST_NOT_FOUND_EXCEPTION(400, 1016, "존재하지 않는 게시물입니다.");
+    POST_NOT_FOUND_EXCEPTION(400, 1016, "존재하지 않는 게시물입니다."),
+
+    ALREADY_TATTOOIST_EXCEPTION(400, 1017, "이미 타투이스트로 승급한 사용자입니다.");
 
     private final boolean success = false;
     private int statusCode;

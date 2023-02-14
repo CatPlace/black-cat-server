@@ -19,7 +19,7 @@ public class EstimateController {
     }
 
     @GetMapping("tattooists/{tattooistId}")
-    public ResponseDto getUserEstimate(@UserId Long tattooistId) {
+    public ResponseDto getUserEstimate(@PathVariable Long tattooistId) {
         return ResponseUtil.SUCCESS("견적서 조회 성공", this.estimateService.getUserEstimate(tattooistId));
     }
 }

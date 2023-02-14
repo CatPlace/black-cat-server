@@ -33,9 +33,9 @@ public class ProfileServiceImpl implements ProfileService {
 
         deleteImages(upsertProfileReqDto.getDeleteImageUrls());
         if (images != null) {
-            this.imageService.saveImage(ImageType.POST, user.getId(), images);
+            this.imageService.saveImage(ImageType.POST, profile.getId(), images);
         }
-        List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, user.getId());
+        List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, profile.getId());
 
         UpsertProfileResDto upsertProfileResDto = new UpsertProfileResDto(profile.getIntroduce(), imageUrls);
 

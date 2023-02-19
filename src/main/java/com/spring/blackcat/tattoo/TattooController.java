@@ -1,5 +1,6 @@
 package com.spring.blackcat.tattoo;
 
+import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.common.response.ResponseDto;
 import com.spring.blackcat.common.response.ResponseUtil;
 import com.spring.blackcat.common.security.interceptor.UserId;
@@ -9,7 +10,6 @@ import com.spring.blackcat.tattoo.dto.UpdateTattooReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,19 +25,17 @@ public class TattooController {
 
     @GetMapping()
     public ResponseDto getAllTattoos(@PageableDefault(page = 0, size = 20, sort = "likesCount", direction = Sort.Direction.DESC) Pageable pageable,
-                                     @UserId Long userId,
-                                     @Param("tattooType") String tattooType,
-                                     @Param("addressId") Long addressId) {
-        return ResponseUtil.SUCCESS("모든 타투 조회 성공", this.tattooService.getAllTattoos(pageable, userId, tattooType, addressId));
+                                     @RequestParam(name = "tattooTypes", required = false) List<TattooType> tattooTypes,
+                                     @RequestParam(name = "addressIds", required = false) List<Long> addressIds) {
+        return ResponseUtil.SUCCESS("모든 타투 조회 성공", this.tattooService.getAllTattoos(pageable, tattooTypes, addressIds));
     }
 
     @GetMapping("/categories/{categoryId}")
     public ResponseDto getTattoosByCategoryId(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
-                                              @UserId Long userId,
                                               @PathVariable("categoryId") Long categoryId,
-                                              @Param("tattooType") String tattooType,
-                                              @Param("addressId") Long addressId) {
-        return ResponseUtil.SUCCESS("카테고리별 타투 조회 성공", this.tattooService.getTattoosByCategoryId(pageable, userId, categoryId, tattooType, addressId));
+                                              @RequestParam(name = "tattooTypes", required = false) List<TattooType> tattooTypes,
+                                              @RequestParam(name = "addressIds", required = false) List<Long> addressIds) {
+        return ResponseUtil.SUCCESS("카테고리별 타투 조회 성공", this.tattooService.getTattoosByCategoryId(pageable, categoryId, tattooTypes, addressIds));
     }
 
     @GetMapping("/{tattooId}")

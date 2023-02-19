@@ -17,6 +17,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
         ErrorResponse errorResponse = new ErrorResponse(UNKNOWN_EXCEPTION);
+        errorResponse.setMessage(e.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatusCode()));
     }
 

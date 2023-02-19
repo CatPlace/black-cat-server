@@ -10,6 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetTattoosResDto {
     private Long id;
+    private String title;
     private Long price;
     private Long tattooistId;
     private String tattooistName;

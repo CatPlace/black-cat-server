@@ -150,13 +150,14 @@ public class TattooServiceImpl implements TattooService {
     private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo) {
 
         Long tattooistId = tattoo.getUser().getId();
+        String title = tattoo.getTitle();
         String tattooistName = this.getPostingTattooistName(tattoo);
         String tattooistAddress = this.getTattooistAddress(tattoo);
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattoo.getId());
         TattooType tattooType = tattoo.getTattooType();
         Long categoryId = tattoo.getCategory().getId();
 
-        GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
+        GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), title,
                 tattoo.getPrice(), tattooistId, tattooistName, tattoo.getDescription(), tattooistAddress, imageUrls, tattooType, categoryId);
 
         return getTattoosResDto;
@@ -166,12 +167,13 @@ public class TattooServiceImpl implements TattooService {
         boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
         GetTattoosResDto getTattoosResDto = this.convertToGetTattoosRes(tattoo);
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
+        List<String> profileImageUrls = this.imageService.getImageUrls(ImageType.USER, tattoo.getUser().getId());
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
-                getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
+                getTattoosResDto.getId(), getTattoosResDto.getTitle(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
                 getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), isLiked,
                 getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(),
-                getTattoosResDto.getCategoryId(), likeCount);
+                getTattoosResDto.getCategoryId(), likeCount, tattoo.getCreatedDate(), profileImageUrls);
 
         return getTattooResDto;
     }

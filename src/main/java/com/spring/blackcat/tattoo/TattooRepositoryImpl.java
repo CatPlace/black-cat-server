@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.spring.blackcat.categoryPost.QCategoryPost.categoryPost;
 import static com.spring.blackcat.common.QuerydslOrder.getOrders;
 import static com.spring.blackcat.likes.QLikes.likes;
 import static com.spring.blackcat.tattoo.QTattoo.tattoo;
@@ -33,7 +34,6 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                         tattoo.title,
                         tattoo.tattooType,
                         tattoo.description,
-                        tattoo.category,
                         tattoo.price,
                         tattoo.user,
                         likes.count().as("likes"))
@@ -50,7 +50,7 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
         List<Tattoo> tattooResults = new ArrayList<>();
         results.forEach(tuple ->
                 tattooResults.add(new Tattoo(tuple.get(tattoo.id), tuple.get(tattoo.title), tuple.get(tattoo.description),
-                        tuple.get(tattoo.price), tuple.get(tattoo.category), tuple.get(tattoo.tattooType), tuple.get(tattoo.user)))
+                        tuple.get(tattoo.price), tuple.get(tattoo.tattooType), tuple.get(tattoo.user)))
         );
 
         return new PageImpl<>(tattooResults, pageable, results.size());
@@ -60,8 +60,8 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
     public Page<Tattoo> findTattoosByCategoryId(Pageable pageable, Long categoryId, List<TattooType> tattooTypes, List<Long> addressIds) {
         List<Tattoo> results = query
                 .selectFrom(tattoo)
-                .where(eqCategoryId(categoryId),
-                        eqTattooType(tattooTypes),
+                .leftJoin(tattoo.categoryPosts, categoryPost).on(categoryPost.category.id.eq(categoryId).and(tattoo.id.eq(categoryPost.post.id)))
+                .where(eqTattooType(tattooTypes),
                         eqAddressId(addressIds))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -69,13 +69,6 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                 .fetch();
 
         return new PageImpl<>(results, pageable, results.size());
-    }
-
-    private BooleanExpression eqCategoryId(Long categoryId) {
-        if (Objects.isNull(categoryId)) {
-            return null;
-        }
-        return tattoo.category.id.eq(categoryId);
     }
 
     private static BooleanExpression eqTattooType(List<TattooType> tattooTypes) {

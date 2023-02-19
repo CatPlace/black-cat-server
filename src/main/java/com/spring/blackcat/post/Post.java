@@ -1,5 +1,6 @@
 package com.spring.blackcat.post;
 
+import com.spring.blackcat.categoryPost.CategoryPost;
 import com.spring.blackcat.common.BaseTimeEntity;
 import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.likes.Likes;
@@ -35,6 +36,9 @@ public abstract class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
     private List<Likes> likes = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post", cascade = ALL)
+    private List<CategoryPost> categoryPosts = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     @Column(insertable = false, updatable = false)
     private PostType postType;
@@ -60,5 +64,9 @@ public abstract class Post extends BaseTimeEntity {
 
     protected void setTitle(String title) {
         this.title = title;
+    }
+
+    public void addCategoryPost(CategoryPost categoryPost) {
+        this.categoryPosts.add(categoryPost);
     }
 }

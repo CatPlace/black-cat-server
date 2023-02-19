@@ -8,7 +8,6 @@ import com.spring.blackcat.common.code.TattooType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
     }
 
     @Override
-    public Page<Tattoo> findTattoos(Pageable pageable, String tattooType, Long addressId) {
+    public Page<Tattoo> findTattoos(Pageable pageable, List<TattooType> tattooTypes, List<Long> addressIds) {
         List<Tuple> results = query
                 .select(tattoo.id,
                         tattoo.title,
@@ -40,8 +39,8 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                         likes.count().as("likes"))
                 .from(tattoo)
                 .leftJoin(tattoo.likes, likes).on(likes.postType.eq(PostType.TATTOO).and(tattoo.id.eq(likes.post.id)))
-                .where(eqTattooType(tattooType),
-                        eqAddressId(addressId))
+                .where(eqTattooType(tattooTypes),
+                        eqAddressId(addressIds))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .groupBy(tattoo.id)
@@ -58,12 +57,12 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
     }
 
     @Override
-    public Page<Tattoo> findTattoosByCategoryId(Pageable pageable, Long categoryId, String tattooType, Long addressId) {
+    public Page<Tattoo> findTattoosByCategoryId(Pageable pageable, Long categoryId, List<TattooType> tattooTypes, List<Long> addressIds) {
         List<Tattoo> results = query
                 .selectFrom(tattoo)
                 .where(eqCategoryId(categoryId),
-                        eqTattooType(tattooType),
-                        eqAddressId(addressId))
+                        eqTattooType(tattooTypes),
+                        eqAddressId(addressIds))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(getOrders(pageable, tattoo))
@@ -79,17 +78,17 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
         return tattoo.category.id.eq(categoryId);
     }
 
-    private static BooleanExpression eqTattooType(String tattooType) {
-        if (StringUtils.isEmpty(tattooType)) {
+    private static BooleanExpression eqTattooType(List<TattooType> tattooTypes) {
+        if (Objects.isNull(tattooTypes)) {
             return null;
         }
-        return tattoo.tattooType.eq(TattooType.valueOf(tattooType));
+        return tattoo.tattooType.in(tattooTypes);
     }
 
-    private static BooleanExpression eqAddressId(Long addressId) {
-        if (Objects.isNull(addressId)) {
+    private static BooleanExpression eqAddressId(List<Long> addressIds) {
+        if (Objects.isNull(addressIds)) {
             return null;
         }
-        return tattoo.user.address.id.eq(addressId);
+        return tattoo.user.address.id.in(addressIds);
     }
 }

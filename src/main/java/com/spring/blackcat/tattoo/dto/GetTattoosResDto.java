@@ -14,7 +14,6 @@ public class GetTattoosResDto {
     private Long tattooistId;
     private String tattooistName;
     private String description;
-    private boolean isLiked;
     private String address;
     private List<String> imageUrls;
     private TattooType tattooType;

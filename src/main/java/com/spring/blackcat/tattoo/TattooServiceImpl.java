@@ -41,18 +41,18 @@ public class TattooServiceImpl implements TattooService {
     private final ImageService imageService;
 
     @Override
-    public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, Long userId, String tattooType, Long addressId) {
-        return this.tattooRepository.findTattoos(pageable, tattooType, addressId).map(tattoo -> {
-            return this.convertToGetTattoosRes(tattoo, userId);
+    public Page<GetTattoosResDto> getAllTattoos(Pageable pageable, List<TattooType> tattooTypes, List<Long> addressIds) {
+        return this.tattooRepository.findTattoos(pageable, tattooTypes, addressIds).map(tattoo -> {
+            return this.convertToGetTattoosRes(tattoo);
         });
     }
 
     @Override
-    public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long userId, Long categoryId, String tattooType, Long addressId) {
+    public Page<GetTattoosResDto> getTattoosByCategoryId(Pageable pageable, Long categoryId, List<TattooType> tattooTypes, List<Long> addressIds) {
         isExistCategory(categoryId);
 
-        return this.tattooRepository.findTattoosByCategoryId(pageable, categoryId, tattooType, addressId).map(tattoo -> {
-            return this.convertToGetTattoosRes(tattoo, userId);
+        return this.tattooRepository.findTattoosByCategoryId(pageable, categoryId, tattooTypes, addressIds).map(tattoo -> {
+            return this.convertToGetTattoosRes(tattoo);
         });
     }
 
@@ -147,8 +147,7 @@ public class TattooServiceImpl implements TattooService {
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 사용자 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
     }
 
-    private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo, Long userId) {
-        boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
+    private GetTattoosResDto convertToGetTattoosRes(Tattoo tattoo) {
 
         Long tattooistId = tattoo.getUser().getId();
         String tattooistName = this.getPostingTattooistName(tattoo);
@@ -158,18 +157,19 @@ public class TattooServiceImpl implements TattooService {
         Long categoryId = tattoo.getCategory().getId();
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(),
-                tattoo.getPrice(), tattooistId, tattooistName, tattoo.getDescription(), isLiked, tattooistAddress, imageUrls, tattooType, categoryId);
+                tattoo.getPrice(), tattooistId, tattooistName, tattoo.getDescription(), tattooistAddress, imageUrls, tattooType, categoryId);
 
         return getTattoosResDto;
     }
 
     private GetTattooResDto convertToGetTattooRes(Tattoo tattoo, Long userId) {
-        GetTattoosResDto getTattoosResDto = this.convertToGetTattoosRes(tattoo, userId);
+        boolean isLiked = this.isUserLikedTattoo(tattoo.getId(), userId);
+        GetTattoosResDto getTattoosResDto = this.convertToGetTattoosRes(tattoo);
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
                 getTattoosResDto.getId(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
-                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), getTattoosResDto.isLiked(),
+                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), isLiked,
                 getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(),
                 getTattoosResDto.getCategoryId(), likeCount);
 

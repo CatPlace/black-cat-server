@@ -6,5 +6,5 @@ import java.util.List;
 
 @Getter
 public class UpdateTattooReqDto extends CreateTattooDto {
-    List<String> deleteImageUrls;
+    private List<String> deleteImageUrls;
 }

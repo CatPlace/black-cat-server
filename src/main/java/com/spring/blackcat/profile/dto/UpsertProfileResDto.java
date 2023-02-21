@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class UpsertProfileResDto {
-    Long profileId;
-    String introduce;
-    List<String> imageUrls;
+    private Long profileId;
+    private String introduce;
+    private List<String> imageUrls;
 }

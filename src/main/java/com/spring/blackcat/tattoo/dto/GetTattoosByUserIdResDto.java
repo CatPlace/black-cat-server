@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class GetTattoosByUserIdResDto {
-    Long tattooId;
-    String imageUrl;
+    private Long tattooId;
+    private String imageUrl;
 }

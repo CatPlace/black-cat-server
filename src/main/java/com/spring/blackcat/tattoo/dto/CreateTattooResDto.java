@@ -8,6 +8,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class CreateTattooResDto {
-    Long tattooId;
-    List<String> imageUrls;
+    private Long tattooId;
+    private List<String> imageUrls;
 }

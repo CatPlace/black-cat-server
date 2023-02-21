@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class DeleteTattoosReqDto {
-    Long[] tattooIds;
+    private Long[] tattooIds;
 }

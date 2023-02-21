@@ -156,7 +156,7 @@ public class TattooServiceImpl implements TattooService {
     private List<String> updateImages(Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images, User user) {
         deleteImages(updateTattooReqDto.getDeleteImageUrls());
         if (images != null) {
-            this.imageService.saveImage(ImageType.POST, user.getId(), images);
+            this.imageService.saveImage(ImageType.POST, tattooId, images);
         }
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattooId);
         return imageUrls;

@@ -293,7 +293,7 @@ class InitService {
         Address address = addressRepository.findById(1L).get();
         User user = this.userRepository.findById(1L).get();
 
-        return new Tattoo(name, description, price, category, tattooType, user);
+        return new Tattoo(name, description, price, tattooType, user);
     }
 
     private Magazine createMagazine(String title) {

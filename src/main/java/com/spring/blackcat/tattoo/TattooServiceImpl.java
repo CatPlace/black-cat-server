@@ -1,8 +1,9 @@
 package com.spring.blackcat.tattoo;
 
-import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.categoryPost.CategoryPost;
+import com.spring.blackcat.categoryPost.CategoryPostRepository;
 import com.spring.blackcat.common.code.ImageType;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.common.exception.ErrorInfo;
@@ -11,6 +12,7 @@ import com.spring.blackcat.common.exception.custom.TattooNotFoundException;
 import com.spring.blackcat.common.exception.custom.UserNotFoundException;
 import com.spring.blackcat.image.ImageService;
 import com.spring.blackcat.likes.Likes;
+import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
 import com.spring.blackcat.tattoo.dto.*;
 import com.spring.blackcat.user.User;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +39,7 @@ public class TattooServiceImpl implements TattooService {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
 
-    private final AddressRepository addressRepository;
+    private final CategoryPostRepository categoryPostRepository;
 
     private final ImageService imageService;
 
@@ -93,16 +96,20 @@ public class TattooServiceImpl implements TattooService {
     @Override
     @Transactional
     public CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images) {
-        Category category = this.categoryRepository.findById(createTattooDto.getCategoryId())
-                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
-
         User user = findUserById(userId);
 
         Tattoo tattoo = new Tattoo(
-                createTattooDto.getTitle(), createTattooDto.getDescription(), createTattooDto.getPrice(), category, createTattooDto.getTattooType(), user);
+                createTattooDto.getTitle(), createTattooDto.getDescription(), createTattooDto.getPrice(), createTattooDto.getTattooType(), user);
 
+        //타투 저장
         Tattoo createdTattoo = this.tattooRepository.save(tattoo);
 
+        //카테고리 <-> 포스트 관계 테이블에 저장
+        for (Long categoryId : createTattooDto.getCategoryIds()) {
+            createCategoryPost(createdTattoo, categoryId);
+        }
+
+        //이미지 저장
         List<String> imageUrls = this.imageService.saveImage(ImageType.POST, tattoo.getId(), images);
 
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(createdTattoo.getId(), imageUrls);
@@ -115,18 +122,35 @@ public class TattooServiceImpl implements TattooService {
     public CreateTattooResDto updateTattoo(Long userId, Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images) {
         Tattoo tattoo = this.tattooRepository.findById(tattooId)
                 .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투 입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
-        Category category = this.categoryRepository.findById(updateTattooReqDto.getCategoryId())
-                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
-        User user = findUserById(userId);
 
         tattoo.updateTattoo(updateTattooReqDto.getTitle(), updateTattooReqDto.getDescription(),
-                updateTattooReqDto.getPrice(), category, updateTattooReqDto.getTattooType());
+                updateTattooReqDto.getPrice(), updateTattooReqDto.getTattooType());
+
+        //카테고리 <-> 포스트 관계 테이블에 저장
+        this.categoryPostRepository.deleteByPostId(tattooId);
+        for (Long categoryId : updateTattooReqDto.getCategoryIds()) {
+            createCategoryPost(tattoo, categoryId);
+        }
+
+        User user = findUserById(userId);
 
         List<String> imageUrls = updateImages(tattooId, updateTattooReqDto, images, user);
 
         CreateTattooResDto createTattooResDto = new CreateTattooResDto(tattooId, imageUrls);
 
         return createTattooResDto;
+    }
+
+    private void createCategoryPost(Tattoo tattoo, Long categoryId) {
+        Category category = this.categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException("존재하지 않는 카테고리 입니다.", ErrorInfo.CATEGORY_NOT_FOUND_EXCEPTION));
+        Post post = this.postRepository.findById(tattoo.getId())
+                .orElseThrow(() -> new TattooNotFoundException("존재하지 않는 타투입니다.", ErrorInfo.TATTOO_NOT_FOUND_EXCEPTION));
+
+        CategoryPost categoryPost = new CategoryPost(post, category);
+
+        tattoo.addCategoryPost(categoryPost);
+        categoryPostRepository.save(categoryPost);
     }
 
     private List<String> updateImages(Long tattooId, UpdateTattooReqDto updateTattooReqDto, List<MultipartFile> images, User user) {
@@ -155,12 +179,23 @@ public class TattooServiceImpl implements TattooService {
         String tattooistAddress = this.getTattooistAddress(tattoo);
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, tattoo.getId());
         TattooType tattooType = tattoo.getTattooType();
-        Long categoryId = tattoo.getCategory().getId();
+        List<Long> categoryIds = getCategoryIds(this.categoryPostRepository.findByPostId(tattoo.getId()));
+
 
         GetTattoosResDto getTattoosResDto = new GetTattoosResDto(tattoo.getId(), title,
-                tattoo.getPrice(), tattooistId, tattooistName, tattoo.getDescription(), tattooistAddress, imageUrls, tattooType, categoryId);
+                tattoo.getPrice(), tattooistId, tattooistName, tattoo.getDescription(), tattooistAddress, imageUrls, tattooType, categoryIds);
 
         return getTattoosResDto;
+    }
+
+    private List<Long> getCategoryIds(List<CategoryPost> categoryPosts) {
+        List<Long> categoryIds = new ArrayList<>();
+
+        for (CategoryPost categoryPost : categoryPosts) {
+            categoryIds.add(categoryPost.getCategory().getId());
+        }
+
+        return categoryIds;
     }
 
     private GetTattooResDto convertToGetTattooRes(Tattoo tattoo, Long userId) {
@@ -173,7 +208,7 @@ public class TattooServiceImpl implements TattooService {
                 getTattoosResDto.getId(), getTattoosResDto.getTitle(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
                 getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), isLiked,
                 getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(),
-                getTattoosResDto.getCategoryId(), likeCount, tattoo.getCreatedDate(), profileImageUrls);
+                getTattoosResDto.getCategoryIds(), likeCount, tattoo.getCreatedDate(), profileImageUrls);
 
         return getTattooResDto;
     }

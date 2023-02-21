@@ -1,7 +1,7 @@
 package com.spring.blackcat.category;
 
+import com.spring.blackcat.categoryPost.CategoryPost;
 import com.spring.blackcat.common.BaseTimeEntity;
-import com.spring.blackcat.tattoo.Tattoo;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,7 +35,7 @@ public class Category extends BaseTimeEntity {
     private List<Category> children = new ArrayList<>();
 
     @OneToMany(mappedBy = "category", cascade = ALL)
-    private List<Tattoo> tattoos = new ArrayList<>();
+    private List<CategoryPost> categoryPosts = new ArrayList<>();
 
     private Long registerId;
     private Long modifierId;

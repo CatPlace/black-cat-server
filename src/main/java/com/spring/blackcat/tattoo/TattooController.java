@@ -61,7 +61,7 @@ public class TattooController {
     @PatchMapping("/{tattooId}")
     public ResponseDto updateTattoo(@PathVariable("tattooId") Long tattooId,
                                     @RequestPart("tattooInfo") @Valid UpdateTattooReqDto updateTattooReqDto,
-                                    @RequestPart(name = "images", required = true) List<MultipartFile> images,
+                                    @RequestPart(name = "images", required = false) List<MultipartFile> images,
                                     @UserId Long userId) {
         return ResponseUtil.SUCCESS("타투 수정 성공", this.tattooService.updateTattoo(userId, tattooId, updateTattooReqDto, images));
     }

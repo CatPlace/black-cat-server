@@ -39,9 +39,8 @@ public class TattooController {
     }
 
     @GetMapping("/{tattooId}")
-    public ResponseDto getTattooById(@PathVariable("tattooId") Long tattooId,
-                                     @UserId Long userId) {
-        return ResponseUtil.SUCCESS("타투 상세 조회 성공", this.tattooService.getTattooById(tattooId, userId));
+    public ResponseDto getTattooById(@PathVariable("tattooId") Long tattooId) {
+        return ResponseUtil.SUCCESS("타투 상세 조회 성공", this.tattooService.getTattooById(tattooId));
     }
 
     @GetMapping("/users/{tattooistId}")
@@ -49,7 +48,6 @@ public class TattooController {
                                          @PathVariable Long tattooistId) {
         return ResponseUtil.SUCCESS("타투이스트 작품 조회 성공", this.tattooService.getTattoosByUserId(pageable, tattooistId));
     }
-
 
     @PostMapping()
     public ResponseDto createTattoo(@RequestPart("tattooInfo") @Valid CreateTattooDto createTattooDto,

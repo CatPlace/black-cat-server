@@ -15,7 +15,7 @@ public interface TattooService {
 
     CreateTattooResDto createTattoo(Long userId, CreateTattooDto createTattooDto, List<MultipartFile> images);
 
-    GetTattooResDto getTattooById(Long tattooId, Long userId);
+    GetTattooResDto getTattooById(Long tattooId);
 
     DeleteTattoosResDto deleteTattoos(DeleteTattoosReqDto deleteTattoosReqDto);
 

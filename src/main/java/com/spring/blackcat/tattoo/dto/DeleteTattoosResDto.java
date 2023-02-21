@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class DeleteTattoosResDto {
-    Long[] deletedTattooIds;
+    private Long[] deletedTattooIds;
 }

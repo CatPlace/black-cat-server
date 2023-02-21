@@ -8,6 +8,7 @@ import java.util.List;
 
 @Getter
 public class GetTattooResDto extends GetTattoosResDto {
+    
     private int likeCount;
     private boolean isLiked;
     private LocalDateTime createDate;

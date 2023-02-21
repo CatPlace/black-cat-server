@@ -8,10 +8,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class GetProfileResDto {
-    Long profileId;
-    String introduce;
-    List<String> imageUrls;
-    String userName;
-    Long addressId;
-    List<String> userImgUrls;
+    private Long profileId;
+    private String introduce;
+    private List<String> imageUrls;
+    private String userName;
+    private Long addressId;
+    private List<String> userImgUrls;
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter
 public class UpsertProfileReqDto {
-    String introduce;
+    private String introduce;
 
-    List<String> deleteImageUrls;
+    private List<String> deleteImageUrls;
 }

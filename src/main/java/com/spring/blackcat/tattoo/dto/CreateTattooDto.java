@@ -10,16 +10,16 @@ import java.util.List;
 @Getter
 public class CreateTattooDto {
     @NotNull(message = "타투 종류를 입력해주세요")
-    TattooType tattooType;
+    private TattooType tattooType;
 
     @NotNull(message = "카테고리 ID를 입력해주세요")
-    List<Long> categoryIds;
+    private List<Long> categoryIds;
 
     @NotNull(message = "타투 제목을 입력해주세요")
-    String title;
+    private String title;
 
     @NotNull(message = "타투 가격을 입력해주세요")
-    Long price;
+    private Long price;
 
-    String description;
+    private String description;
 }

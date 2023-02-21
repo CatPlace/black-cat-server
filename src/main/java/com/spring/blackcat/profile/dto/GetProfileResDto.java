@@ -7,8 +7,11 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class UpsertProfileResDto {
+public class GetProfileResDto {
     Long profileId;
     String introduce;
     List<String> imageUrls;
+    String userName;
+    Long addressId;
+    List<String> userImgUrls;
 }

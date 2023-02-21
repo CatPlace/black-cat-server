@@ -26,7 +26,10 @@ public enum ErrorInfo {
     ADDRESS_NOT_FOUND_EXCEPTION(400, 1015, "존재하지 않은 주소입니다."),
     POST_NOT_FOUND_EXCEPTION(400, 1016, "존재하지 않는 게시물입니다."),
 
-    ALREADY_TATTOOIST_EXCEPTION(400, 1017, "이미 타투이스트로 승급한 사용자입니다.");
+    ALREADY_TATTOOIST_EXCEPTION(400, 1017, "이미 타투이스트로 승급한 사용자입니다."),
+
+    PROFILE_NOT_FOUND_EXCEPTION(400, 1017, "존재하지 않는 프로필 입니다."),
+    ;
 
     private final boolean success = false;
     private int statusCode;

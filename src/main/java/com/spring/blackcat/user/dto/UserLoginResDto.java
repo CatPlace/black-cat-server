@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserLoginResDto {
     private Long userId;
+    private Long profileId;
     private String accessToken;
     private Role role;
     private Date dateOfBirth;

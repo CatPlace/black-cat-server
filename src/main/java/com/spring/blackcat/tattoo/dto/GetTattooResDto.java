@@ -8,7 +8,6 @@ import java.util.List;
 
 @Getter
 public class GetTattooResDto extends GetTattoosResDto {
-    private Long profileId;
     private int likeCount;
     private boolean isLiked;
     private LocalDateTime createDate;
@@ -18,11 +17,10 @@ public class GetTattooResDto extends GetTattoosResDto {
     //@TODO: 타투이스트 이름 추가
     public GetTattooResDto(Long id, String title, Long price, Long tattooistId, String tattooistName, String description,
                            String address, List<String> imageUrls, TattooType tattooType, List<Long> categoryIds, int likeCount,
-                           LocalDateTime createDate, List<String> profileImageUrls, Long profileId) {
+                           LocalDateTime createDate, List<String> profileImageUrls) {
         super(id, title, price, tattooistId, tattooistName, description, address, imageUrls, tattooType, categoryIds);
         this.likeCount = likeCount;
         this.createDate = createDate;
         this.profileImageUrls = profileImageUrls;
-        this.profileId = profileId;
     }
 }

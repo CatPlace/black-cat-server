@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@RequestMapping("/api/v1/profile")
+@RequestMapping("/api/v1/profile/tattooists")
 @RequiredArgsConstructor
 @RestController
 public class ProfileController {
@@ -23,8 +23,8 @@ public class ProfileController {
         return ResponseUtil.SUCCESS("타투이스트 프로필 등록 성공", this.profileService.upsertTattooistProfile(userId, upsertProfileReqDto, images));
     }
 
-    @GetMapping("/{profileId}")
-    public ResponseDto getTattooistProfile(@PathVariable Long profileId) {
-        return ResponseUtil.SUCCESS("타투이스트 프로필 조회 성공", this.profileService.getTattooistProfile(profileId));
+    @GetMapping("/{tattooistId}")
+    public ResponseDto getTattooistProfile(@PathVariable Long tattooistId) {
+        return ResponseUtil.SUCCESS("타투이스트 프로필 조회 성공", this.profileService.getTattooistProfile(tattooistId));
     }
 }

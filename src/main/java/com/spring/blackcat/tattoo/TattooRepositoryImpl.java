@@ -60,7 +60,7 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
     public Page<Tattoo> findTattoosByCategoryId(Pageable pageable, Long categoryId, List<TattooType> tattooTypes, List<Long> addressIds) {
         List<Tattoo> results = query
                 .selectFrom(tattoo)
-                .leftJoin(tattoo.categoryPosts, categoryPost).on(categoryPost.category.id.eq(categoryId).and(tattoo.id.eq(categoryPost.post.id)))
+                .join(tattoo.categoryPosts, categoryPost).on(categoryPost.category.id.eq(categoryId).and(tattoo.id.eq(categoryPost.post.id)))
                 .where(eqTattooType(tattooTypes),
                         eqAddressId(addressIds))
                 .offset(pageable.getOffset())

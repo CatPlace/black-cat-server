@@ -64,6 +64,7 @@ public class SecurityConfig {
                 .antMatchers(GET, "/api/v1/categories").permitAll()
                 .antMatchers(GET, "/api/v1/tattoos").permitAll()
                 .antMatchers(GET, "/api/v1/tattoos/categories/**").permitAll()
+                .antMatchers(GET, "/api/v1/tattoos/**").permitAll()
                 .antMatchers(POST, "/init").access("hasRole('ADMIN')")
                 .antMatchers(POST, "/api/v1/magazines").access("hasRole('ADMIN')")
                 .antMatchers(POST, "/api/v1/tattoos").access("hasRole('TATTOOIST') or hasRole('ADMIN')")

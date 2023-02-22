@@ -208,9 +208,8 @@ public class TattooServiceImpl implements TattooService {
 
         GetTattooResDto getTattooResDto = new GetTattooResDto(
                 getTattoosResDto.getId(), getTattoosResDto.getTitle(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
-                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(),
-                getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(),
-                getTattoosResDto.getCategoryIds(), likeCount, tattoo.getCreatedDate(), profileImageUrls, profileId);
+                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(),
+                getTattoosResDto.getTattooType(), getTattoosResDto.getCategoryIds(), likeCount, tattoo.getCreatedDate(), profileImageUrls, profileId);
 
         return getTattooResDto;
     }

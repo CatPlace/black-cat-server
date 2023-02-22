@@ -5,7 +5,6 @@ import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.categoryPost.CategoryPost;
 import com.spring.blackcat.categoryPost.CategoryPostRepository;
 import com.spring.blackcat.common.code.ImageType;
-import com.spring.blackcat.common.code.PostType;
 import com.spring.blackcat.common.code.TattooType;
 import com.spring.blackcat.common.exception.ErrorInfo;
 import com.spring.blackcat.common.exception.custom.CategoryNotFoundException;
@@ -204,24 +203,12 @@ public class TattooServiceImpl implements TattooService {
         int likeCount = this.getLikeCount(getTattoosResDto.getId());
         List<String> profileImageUrls = this.imageService.getImageUrls(ImageType.USER, tattoo.getUser().getId());
 
-        Long profileId = getProfileId(tattoo);
-
         GetTattooResDto getTattooResDto = new GetTattooResDto(
                 getTattoosResDto.getId(), getTattoosResDto.getTitle(), getTattoosResDto.getPrice(), getTattoosResDto.getTattooistId(),
-                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(),
-                getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(), getTattoosResDto.getTattooType(),
-                getTattoosResDto.getCategoryIds(), likeCount, tattoo.getCreatedDate(), profileImageUrls, profileId);
+                getTattoosResDto.getTattooistName(), getTattoosResDto.getDescription(), getTattoosResDto.getAddress(), getTattoosResDto.getImageUrls(),
+                getTattoosResDto.getTattooType(), getTattoosResDto.getCategoryIds(), likeCount, tattoo.getCreatedDate(), profileImageUrls);
 
         return getTattooResDto;
-    }
-
-    private static Long getProfileId(Tattoo tattoo) {
-        return tattoo.getUser()
-                .getPosts()
-                .stream()
-                .filter(post -> post.getPostType().equals(PostType.PROFILE))
-                .findFirst()
-                .get().getId();
     }
 
     private boolean isUserLikedTattoo(Long postId, Long userId) {

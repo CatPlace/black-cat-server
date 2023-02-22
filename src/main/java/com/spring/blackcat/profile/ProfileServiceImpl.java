@@ -58,8 +58,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public GetProfileResDto getTattooistProfile(Long profileId) {
-        Profile profile = this.profileRepository.findById(profileId)
+    public GetProfileResDto getTattooistProfile(Long tattooistId) {
+        Profile profile = this.profileRepository.findByUserId(tattooistId)
                 .orElseThrow(() -> new UserNotFoundException("존재하지 않는 프로필 입니다.", ErrorInfo.USER_NOT_FOUND_EXCEPTION));
 
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.POST, profile.getId());

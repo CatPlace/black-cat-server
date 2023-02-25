@@ -34,7 +34,7 @@ public class LogInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         String uuid = (String) request.getAttribute(LOG_ID);
 
-        log.info("REQUEST [{}][{}][{}] RESPONSE [{}]", uuid, requestURI, handler, response.getOutputStream().toString());
+        log.info("REQUEST [{}][{}][{}], RESPONSE STATUS [{}]", uuid, requestURI, handler, response.getStatus());
     }
 
     @Override

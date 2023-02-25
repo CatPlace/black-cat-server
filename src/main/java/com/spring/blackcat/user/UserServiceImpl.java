@@ -19,6 +19,7 @@ import com.spring.blackcat.profile.Profile;
 import com.spring.blackcat.profile.ProfileRepository;
 import com.spring.blackcat.user.dto.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -48,11 +50,9 @@ public class UserServiceImpl implements UserService {
         User user = this.getUser(userJoinReqDto, providerId);
         String accessToken = this.jwtProvider.createAccessToken(user.getId());
         Long userAddressId = user.getAddress() == null ? null : user.getAddress().getId();
-        Long profileId = this.profileRepository.findByUserId(user.getId()).orElse(null).getId();
-
         List<String> imageUrls = this.imageService.getImageUrls(ImageType.USER, user.getId());
 
-        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), profileId, accessToken, user.getRole(),
+        UserLoginResDto userLoginResDto = new UserLoginResDto(user.getId(), accessToken, user.getRole(),
                 user.getDateOfBirth(), user.getEmail(), user.getGender(), user.getName(), userAddressId,
                 user.getPhoneNumber(), imageUrls);
 
@@ -154,6 +154,7 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new InvalidLoginInputException("값이 유효하지 않은 로그인 요청입니다.", ErrorInfo.INVALID_LOGIN_INPUT_EXCEPTION);
         }
+        log.info("Check Provider And Provider Token. Provider Id = {}", providerId);
 
         return providerId;
     }
@@ -166,6 +167,9 @@ public class UserServiceImpl implements UserService {
                     String defaultNickname = providerType + "_" + UUID.randomUUID();
                     User createdUser = new User(providerId, providerType, defaultNickname, Role.BASIC, 1L, 1L);
                     this.userRepository.save(createdUser);
+
+                    log.info("Get User Or Create User. userId = {}", createdUser.getId());
+
                     return createdUser;
                 });
     }

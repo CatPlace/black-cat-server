@@ -10,6 +10,7 @@ import com.spring.blackcat.common.exception.custom.FileResizingFailedException;
 import com.spring.blackcat.common.exception.custom.ImageUploadFailedException;
 import com.spring.blackcat.common.exception.custom.IncorrectlyFormattedFileException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import marvin.image.MarvinImage;
 import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ import static java.util.Objects.requireNonNull;
 import static javax.imageio.ImageIO.read;
 import static javax.imageio.ImageIO.write;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImageServiceImpl implements ImageService {
@@ -46,6 +48,8 @@ public class ImageServiceImpl implements ImageService {
         List<String> imageUrls = new ArrayList<>();
         List<Image> images = imageRepository.findByImageTypeAndMappedId(imageType, mappedId);
         images.forEach(image -> imageUrls.add(image.getImageUrl()));
+
+        log.info("Get User Profile Image Urls. imageUrls = {}", imageUrls);
 
         return imageUrls;
     }

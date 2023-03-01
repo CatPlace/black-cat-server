@@ -8,6 +8,8 @@ import com.spring.blackcat.category.CategoryRepository;
 import com.spring.blackcat.categoryPost.CategoryPost;
 import com.spring.blackcat.categoryPost.CategoryPostRepository;
 import com.spring.blackcat.common.code.*;
+import com.spring.blackcat.estimate.Estimate;
+import com.spring.blackcat.estimate.EstimateRepository;
 import com.spring.blackcat.image.Image;
 import com.spring.blackcat.image.ImageRepository;
 import com.spring.blackcat.likes.Likes;
@@ -17,6 +19,7 @@ import com.spring.blackcat.magazine.Magazine;
 import com.spring.blackcat.magazine.MagazineRepository;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
+import com.spring.blackcat.profile.ProfileRepository;
 import com.spring.blackcat.tattoo.Tattoo;
 import com.spring.blackcat.tattoo.TattooRepository;
 import com.spring.blackcat.user.User;
@@ -71,6 +74,8 @@ class InitService {
     private final LikesRepository likesRepository;
 
     private final ImageRepository imageRepository;
+    private final ProfileRepository profileRepository;
+    private final EstimateRepository estimateRepository;
 
     private final CategoryPostRepository categoryPostRepository;
 
@@ -86,6 +91,8 @@ class InitService {
             initMagazine();
             initLikes();
             initImage();
+            initProfile();
+            initEstimate();
             mapCategoryTattoo();
             isFirstRequest = false;
             return true;
@@ -256,6 +263,30 @@ class InitService {
         imageList.add(createImage("/image/url/11-2", POST, postRepository.findById(11L).orElse(null).getId()));
 
         imageRepository.saveAllAndFlush(imageList);
+        em.clear();
+    }
+
+    public void initProfile() {
+        User user1 = userRepository.findById(1L).orElse(null);
+        com.spring.blackcat.profile.Profile profile1 = new com.spring.blackcat.profile.Profile(user1);
+
+        User user2 = userRepository.findById(2L).orElse(null);
+        com.spring.blackcat.profile.Profile profile2 = new com.spring.blackcat.profile.Profile(user2);
+
+        profileRepository.saveAndFlush(profile1);
+        profileRepository.saveAndFlush(profile2);
+        em.clear();
+    }
+
+    public void initEstimate() {
+        User user1 = userRepository.findById(1L).orElse(null);
+        Estimate estimate1 = new Estimate(user1);
+
+        User user2 = userRepository.findById(2L).orElse(null);
+        Estimate estimate2 = new Estimate(user2);
+
+        estimateRepository.saveAndFlush(estimate1);
+        estimateRepository.saveAndFlush(estimate2);
         em.clear();
     }
 

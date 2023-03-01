@@ -80,11 +80,18 @@ public class User extends BaseTimeEntity {
         this.modifierId = modifierId;
     }
 
-    public User(String providerId, ProviderType providerType, Address address, String nickname, Role role, Long registerId, Long modifierId) {
+    public User(String providerId, ProviderType providerType, Address address, String name, String nickname,
+                String email, String phoneNumber, Gender gender, String openChatLink, Role role,
+                Long registerId, Long modifierId) {
         this.providerId = providerId;
         this.providerType = providerType;
         this.address = address;
+        this.name = name;
         this.nickname = nickname;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.openChatLink = openChatLink;
         this.role = role;
         this.registerId = registerId;
         this.modifierId = modifierId;

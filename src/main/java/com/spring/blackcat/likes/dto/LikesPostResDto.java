@@ -12,14 +12,16 @@ import java.time.LocalDateTime;
 public class LikesPostResDto {
 
     private Long likesId;
+    private Long userId;
     private Long postId;
     private PostType postType;
     private String title;
     private String imageUrl;
     private LocalDateTime createdDate;
 
-    public LikesPostResDto(Long likesId, Long postId, PostType postType, String title, String imageUrl, LocalDateTime createdDate) {
+    public LikesPostResDto(Long likesId, Long userId, Long postId, PostType postType, String title, String imageUrl, LocalDateTime createdDate) {
         this.likesId = likesId;
+        this.userId = userId;
         this.postId = postId;
         this.postType = postType;
         this.title = title;

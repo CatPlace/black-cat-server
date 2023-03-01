@@ -58,6 +58,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
         List<LikesPostResDto> results = query
                 .select(constructor(LikesPostResDto.class,
                         likes.id,
+                        user.id,
                         post.id,
                         post.postType,
                         post.title,
@@ -65,6 +66,7 @@ public class LikesRepositoryImpl implements LikesRepositoryCustom {
                         likes.createdDate))
                 .from(likes)
                 .join(likes.post, post)
+                .join(likes.user, user)
                 .leftJoin(image).on(image.imageType.eq(POST).and(post.id.eq(image.mappedId)))
                 .where(userIdEqual(userId), postTypeEqual(postType), isMainImage(POST, post.id))
                 .offset(pageable.getOffset())

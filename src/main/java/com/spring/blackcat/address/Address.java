@@ -22,6 +22,7 @@ public class Address extends BaseTimeEntity {
     @Column(name = "address_id")
     private Long id; // 주소ID
     //    private String zipCode; // 우편번호
+    @Column(unique = true)
     private String sido; // 시도
 //    private String sidoEn; // 시도영문
 //    private String sigungu; // 시군구

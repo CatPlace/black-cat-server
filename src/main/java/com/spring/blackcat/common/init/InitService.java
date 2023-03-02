@@ -5,7 +5,11 @@ import com.spring.blackcat.address.Address;
 import com.spring.blackcat.address.AddressRepository;
 import com.spring.blackcat.category.Category;
 import com.spring.blackcat.category.CategoryRepository;
+import com.spring.blackcat.categoryPost.CategoryPost;
+import com.spring.blackcat.categoryPost.CategoryPostRepository;
 import com.spring.blackcat.common.code.*;
+import com.spring.blackcat.estimate.Estimate;
+import com.spring.blackcat.estimate.EstimateRepository;
 import com.spring.blackcat.image.Image;
 import com.spring.blackcat.image.ImageRepository;
 import com.spring.blackcat.likes.Likes;
@@ -15,6 +19,7 @@ import com.spring.blackcat.magazine.Magazine;
 import com.spring.blackcat.magazine.MagazineRepository;
 import com.spring.blackcat.post.Post;
 import com.spring.blackcat.post.PostRepository;
+import com.spring.blackcat.profile.ProfileRepository;
 import com.spring.blackcat.tattoo.Tattoo;
 import com.spring.blackcat.tattoo.TattooRepository;
 import com.spring.blackcat.user.User;
@@ -34,8 +39,12 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+import static com.spring.blackcat.common.code.Gender.FEMALE;
+import static com.spring.blackcat.common.code.Gender.MALE;
 import static com.spring.blackcat.common.code.ImageType.POST;
 import static com.spring.blackcat.common.code.ImageType.USER;
+import static com.spring.blackcat.common.code.Role.*;
+import static java.lang.Math.min;
 
 @Slf4j
 @Component
@@ -66,6 +75,12 @@ class InitService {
 
     private final ImageRepository imageRepository;
 
+    private final ProfileRepository profileRepository;
+    
+    private final EstimateRepository estimateRepository;
+
+    private final CategoryPostRepository categoryPostRepository;
+
     private boolean isFirstRequest = true;
 
     @Transactional
@@ -78,6 +93,9 @@ class InitService {
             initMagazine();
             initLikes();
             initImage();
+            initProfile();
+            initEstimate();
+            mapCategoryTattoo();
             isFirstRequest = false;
             return true;
         } else {
@@ -170,6 +188,23 @@ class InitService {
         em.clear();
     }
 
+    public void mapCategoryTattoo() {
+        List<Category> categories = categoryRepository.findAll();
+        List<Tattoo> tattoos = tattooRepository.findAll();
+
+        List<CategoryPost> categoryPostList = new ArrayList<>();
+
+        for (int i = 0; i < min(tattoos.size(), categories.size()); i++) {
+            Category category = categories.get(i);
+            Tattoo tattoo = tattoos.get(i);
+            CategoryPost categoryPost = new CategoryPost(tattoo, category);
+            categoryPostList.add(categoryPost);
+        }
+
+        categoryPostRepository.saveAllAndFlush(categoryPostList);
+        em.clear();
+    }
+
     public void initMagazine() {
         List<Magazine> magazineList = new ArrayList<>();
         List<Cell> cellList1 = createCells("타투 말은 많이 들어보고 주변에서도 요즘 많이 하던데 뭐가 뭔지 잘 모르겠어",
@@ -233,6 +268,30 @@ class InitService {
         em.clear();
     }
 
+    public void initProfile() {
+        User user1 = userRepository.findById(1L).orElse(null);
+        com.spring.blackcat.profile.Profile profile1 = new com.spring.blackcat.profile.Profile(user1);
+
+        User user2 = userRepository.findById(2L).orElse(null);
+        com.spring.blackcat.profile.Profile profile2 = new com.spring.blackcat.profile.Profile(user2);
+
+        profileRepository.saveAndFlush(profile1);
+        profileRepository.saveAndFlush(profile2);
+        em.clear();
+    }
+
+    public void initEstimate() {
+        User user1 = userRepository.findById(1L).orElse(null);
+        Estimate estimate1 = new Estimate(user1);
+
+        User user2 = userRepository.findById(2L).orElse(null);
+        Estimate estimate2 = new Estimate(user2);
+
+        estimateRepository.saveAndFlush(estimate1);
+        estimateRepository.saveAndFlush(estimate2);
+        em.clear();
+    }
+
     private void createAdminJwtToken() {
         String token = JWT.create()
                 .withSubject("ADMIN")
@@ -263,22 +322,28 @@ class InitService {
     private User createAdminUser() {
         Address address = createAddress("서울");
         addressRepository.save(address);
-        return new User("ADMIN", null, address, "ADMIN", Role.ADMIN, 1L, 1L);
+        return new User("ADMIN", null, address, "관리자", "ADMIN",
+                "admin@blackcat.pe.kr", "010-1234-5678", MALE,
+                "http://openchat/admin", ADMIN, 1L, 1L);
     }
 
     private User createBasicUser() {
         Address address = addressRepository.findBySido("서울").orElse(null);
-        return new User("BASIC", null, address, "BASIC", Role.BASIC, 1L, 1L);
+        return new User("BASIC", null, address, "일반사용자", "BASIC",
+                "basic@blackcat.pe.kr", "010-1234-5678", FEMALE,
+                "http://openchat/basic", BASIC, 1L, 1L);
     }
 
     private User createTattooist() {
         Address address = addressRepository.findBySido("서울").orElse(null);
-        return new User("TATTOOIST", null, address, "TATTOOIST", Role.TATTOOIST, 1L, 1L);
+        return new User("TATTOOIST", null, address, "타투이스트", "TATTOOIST",
+                "tattooist@blackcat.pe.kr", "010-1234-5678", MALE,
+                "http://openchat/tattooist", TATTOOIST, 1L, 1L);
     }
 
     private User createUser(String providerId, ProviderType providerType) {
         String defaultNickname = providerType + "_" + UUID.randomUUID();
-        return new User(providerId, providerType, defaultNickname, Role.ADMIN, 1L, 1L);
+        return new User(providerId, providerType, defaultNickname, ADMIN, 1L, 1L);
     }
 
     private Address createAddress(String sido) {

@@ -47,7 +47,13 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring().mvcMatchers("/api/v1/users/login");
+        return (web) -> web.ignoring()
+                .mvcMatchers("/api/v1/users/login")
+                .mvcMatchers(GET, "/api/v1/tattoos/**")
+                .mvcMatchers(GET, "/api/v1/tattoos")
+                .mvcMatchers(GET, "/api/v1/profile/**")
+                .mvcMatchers(GET, "/api/v1/estimate/**")
+                .mvcMatchers(GET, "/api/v1/categories");
     }
 
     @Bean
@@ -61,7 +67,6 @@ public class SecurityConfig {
         return http.antMatcher("/**")
                 .authorizeRequests()
                 .mvcMatchers(OPTIONS, "/**").permitAll() // Preflight Request 허용해주기
-                .antMatchers(GET, "/api/v1/categories").permitAll()
                 .antMatchers(GET, "/api/v1/tattoos").permitAll()
                 .antMatchers(GET, "/api/v1/tattoos/categories/**").permitAll()
                 .antMatchers(GET, "/api/v1/tattoos/**").permitAll()

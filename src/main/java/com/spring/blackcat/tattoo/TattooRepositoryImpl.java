@@ -41,10 +41,10 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                 .leftJoin(tattoo.likes, likes).on(likes.postType.eq(PostType.TATTOO).and(tattoo.id.eq(likes.post.id)))
                 .where(eqTattooType(tattooTypes),
                         eqAddressId(addressIds))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .groupBy(tattoo.id)
                 .orderBy(getOrders(pageable, tattoo))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         List<Tattoo> tattooResults = new ArrayList<>();
@@ -64,10 +64,10 @@ public class TattooRepositoryImpl implements TattooRepositoryCustom {
                 .leftJoin(tattoo.likes, likes).on(likes.postType.eq(PostType.TATTOO).and(tattoo.id.eq(likes.post.id)))
                 .where(eqTattooType(tattooTypes),
                         eqAddressId(addressIds))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
                 .groupBy(tattoo.id)
                 .orderBy(getOrders(pageable, tattoo))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         return new PageImpl<>(results, pageable, results.size());

@@ -78,7 +78,7 @@ public class ImageServiceImpl implements ImageService {
                 String fileName = createFileName(file.getOriginalFilename());
                 String fileFormatName = file.getContentType().substring(file.getContentType().lastIndexOf("/") + 1);
 
-                MultipartFile resizedFile = resizeImage(fileName, fileFormatName, file, 600, 600);
+                MultipartFile resizedFile = resizeImage(fileName, fileFormatName, file, 600);
 
                 ObjectMetadata objectMetadata = new ObjectMetadata();
                 objectMetadata.setContentLength(resizedFile.getSize());
@@ -109,22 +109,36 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
-    private MultipartFile resizeImage(String fileName, String fileFormatName, MultipartFile originalImage, int targetWidth, int targetHeight) {
+    private MultipartFile resizeImage(String fileName, String fileFormatName, MultipartFile originalImage, int targetSize) {
         try {
             BufferedImage image = read(originalImage.getInputStream());
+
+            int newWidth;
+            int newHeight;
 
             int originWidth = image.getWidth();
             int originHeight = image.getHeight();
 
-            if (originWidth < targetWidth && originHeight < targetHeight) {
+            if (originWidth < targetSize && originHeight < targetSize) {
                 return originalImage;
+            }
+
+            if (originWidth > originHeight) {
+                newWidth = targetSize;
+                newHeight = (int) Math.round((double) targetSize / (double) originWidth * originHeight);
+            } else if (originWidth < originHeight) {
+                newHeight = targetSize;
+                newWidth = (int) Math.round((double) targetSize / (double) originHeight * originWidth);
+            } else {
+                newWidth = targetSize;
+                newHeight = targetSize;
             }
 
             MarvinImage imageMarvin = new MarvinImage(image);
             Scale scale = new Scale();
             scale.load();
-            scale.setAttribute("newWidth", targetWidth);
-            scale.setAttribute("newHeight", targetHeight);
+            scale.setAttribute("newWidth", newWidth);
+            scale.setAttribute("newHeight", newHeight);
             scale.process(imageMarvin.clone(), imageMarvin, null, null, false);
 
             BufferedImage imageNoAlpha = imageMarvin.getBufferedImageNoAlpha();

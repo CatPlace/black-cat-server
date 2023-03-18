@@ -53,7 +53,8 @@ public class SecurityConfig {
                 .mvcMatchers(GET, "/api/v1/tattoos")
                 .mvcMatchers(GET, "/api/v1/profile/**")
                 .mvcMatchers(GET, "/api/v1/estimate/**")
-                .mvcMatchers(GET, "/api/v1/categories");
+                .mvcMatchers(GET, "/api/v1/categories")
+                .mvcMatchers(GET, "/api/v1/likes/posts/*/count");
     }
 
     @Bean
@@ -72,6 +73,7 @@ public class SecurityConfig {
                 .antMatchers(GET, "/api/v1/tattoos/**").permitAll()
                 .antMatchers(GET, "/api/v1/estimate/**").permitAll()
                 .antMatchers(GET, "/api/v1/profile/**").permitAll()
+                .antMatchers(GET, "/api/v1/likes/posts/*/count").permitAll()
                 .antMatchers(POST, "/init").access("hasRole('ADMIN')")
                 .antMatchers(POST, "/api/v1/magazines").access("hasRole('ADMIN')")
                 .antMatchers(POST, "/api/v1/tattoos").access("hasRole('TATTOOIST') or hasRole('ADMIN')")
